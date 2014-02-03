@@ -1,0 +1,28 @@
+Gustavo Pedroso
+Levi Clark
+Terry Chen
+Daniel He
+					Design Document
+
+Phase I (DB engine):
+
+
+
+
+
+
+
+
+
+Phase II (DB app):
+
+
+
+
+
+
+
+
+
+
+
