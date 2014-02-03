@@ -26,7 +26,49 @@
 #include "DBMS.h"
 using namespace std;
 
-int main 
+int main() 
 {
+	DBMS d; //declaring class variable
+	string sInput; //variable for gathering input
+	bool bExit; //variable for exiting the loop
+
+	d.printOperations(); //print operations list
+	do
+	{
+		//gather user input
+		cin >> sInput;
+		bExit = false;
+
+		if (toupper(sInput[0]) == 'A')
+		{
+			printf("| A was selected\n");
+		}
+		else if (toupper(sInput[0]) == 'B')
+		{
+			printf("| B was selected\n");
+		}
+		else if (toupper(sInput[0]) == 'C')
+		{
+			printf("| C was selected\n");
+		}
+		else if (toupper(sInput[0]) == 'D')
+		{
+			printf("| D was selected\n");
+		}
+		else if (toupper(sInput[0]) == 'E')
+		{
+			printf("| E was selected\n");
+		}
+		else if (toupper(sInput[0]) == 'F')
+		{
+			printf("| EXITING..\n");
+			bExit = true;
+		}
+		else
+		{
+			printf("| ERROR, please enter a valid choice\n");
+		}
+	} while(!bExit);
+	
 	return 0;
 }

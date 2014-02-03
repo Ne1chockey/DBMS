@@ -34,6 +34,38 @@ private:
 
 public:
 	//Declare class methods
+    DBMS(){};
+    
+    //engine functions
+
+    //app functions
+    void printOperations();
 };
+
+void DBMS::printOperations()
+{
+    printf("\n|---------------------------------------");
+    printf("---------------------------------------|\n");
+    printf("|                                 OPERATIONS");
+    printf("                                   |\n");
+    printf("| -----------------------------------------------");
+    printf("----------------------------- |\n");
+    printf("| A) operation                                    ");
+    printf("                             |\n");
+    printf("| B) operation                                    ");
+    printf("                             |\n");
+    printf("| C) operation                                    ");
+    printf("                             |\n");
+    printf("| D) operation                                    ");
+    printf("                             |\n");
+    printf("| E) operation                                    ");
+    printf("                             |\n");
+    printf("| F) operation                                    ");
+    printf("                             |\n");
+    printf("| F) EXIT                                         ");
+    printf("                             |\n");
+    printf("|---------------------------------------");
+    printf("---------------------------------------|\n");
+}
 
 #endif
