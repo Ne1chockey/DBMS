@@ -1,7 +1,7 @@
-main: main.o Engine.o Parser.o App.o
-	g++ -o main main.o Engine.o Parser.o App.o
+main: main.o Engine.o Parser.o App.o Table.o
+	g++ -o main main.o Engine.o Parser.o App.o Table.o
 
-main.o: main.cpp Engine.h Parser.h App.h
+main.o: main.cpp Engine.h Parser.h App.h Table.h
 	g++ -c main.cpp
 
 Engine.o: Engine.h
@@ -12,6 +12,9 @@ Parser.o: Parser.h
 
 App.o: App.h
 	g++ -c App.cpp
+
+Table.o: Table.h
+	g++ -c Table.cpp
 
 clean:
 	rm-rf *.o

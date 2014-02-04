@@ -26,10 +26,23 @@
 #include "Parser.h"
 #include "Engine.h"
 #include "App.h"
+#include "Table.h"
 using namespace std;
 
 int main() 
 {
+    vector<void *> vTemp;
+    vector<void *> vTemp2;
+    Table *t1 = new Table();
+
+    vTemp.push_back((char *)'a');
+    vTemp.push_back((int *) 234);
+    vTemp.push_back((string *)"sdfas");
+    vTemp2.push_back((string *)"sdf");
+
+    t1.addRow(vTemp);
+    t1.addRow(vTemp2);
+
 	
 	return 0;
 }
