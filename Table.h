@@ -35,17 +35,11 @@ private:
     vector<vector<void *> > vRows;
 
 public:
-    void makeTuple();
+    void makeTuple(){};
     Table(){};
     void addColumn(string s){vColumnName.push_back(s);}
-    void addRow(vector<void*> v){vRows.push_back(v);}
+    //void addRow(vector<void*> v){vRows.push_back(v);}
 
 };
 
-
-
-void makeTuple()
-{
-    ;
-}
 #endif

@@ -40,8 +40,12 @@ int main()
     vTemp.push_back((string *)"sdfas");
     vTemp2.push_back((string *)"sdf");
 
-    t1.addRow(vTemp);
-    t1.addRow(vTemp2);
+    for (int i = 0; i < vTemp.size(); ++i)
+    {
+        cout << vTemp[i] << endl;
+    }
+    //t1.addRow(vTemp);
+    //t1.addRow(vTemp2);
 
 	
 	return 0;

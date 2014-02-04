@@ -28,14 +28,61 @@
 #include <iomanip>
 using namespace std;
 
+template <class T>
 class Engine 
 {
 private:
     //Declare private variables
+    struct sCustomer
+    {
+        string sTableName;
+        vector<string> vColumnNames;
+        int ID;
+        string sName;
+        string SPhoneNumber;
+        string sAddress;
+    };
+
+    struct sHairdresser
+    {
+        string sTableName;
+        int ID;
+        string sName;
+        string SPhoneNumber;
+        string sAddress;
+    };
+
+    struct sAppointment
+    {
+        string sTableName;
+        int ID;
+        string * sCustomerID;
+        string * sHairdresserID;
+        string sTime;
+    };
+
+    vector <sCustomer> vCustomerTable;
+    vector <sHairdresser> vHairDresserTable;
+    vector <sAppointment> vAppointmentTable;
+
+    
 
 public:
 	//Declare class methods
-    Engine(){};
+    Engine();
+    void createTable();
+    void dropTable();
+
+    void insertInto();
+    void update();
+    void deleteFrom();
+
+    void selection(); //selects the tuples in a relation that satisfy a particular condition
+    void projection(); //select of a subset of the attributes of a relation
+    void reNaming(); //rename the attributes in a relation
+    void setUnion(); //compute the union of two relations, the relations must be union compatible
+    void setDifference(); //compute the set diff of two relations and the relations must be union compatible
+    void crossProduct(); //compute the cartisian product of two relations
 
     
 };
