@@ -1,5 +1,5 @@
 /*******************************************************************************
-    File: main.cpp
+    File: Engine.cpp
 
     Authors: Gustavo Pedroso UIN: 423002834
              Levi Clark UIN:
@@ -15,7 +15,7 @@
                 * Comments are applied for explanations
                 * Spacing and brackets are applied for readability
 
-	This file contains the main file 
+	This file contains the implementation for the engine
 *******************************************************************************/
 
 #include <string>
@@ -23,13 +23,5 @@
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
-#include "Parser.h"
 #include "Engine.h"
-#include "App.h"
 using namespace std;
-
-int main() 
-{
-	
-	return 0;
-}

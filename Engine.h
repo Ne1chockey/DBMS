@@ -1,5 +1,5 @@
 /*******************************************************************************
-    File: main.cpp
+    File: Engine.h
 
     Authors: Gustavo Pedroso UIN: 423002834
              Levi Clark UIN:
@@ -15,21 +15,29 @@
                 * Comments are applied for explanations
                 * Spacing and brackets are applied for readability
 
-	This file contains the main file 
+    This file contains the header for the engine
 *******************************************************************************/
+
+#ifndef ENGINE_H
+#define ENGINE_H
 
 #include <string>
 #include <vector>
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
-#include "Parser.h"
-#include "Engine.h"
-#include "App.h"
 using namespace std;
 
-int main() 
+class Engine 
 {
-	
-	return 0;
-}
+private:
+    //Declare private variables
+
+public:
+	//Declare class methods
+    Engine(){};
+
+    
+};
+
+#endif
