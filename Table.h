@@ -32,13 +32,13 @@ class Table
 {
 private:
     vector<string> vColumnName;
-    vector<vector<void *> > vRows;
+    vector<vector<string> > vRows;
 
 public:
-    void makeTuple(){};
     Table(){};
     void addColumn(string s){vColumnName.push_back(s);}
-    //void addRow(vector<void*> v){vRows.push_back(v);}
+    void addRow(vector<string> v){vRows.push_back(v);}
+    void displayTable();
 
 };
 

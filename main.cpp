@@ -31,22 +31,27 @@ using namespace std;
 
 int main() 
 {
-    vector<void *> vTemp;
-    vector<void *> vTemp2;
-    Table *t1 = new Table();
+    vector<string> vTemp;
+    vector<string> vTemp2;
+    Table t1;
 
-    vTemp.push_back((char *)'a');
-    vTemp.push_back((int *) 234);
-    vTemp.push_back((string *)"sdfas");
-    vTemp2.push_back((string *)"sdf");
+    vTemp.push_back("John Doe");
+    vTemp.push_back("23");
+    vTemp.push_back("8175555555");
+    vTemp.push_back("123 Something St. Ft Worth TX 76137");
 
-    for (int i = 0; i < vTemp.size(); ++i)
-    {
-        cout << vTemp[i] << endl;
-    }
-    //t1.addRow(vTemp);
-    //t1.addRow(vTemp2);
+    vTemp2.push_back("Jane Smith");
+    vTemp2.push_back("18");
 
+    t1.addColumn("Name");
+    t1.addColumn("Age");
+    t1.addColumn("Phone Number");
+    t1.addColumn("Street");
+
+    t1.addRow(vTemp);
+    t1.addRow(vTemp2);
+    cout << "sadfasdfas" << endl;
+    t1.displayTable();
 	
 	return 0;
 }
