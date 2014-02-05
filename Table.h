@@ -26,18 +26,19 @@
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
+#include <tuple>
 using namespace std;
 
 class Table
 {
 private:
-    vector<string> vColumnName;
-    vector<vector<string> > vRows;
+    vector<tuple<int,string> > vColumnName;
+    vector<vector<tuple<int,string> > > vRows;
 
 public:
     Table(){};
-    void addColumn(string s){vColumnName.push_back(s);}
-    void addRow(vector<string> v){vRows.push_back(v);}
+    void addColumn(tuple<int,string> s){vColumnName.push_back(s);}
+    void addRow(vector<tuple<int,string> > v){vRows.push_back(v);}
     void displayTable();
 
 };
