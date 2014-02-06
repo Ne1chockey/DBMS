@@ -25,3 +25,32 @@
 #include <iomanip>
 #include "Engine.h"
 using namespace std;
+
+/*******************************************************************************
+
+*******************************************************************************/
+Engine::Engine()
+{
+
+}
+
+/*******************************************************************************
+ This function will take in a vector of column names and trailing primary keys,
+ and an integer specifying how many columns are in the vector.
+*******************************************************************************/
+Engine::createTable(string sTableNameIn, vector<string> vColumnNamesIn, int iAmountOfColumns)
+{
+    Table t(sTableNameIn);
+
+    for (int i = 0; i < iAmountOfColumns; ++i)
+    {
+        t.addColumn(make_tuple(i,vColumnNamesIn[i]));
+    }
+
+    for (int i = 0; i < sizeof(vColumnNamesIn)-iAmountOfColumns; ++i)
+    {
+        t.vPrimaryKeys.push_back
+    }
+    
+
+}

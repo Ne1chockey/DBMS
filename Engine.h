@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
+#include <Table.h>
 using namespace std;
 
 template <class T>
@@ -33,39 +34,7 @@ class Engine
 {
 private:
     //Declare private variables
-    struct sCustomer
-    {
-        string sTableName;
-        vector<string> vColumnNames;
-        int ID;
-        string sName;
-        string SPhoneNumber;
-        string sAddress;
-    };
-
-    struct sHairdresser
-    {
-        string sTableName;
-        int ID;
-        string sName;
-        string SPhoneNumber;
-        string sAddress;
-    };
-
-    struct sAppointment
-    {
-        string sTableName;
-        int ID;
-        string * sCustomerID;
-        string * sHairdresserID;
-        string sTime;
-    };
-
-    vector <sCustomer> vCustomerTable;
-    vector <sHairdresser> vHairDresserTable;
-    vector <sAppointment> vAppointmentTable;
-
-    
+    vector<Table> vTableList;
 
 public:
 	//Declare class methods

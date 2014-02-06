@@ -33,10 +33,14 @@ class Table
 {
 private:
     vector<tuple<int,string> > vColumnName;
-    vector<vector<tuple<int,string> > > vRows;
+    vector<vector<tuple<int,string>> > vRows;
+    vector<string> vTypes; 
+    vector<int> vPrimaryKeys;
+    string sTableName;
 
 public:
     Table(){};
+    Table(string sTableNameIn) {sTableName = sTableNameIn; }
     void addColumn(tuple<int,string> s){vColumnName.push_back(s);}
     void addRow(vector<tuple<int,string> > v){vRows.push_back(v);}
     void displayTable();
