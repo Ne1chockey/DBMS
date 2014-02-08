@@ -2,9 +2,9 @@
     File: Parser.h
 
     Authors: Gustavo Pedroso UIN: 423002834
-             Levi Clark UIN:
-             Terry Chen UIN:
-             Daniel He UIN:
+             Levi Clark      UIN:
+             Terry Chen      UIN: 121007055
+             Daniel He       UIN: 620006827
 
             Department of Computer Science
             Texas A&M University
@@ -31,13 +31,13 @@ using namespace std;
 class Parser 
 {
 private:
-    //Declare private variables
+  //Declare private variables
 
 public:
-	//Declare class methods
-    Parser(){};
+  //Declare class methods
+  Parser(){};
 
-    
+
 };
 
 #endif

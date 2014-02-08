@@ -17,4 +17,4 @@ Table.o: Table.h
 	g++ -std=c++11 -c Table.cpp
 
 clean:
-	rm-rf *.o
+	rm -rf *.o main

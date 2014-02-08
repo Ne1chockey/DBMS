@@ -2,9 +2,9 @@
     File: Engine.h
 
     Authors: Gustavo Pedroso UIN: 423002834
-             Levi Clark UIN:
-             Terry Chen UIN:
-             Daniel He UIN:
+             Levi Clark      UIN:
+             Terry Chen      UIN: 121007055
+             Daniel He       UIN: 620006827
 
             Department of Computer Science
             Texas A&M University
@@ -32,31 +32,37 @@ using namespace std;
 class Engine 
 {
 private:
-    //Declare private variables
-    vector<Table> vTableList;
+  //Declare private variables
+  vector<Table> vTableList;
 
 public:
-	//Declare class methods
-    Engine(){};
-    void addTable(Table t) { vTableList.push_back(t); }
-    void createTable(string sTableNameIn, vector<string> vColumnNamesIn); 
-    void dropTable(string sTableNameIn);
-    void displayTable(int iIndex);
-    Table * getTable(int iIndex) { return &vTableList[iIndex]; }
+  //Declare class methods
+  Engine() {};
+  void addTable(Table t) 
+  { 
+    vTableList.push_back(t); 
+  }
+  void createTable(string sTableNameIn, vector<string> vColumnNamesIn); 
+  void dropTable(string sTableNameIn);
+  void displayTable(int iIndex);
+  Table * getTable(int iIndex) 
+  {
+    return &vTableList[iIndex];
+  }
 
-    void insertInto(string sTableNameIn);
-    void update();
-    void deleteFrom();
+  void insertInto(string sTableNameIn);
+  void update();
+  void deleteFrom();
 
-    Table selection(string sTableNameIn, string sTableNameOut, string sOperator,
-     string sColumn, string sAttribute); 
-    void projection(); //select of a subset of the attributes of a relation
-    void reNaming(); //rename the attributes in a relation
-    void setUnion(); //compute the union of two relations, the relations must be union compatible
-    void setDifference(); //compute the set diff of two relations and the relations must be union compatible
-    void crossProduct(); //compute the cartesian product of two relations
+  Table selection(string sTableNameIn, string sTableNameOut, string sOperator,
+    string sColumn, string sAttribute); 
+  void projection(); //select of a subset of the attributes of a relation
+  void reNaming(); //rename the attributes in a relation
+  void setUnion(); //compute the union of two relations, the relations must be union compatible
+  void setDifference(); //compute the set diff of two relations and the relations must be union compatible
+  void crossProduct(); //compute the cartesian product of two relations
 
-    
+
 };
 
 #endif
