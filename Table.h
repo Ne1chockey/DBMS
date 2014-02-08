@@ -41,9 +41,19 @@ private:
 public:
     Table(){};
     Table(string sTableNameIn) {sTableName = sTableNameIn; }
+
     void addColumn(tuple<int,string> s){vColumnName.push_back(s);}
     void addRow(vector<tuple<int,string> > v){vRows.push_back(v);}
+    tuple<int,string> getColumnIndex(string sColumnNameIn);
+    vector<tuple<int,string> > getRow(int iIndex);
+    vector<vector<tuple<int,string>> > getRows(){ return vRows; }
+    vector<string> getColumnValues(int iIndex);
+    vector<tuple<int,string> > getColumnNames() { return vColumnName; }
+    void addPrimaryKey(int iKeyIn) { vPrimaryKeys.push_back(iKeyIn); }
     void displayTable();
+
+
+    string getTableName() { return sTableName; }
 
 };
 

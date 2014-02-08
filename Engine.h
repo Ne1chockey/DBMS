@@ -26,10 +26,9 @@
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
-#include <Table.h>
+#include "Table.h"
 using namespace std;
 
-template <class T>
 class Engine 
 {
 private:
@@ -38,20 +37,24 @@ private:
 
 public:
 	//Declare class methods
-    Engine();
-    void createTable();
-    void dropTable();
+    Engine(){};
+    void addTable(Table t) { vTableList.push_back(t); }
+    void createTable(string sTableNameIn, vector<string> vColumnNamesIn); 
+    void dropTable(string sTableNameIn);
+    void displayTable(int iIndex);
+    Table * getTable(int iIndex) { return &vTableList[iIndex]; }
 
-    void insertInto();
+    void insertInto(string sTableNameIn);
     void update();
     void deleteFrom();
 
-    void selection(); //selects the tuples in a relation that satisfy a particular condition
+    Table selection(string sTableNameIn, string sTableNameOut, string sOperator,
+     string sColumn, string sAttribute); 
     void projection(); //select of a subset of the attributes of a relation
     void reNaming(); //rename the attributes in a relation
     void setUnion(); //compute the union of two relations, the relations must be union compatible
     void setDifference(); //compute the set diff of two relations and the relations must be union compatible
-    void crossProduct(); //compute the cartisian product of two relations
+    void crossProduct(); //compute the cartesian product of two relations
 
     
 };

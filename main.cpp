@@ -24,17 +24,23 @@
 #include <iostream>
 #include <iomanip>
 #include <tuple>
-#include "Parser.h"
 #include "Engine.h"
-#include "App.h"
-#include "Table.h"
 using namespace std;
 
 int main() 
 {
+    vector<string> vColumnNames;
     vector<tuple<int, string>> vTemp;
     vector<tuple<int, string>> vTemp2;
-    Table t1;
+    vector<tuple<int, string>> vTemp3;
+    Engine e;
+
+    vColumnNames.push_back("Name");
+    vColumnNames.push_back("Age");
+    vColumnNames.push_back("Phone Number");
+    vColumnNames.push_back("Address");
+
+    e.createTable("Table 1", vColumnNames);
 
     vTemp.push_back(make_tuple(0,"John Doe"));
     vTemp.push_back(make_tuple(1,"23"));
@@ -42,17 +48,21 @@ int main()
     vTemp.push_back(make_tuple(3,"123 Something St. Ft Worth TX 76137"));
 
     vTemp2.push_back(make_tuple(0,"Jane Smith"));
+    vTemp2.push_back(make_tuple(1,"25"));
     vTemp2.push_back(make_tuple(2,"8171231234"));
+    vTemp2.push_back(make_tuple(3,"456 That St. Ft Worth TX 76137"));
 
-    t1.addColumn(make_tuple(0,"Name"));
-    t1.addColumn(make_tuple(1,"Age"));
-    t1.addColumn(make_tuple(2,"Phone Number"));
-    t1.addColumn(make_tuple(3,"Street"));
+    vTemp3.push_back(make_tuple(0,"Damnit Terry"));
+    vTemp3.push_back(make_tuple(1,"23"));
+    vTemp3.push_back(make_tuple(2,"8171231234"));
+    vTemp3.push_back(make_tuple(3,"999 Elm St. Ft Worth TX 76137"));
 
-    t1.addRow(vTemp);
-    t1.addRow(vTemp2);
+    e.getTable(0)->addRow(vTemp);
+    e.getTable(0)->addRow(vTemp2);
+    e.getTable(0)->addRow(vTemp3);
 
-    t1.displayTable();
+    e.addTable(e.selection("Table 1", "Table 2", "==","Age","23"));
+    e.displayTable(1);
 	
 	return 0;
 }
