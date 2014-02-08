@@ -45,6 +45,7 @@ void Engine::createTable(string sTableNameIn, vector<string> vColumnNamesIn)
     t.addPrimaryKey((int)(vColumnNamesIn[i]));
   }
   */
+  vTableList.push_back(t);
 
 }
 
@@ -140,7 +141,11 @@ Table Engine::selection(string sTableNameIn, string sTableNameOut,
 *******************************************************************************/
 void Engine::displayTable(int iIndex)
 {
-
+  if (iIndex > vTableList.size())
+  {
+    cout << "Table Index Out of Bounds" << endl;
+    return;
+  }
   cout << "\n ";
   vector< tuple<int,string> > vColumnName = vTableList[iIndex].getColumnNames();
   vector< vector< tuple<int,string> > > vRows = vTableList[iIndex].getRows();

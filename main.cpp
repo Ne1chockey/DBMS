@@ -61,8 +61,8 @@ int main()
   e.getTable(0)->addRow(vTemp2);
   e.getTable(0)->addRow(vTemp3);
 
-  e.addTable(e.selection("Table 1", "Table 2", "==","Age","23"));
-  e.displayTable(1);
+  // e.addTable(e.selection("Table 1", "Table 2", "==","Age","23"));
+  //e.displayTable(1);
 
   return 0;
 }

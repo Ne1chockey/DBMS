@@ -47,7 +47,7 @@ public:
   void displayTable(int iIndex);
   Table * getTable(int iIndex) 
   {
-    return &vTableList[iIndex];
+    return &vTableList.at(iIndex);
   }
 
   void insertInto(string sTableNameIn);
