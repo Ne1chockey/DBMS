@@ -130,7 +130,12 @@ int main()
   vURow4.push_back(make_tuple(1,"4"));
   vURow4.push_back(make_tuple(2,"3333333333"));
   vURow4.push_back(make_tuple(3,"Somewhere Off Campus 4"));
-
+  
+  e.addRow("Other Table", vURow1);
+  e.addRow("Other Table", vURow2);
+  e.addRow("Other Table", vURow3);
+  e.addRow("Other Table", vURow4);
+  
   e.setUnion("Main Table", "Other Table");
   e.displayTable("Main Table and Other Table union");
   

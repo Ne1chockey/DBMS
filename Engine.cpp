@@ -367,7 +367,7 @@ void Engine::setUnion(string sT1Name, string sT2Name)
 
   // Ghetto way of adding working table 2 without the duplicates
   vector< vector< tuple<int,string> > > vRows2 = workingT2.getRows();
-  bool exists;
+  bool exists = false;
   for (int i = 0; i < vRows2.size(); i++) 
   {
     exists = false;
