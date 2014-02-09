@@ -45,7 +45,7 @@ void Table::displayTable()
   {
     cout << " | " << setw(20) << left << get<1>(vColumnName[i]);
   }
-  cout << "\n";
+  cout << "\n ";
 
   for (int i = 0; i < vColumnName.size(); ++i)
   {
@@ -68,7 +68,7 @@ void Table::displayTable()
       }
     }
 
-    cout << "\n";
+    cout << "\n ";
     for (int y = 0; y < vColumnName.size(); ++y)
     {
       cout << "-----------------------";

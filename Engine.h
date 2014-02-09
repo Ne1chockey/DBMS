@@ -38,12 +38,7 @@ private:
 public:
   //Declare class methods
   Engine() {};
-  /*
-  void addTable(Table t) 
-  { 
-    vTableList.push_back(t); 
-  }
-  */
+  
   void createTable(string sTableNameIn, 
     vector<tuple<string, string> > vColumnNamesIn); 
   void dropTable(string sTableNameIn);
@@ -70,10 +65,6 @@ public:
         return;
       }
     }
-  }
-  Table * getTable(int iIndex) 
-  {
-    return &vTableList.at(iIndex);
   }
 
   void insertInto(string sTableNameIn);

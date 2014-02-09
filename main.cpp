@@ -29,40 +29,74 @@ using namespace std;
 
 int main() 
 {
+  //Declare variables
   vector< tuple<string, string> > vColumnNames;
   vector< tuple<int, string> > vRow;
   vector< tuple<int, string> > vRow2;
   vector< tuple<int, string> > vRow3;
+  vector< tuple<int, string> > vRow4;
+  vector< tuple<int, string> > vRow5;
   Engine e;
 
+  //NOTE TO SELF: change this to where the function takes in the two parameters
+  //instead of making a tuple and sending, have the function make the tuple
+  //dont make the user make a tuple and send it, lets do that on our end.
+
+  //Create columns for the main table
   vColumnNames.push_back(make_tuple("Name","string"));
   vColumnNames.push_back(make_tuple("Age","int"));
   vColumnNames.push_back(make_tuple("Phone Number","string"));
   vColumnNames.push_back(make_tuple("Address","string"));
 
-  e.createTable("Table 1", vColumnNames);
+  //create a main table to work with
+  e.createTable("Main Table", vColumnNames);
 
+  //Push the row values into each row
   vRow.push_back(make_tuple(0,"John Doe"));
   vRow.push_back(make_tuple(1,"23"));
   vRow.push_back(make_tuple(2,"8175555555"));
   vRow.push_back(make_tuple(3,"123 Something St. Ft Worth TX 76137"));
 
   vRow2.push_back(make_tuple(0,"Jane Smith"));
-  vRow2.push_back(make_tuple(1,"25"));
+  vRow2.push_back(make_tuple(1,"15"));
   vRow2.push_back(make_tuple(2,"8171231234"));
   vRow2.push_back(make_tuple(3,"456 That St. Ft Worth TX 76137"));
 
-  vRow3.push_back(make_tuple(0,"This Dude"));
+  vRow3.push_back(make_tuple(0,"Rick Raptor"));
   vRow3.push_back(make_tuple(1,"23"));
   vRow3.push_back(make_tuple(2,"8171231234"));
   vRow3.push_back(make_tuple(3,"999 Elm St. Ft Worth TX 76137"));
 
-  e.addRow("Table 1", vRow);
-  e.addRow("Table 1", vRow2);
-  e.addRow("Table 1", vRow3);
+  vRow4.push_back(make_tuple(0,"Old Blue"));
+  vRow4.push_back(make_tuple(1,"100"));
+  vRow4.push_back(make_tuple(2,"8173335555"));
+  vRow4.push_back(make_tuple(3,"1 Hello Dr. Keller TX 76244"));
 
-  e.selection("Table 1","Table 2", "==","Age","23");
-  e.displayTable("Table 2");
+  vRow5.push_back(make_tuple(0,"Will Johnson"));
+  vRow5.push_back(make_tuple(1,"5"));
+  vRow5.push_back(make_tuple(2,"3611238585"));
+  vRow5.push_back(make_tuple(3,"687 Dude Ave. Corpus Christi TX 78412"));
+
+  //Add each row to the main table
+  e.addRow("Main Table", vRow);
+  e.addRow("Main Table", vRow2);
+  e.addRow("Main Table", vRow3);
+  e.addRow("Main Table", vRow4);
+  e.addRow("Main Table", vRow5);
+
+  //Test the selection function with all possibilities
+  e.selection("Main Table","Equality Table", "==","Age","23");
+  e.selection("Main Table","Less Than Or Equal To Table", "<=","Age","15");
+  e.selection("Main Table","Greater Than Or Equal To Table", ">=","Age","23");
+  e.selection("Main Table","Less Than Table", "<","Age","100");
+  e.selection("Main Table","Greater Than Table", ">","Age","23");
+
+  //Change the table name to the table you want to view
+  e.displayTable("Equality Table");
+  e.displayTable("Less Than Or Equal To Table");
+  e.displayTable("Greater Than Or Equal To Table");
+  e.displayTable("Less Than Table");
+  e.displayTable("Greater Than Table");
 
   return 0;
 }

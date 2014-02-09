@@ -68,9 +68,8 @@ void Engine::dropTable(string sTableNameIn)
 void Engine::selection(string sTableNameIn, string sTableNameOut, 
                         string sOperator, string sColumn, string sAttribute)
 {
-  //Create a new table to send back
+  //Create a new table to send back 
   Table tNewTable(sTableNameOut);
-  int iTemp;
   vector<string> vColumnValues;
 
   for (int i = 0; i < vTableList.size(); ++i)
@@ -87,6 +86,7 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
 
       for (int i = 0; i < vNames.size(); ++i)
       {
+        //Add column to new table
         tNewTable.addColumn(vNames[i], vTypes[i]);
       }
       
@@ -106,10 +106,8 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
         {
           for (int x = 0; x < vColumnValues.size(); ++x)
           {
-            //push back the column names into the new table 
-
             //Execute if the attribute satisfies the condition
-            if (vColumnValues[x] == sAttribute)
+            if (sAttribute == vColumnValues[x])
             {
               //push back the row into the new table
               tNewTable.addRow(tCurrentTable.getRow(x));
@@ -119,19 +117,55 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
         }
         else if (sOperator == ">=")
         {
-          //
+          for (int x = 0; x < vColumnValues.size(); ++x)
+          {
+            //Execute if the attribute satisfies the condition
+            if (sAttribute >= vColumnValues[x])
+            {
+              //push back the row into the new table
+              tNewTable.addRow(tCurrentTable.getRow(x));
+
+            }
+          }
         }
         else if (sOperator == "<=")
         {
-          //
+          for (int x = 0; x < vColumnValues.size(); ++x)
+          {
+            //Execute if the attribute satisfies the condition
+            if (sAttribute <= vColumnValues[x])
+            {
+              //push back the row into the new table
+              tNewTable.addRow(tCurrentTable.getRow(x));
+
+            }
+          }
         }
         else if (sOperator == ">")
         {
-          //
+          for (int x = 0; x < vColumnValues.size(); ++x)
+          {
+            //Execute if the attribute satisfies the condition
+            if (sAttribute > vColumnValues[x])
+            {
+              //push back the row into the new table
+              tNewTable.addRow(tCurrentTable.getRow(x));
+
+            }
+          }
         }
         else if (sOperator == "<")
         {
-          //
+          for (int x = 0; x < vColumnValues.size(); ++x)
+          {
+            //Execute if the attribute satisfies the condition
+            if (sAttribute < vColumnValues[x])
+            {
+              //push back the row into the new table
+              tNewTable.addRow(tCurrentTable.getRow(x));
+
+            }
+          }
         }
         else
         {
@@ -143,66 +177,6 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
 
   vTableList.push_back(tNewTable);
 } 
-
-/*******************************************************************************
-  Display a table from the list
-*******************************************************************************/
-/*
-void Engine::displayTable(int iIndex)
-{
-  if (iIndex > vTableList.size())
-  {
-    cout << "Table Index Out of Bounds" << endl;
-    return;
-  }
-  cout << "\n ";
-  vector< tuple<int,string> > vColumnName = vTableList[iIndex].getColumnNames();
-  vector< vector< tuple<int,string> > > vRows = vTableList[iIndex].getRows();
-  for (int i = 0; i < vColumnName.size(); ++i)
-  {
-    cout << "-----------------------";
-  }
-  cout << "\n";
-
-  for (int i = 0; i < vColumnName.size(); ++i)
-  {
-    cout << " | " << setw(20) << left << get<1>(vColumnName[i]);
-  }
-  cout << "\n";
-
-  for (int i = 0; i < vColumnName.size(); ++i)
-  {
-    cout << "-----------------------";
-  }
-  cout << "\n";
-
-  for (int i = 0; i < vRows.size(); ++i)
-  {
-    for (int a = 0; a < vColumnName.size(); ++a)
-    {
-      for (vector<tuple<int,string> >::iterator it = vRows[i].begin(); 
-        it != vRows[i].end(); ++it)
-      {
-        if (get<0>(*it) == get<0>(vColumnName[a]))
-        {
-          cout << " | " << setw(20) << left << get<1>(*it);
-          break;
-        }
-      }
-    }
-
-    cout << "\n";
-    for (int y = 0; y < vColumnName.size(); ++y)
-    {
-      cout << "-----------------------";
-    }
-    cout << "\n";
-  }
-  cout << "\n";
-}
-*/
-
-
 
 
 
