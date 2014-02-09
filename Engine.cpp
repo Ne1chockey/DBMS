@@ -30,21 +30,17 @@ using namespace std;
   This function will take in a vector of column names and trailing primary keys,
   and an integer specifying how many columns are in the vector.
 *******************************************************************************/
-void Engine::createTable(string sTableNameIn, vector<string> vColumnNamesIn)
+void Engine::createTable(string sTableNameIn, 
+  vector< tuple<string,string> > vColumnNamesIn)
 {
   Table t(sTableNameIn);
 
   for (int i = 0; i < vColumnNamesIn.size(); ++i)
   {
-    t.addColumn(make_tuple(i,vColumnNamesIn[i]));
+    string sColumnNameIn = get<0>(vColumnNamesIn[i]);
+    string sColumnTypeIn = get<1>(vColumnNamesIn[i]);
+    t.addColumn(make_tuple(i,sColumnNameIn), sColumnTypeIn);
   }
-  /*
-  for (int i = sizeof(vColumnNamesIn)-iAmountOfColumns; 
-        i < iAmountOfColumns; ++i)
-  {
-    t.addPrimaryKey((int)(vColumnNamesIn[i]));
-  }
-  */
   vTableList.push_back(t);
 
 }
@@ -69,30 +65,32 @@ void Engine::dropTable(string sTableNameIn)
   sTableNameOut is the name we will give the newly created table.
   sOperator will be the operator to be used on sColumn and sAttribute
 *******************************************************************************/
-Table Engine::selection(string sTableNameIn, string sTableNameOut, 
+void Engine::selection(string sTableNameIn, string sTableNameOut, 
                         string sOperator, string sColumn, string sAttribute)
 {
   //Create a new table to send back
   Table tNewTable(sTableNameOut);
   int iTemp;
-  tuple<int,string> tReturn;
   vector<string> vColumnValues;
 
   for (int i = 0; i < vTableList.size(); ++i)
-  {
+  { 
+    Table tCurrentTable = vTableList[i];
+
     //Execute if the table is found in the list
-    if (vTableList[i].getTableName() == sTableNameIn)
+    if (tCurrentTable.getTableName() == sTableNameIn)
     {
       //See if the column exists in the table
-      tReturn = vTableList[i].getColumnIndex(sColumn);
+      tuple<int,string> tCurrentColumn = tCurrentTable.getColumnIndex(sColumn);
+      int iColumnIndex = get<0>(tCurrentColumn);
 
-      if (get<0>(tReturn) == -1)
+      if (iColumnIndex == -1)
       {
         printf("| The column does not exist.\n");
       }
       else
       {
-        vColumnValues = vTableList[i].getColumnValues(get<0>(tReturn));
+        vColumnValues = tCurrentTable.getColumnValues(iColumnIndex);
 
         //Execute if we are working with strings
         if (sOperator == "==")
@@ -103,42 +101,46 @@ Table Engine::selection(string sTableNameIn, string sTableNameOut,
             if (vColumnValues[x] == sAttribute)
             {
               //push back the row into the new table
-              tNewTable.addRow(vTableList[i].getRow(x));
+              tNewTable.addRow(tCurrentTable.getRow(x));
+
             }
           }
         }
-
-        //Execute if we are working with integers
-        if (sOperator == ">=")
-        {
-          /* code */
-        }
-        else if (sOperator == "<=")
-        {
-          /* code */
-        }
-        else if (sOperator == ">")
-        {
-          /* code */
-        }
-        else if (sOperator == "<")
-        {
-          /* code */
-        }
         else
         {
-          printf("| ERROR, invalid operator.\n");
+          //Execute if we are working with integers
+          if (sOperator == ">=")
+          {
+            //
+          }
+          else if (sOperator == "<=")
+          {
+            //
+          }
+          else if (sOperator == ">")
+          {
+            //
+          }
+          else if (sOperator == "<")
+          {
+            //
+          }
+          else
+          {
+            printf("| ERROR, invalid operator.\n");
+          }
         }
       }
     }
   }
 
-  return tNewTable;
+  vTableList.push_back(tNewTable);
 } 
 
 /*******************************************************************************
   Display a table from the list
 *******************************************************************************/
+/*
 void Engine::displayTable(int iIndex)
 {
   if (iIndex > vTableList.size())
@@ -191,7 +193,7 @@ void Engine::displayTable(int iIndex)
   }
   cout << "\n";
 }
-
+*/
 
 
 

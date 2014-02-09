@@ -46,16 +46,17 @@ public:
     sTableName = sTableNameIn; 
   }
   
-  void addColumn(tuple<int,string> s)
+  void addColumn(tuple<int,string> s, string sColumnType)
   {
     vColumnName.push_back(s);
+    vTypes.push_back(sColumnType);
   }
   
   void addRow(vector< tuple<int,string> > v)
   {
     vRows.push_back(v);
   }
-  
+
   tuple<int,string> getColumnIndex(string sColumnNameIn);
   
   vector< tuple<int,string> > getRow(int iIndex);

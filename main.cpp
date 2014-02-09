@@ -29,40 +29,40 @@ using namespace std;
 
 int main() 
 {
-  vector<string> vColumnNames;
-  vector< tuple<int, string> > vTemp;
-  vector< tuple<int, string> > vTemp2;
-  vector< tuple<int, string> > vTemp3;
+  vector< tuple<string, string> > vColumnNames;
+  vector< tuple<int, string> > vRow;
+  vector< tuple<int, string> > vRow2;
+  vector< tuple<int, string> > vRow3;
   Engine e;
 
-  vColumnNames.push_back("Name");
-  vColumnNames.push_back("Age");
-  vColumnNames.push_back("Phone Number");
-  vColumnNames.push_back("Address");
+  vColumnNames.push_back(make_tuple("Name","string"));
+  vColumnNames.push_back(make_tuple("Age","int"));
+  vColumnNames.push_back(make_tuple("Phone Number","string"));
+  vColumnNames.push_back(make_tuple("Address","string"));
 
   e.createTable("Table 1", vColumnNames);
 
-  vTemp.push_back(make_tuple(0,"John Doe"));
-  vTemp.push_back(make_tuple(1,"23"));
-  vTemp.push_back(make_tuple(2,"8175555555"));
-  vTemp.push_back(make_tuple(3,"123 Something St. Ft Worth TX 76137"));
+  vRow.push_back(make_tuple(0,"John Doe"));
+  vRow.push_back(make_tuple(1,"23"));
+  vRow.push_back(make_tuple(2,"8175555555"));
+  vRow.push_back(make_tuple(3,"123 Something St. Ft Worth TX 76137"));
 
-  vTemp2.push_back(make_tuple(0,"Jane Smith"));
-  vTemp2.push_back(make_tuple(1,"25"));
-  vTemp2.push_back(make_tuple(2,"8171231234"));
-  vTemp2.push_back(make_tuple(3,"456 That St. Ft Worth TX 76137"));
+  vRow2.push_back(make_tuple(0,"Jane Smith"));
+  vRow2.push_back(make_tuple(1,"25"));
+  vRow2.push_back(make_tuple(2,"8171231234"));
+  vRow2.push_back(make_tuple(3,"456 That St. Ft Worth TX 76137"));
 
-  vTemp3.push_back(make_tuple(0,"Sorry Gus"));
-  vTemp3.push_back(make_tuple(1,"23"));
-  vTemp3.push_back(make_tuple(2,"8171231234"));
-  vTemp3.push_back(make_tuple(3,"999 Elm St. Ft Worth TX 76137"));
+  vRow3.push_back(make_tuple(0,"This Dude"));
+  vRow3.push_back(make_tuple(1,"23"));
+  vRow3.push_back(make_tuple(2,"8171231234"));
+  vRow3.push_back(make_tuple(3,"999 Elm St. Ft Worth TX 76137"));
 
-  e.getTable(0)->addRow(vTemp);
-  e.getTable(0)->addRow(vTemp2);
-  e.getTable(0)->addRow(vTemp3);
+  e.addRow("Table 1", vRow);
+  e.addRow("Table 1", vRow2);
+  e.addRow("Table 1", vRow3);
 
-  // e.addTable(e.selection("Table 1", "Table 2", "==","Age","23"));
-  //e.displayTable(1);
+  e.selection("Table 1","Table 2", "==","Age","23");
+  e.displayTable("Table 2");
 
   return 0;
 }

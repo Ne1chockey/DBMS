@@ -89,10 +89,14 @@ tuple<int,string> Table::getColumnIndex(string sColumnNameIn)
     //Execute if the column was found
     if (get<1>(vColumnName[i]) == sColumnNameIn)
     {
-      return make_tuple(get<0>(vColumnName[i]), vTypes[get<0>(vColumnName[i])]);
+      int iColumnIndex = get<0>(vColumnName[i]);
+      string sColumnType = vTypes.at(iColumnIndex);
+
+      return make_tuple(iColumnIndex, sColumnType);
     }
   }
 
+  printf("| We didnt find it\n");
   //The column was not found
   return make_tuple(-1,"n/a");
 }

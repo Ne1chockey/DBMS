@@ -38,13 +38,39 @@ private:
 public:
   //Declare class methods
   Engine() {};
+  /*
   void addTable(Table t) 
   { 
     vTableList.push_back(t); 
   }
-  void createTable(string sTableNameIn, vector<string> vColumnNamesIn); 
+  */
+  void createTable(string sTableNameIn, 
+    vector<tuple<string, string> > vColumnNamesIn); 
   void dropTable(string sTableNameIn);
-  void displayTable(int iIndex);
+  void displayTable(string sTableNameIn)
+  {
+    for (int i = 0; i < vTableList.size(); ++i)
+    {
+      if (vTableList[i].getTableName() == sTableNameIn)
+      {
+        vTableList[i].displayTable();
+        return;
+      }
+    }
+    printf("| The table was not found\n");
+  }
+
+  void addRow(string sTableNameIn, vector< tuple<int, string> > vRowIn)
+  {
+    for (int i = 0; i < vTableList.size(); ++i)
+    {
+      if (vTableList[i].getTableName() == sTableNameIn)
+      {
+        vTableList[i].addRow(vRowIn);
+        return;
+      }
+    }
+  }
   Table * getTable(int iIndex) 
   {
     return &vTableList.at(iIndex);
@@ -54,7 +80,7 @@ public:
   void update();
   void deleteFrom();
 
-  Table selection(string sTableNameIn, string sTableNameOut, string sOperator,
+  void selection(string sTableNameIn, string sTableNameOut, string sOperator,
     string sColumn, string sAttribute); 
   void projection(); //select of a subset of the attributes of a relation
   void reNaming(); //rename the attributes in a relation
