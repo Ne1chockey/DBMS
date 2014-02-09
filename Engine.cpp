@@ -249,20 +249,53 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
   vTableList.push_back(tNewTable);
 } 
 
-void Engine::reNaming(vector<string> vNewNames, Table t) 
+void Engine::reNaming(vector<string> vNewNames, string sTableName) 
 {
-  if (vNewNames.size() != t.getColumnNames().size()) {
+  int iTableIndex = -1;
+  for (int i = 0; i < vTableList.size(); i++) 
+  {
+    if (vTableList[i].getTableName() == sTableName) 
+    {
+      iTableIndex = i;
+      break;
+    }
+  }
+  
+  if (iTableIndex == -1) 
+  {
+    cout << "Could not find that table!" << endl;
+  }
+   
+  Table workingTable = vTableList[iTableIndex];
+  
+  if (vNewNames.size() != workingTable.getColumnNames().size()) 
+  {
     cout << "Supplied column names do not match selected table!" << endl;
   }
   
-  string sTableName = t.getTableName();
-  vector<string> vColTypes = t.getColumnTypes();
-  Table reNamed(sTableName);
+  string sRenameTableName = workingTable.getTableName() + "_renamed";
+  vector<string> vColTypes = workingTable.getColumnTypes();
+  Table reNamed(sRenameTableName);
+  cout << sRenameTableName << endl;
   
-  for (int i = 0; i < vNewNames.size(); ++i)
+  for (int i = 0; i < vNewNames.size(); i++)
   {
     string sColumnNameIn = vNewNames[i];
     string sColumnTypeIn = vColTypes[i];
     reNamed.addColumn(make_tuple(i,sColumnNameIn), sColumnTypeIn);
   }
+  
+  vector< vector< tuple<int,string> > > vRows = workingTable.getRows();
+  
+  for (int i = 0; i < vRows.size(); i++)
+  {
+    reNamed.addRow(vRows[i]);
+  }
+  
+  vTableList.push_back(reNamed);
+}
+
+void Engine::setUnion(Table t1, Table t2)
+{
+  
 }
