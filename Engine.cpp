@@ -249,35 +249,20 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
   vTableList.push_back(tNewTable);
 } 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void Engine::reNaming(vector<string> vNewNames, Table t) 
+{
+  if (vNewNames.size() != t.getColumnNames().size()) {
+    cout << "Supplied column names do not match selected table!" << endl;
+  }
+  
+  string sTableName = t.getTableName();
+  vector<string> vColTypes = t.getColumnTypes();
+  Table reNamed(sTableName);
+  
+  for (int i = 0; i < vNewNames.size(); ++i)
+  {
+    string sColumnNameIn = vNewNames[i];
+    string sColumnTypeIn = vColTypes[i];
+    reNamed.addColumn(make_tuple(i,sColumnNameIn), sColumnTypeIn);
+  }
+}
