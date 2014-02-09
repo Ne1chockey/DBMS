@@ -251,6 +251,7 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
 
 void Engine::reNaming(vector<string> vNewNames, string sTableName) 
 {
+  // Find the table in vTableList
   int iTableIndex = -1;
   for (int i = 0; i < vTableList.size(); i++) 
   {
@@ -264,20 +265,23 @@ void Engine::reNaming(vector<string> vNewNames, string sTableName)
   if (iTableIndex == -1) 
   {
     cout << "Could not find that table!" << endl;
+    return;
   }
-   
+  
   Table workingTable = vTableList[iTableIndex];
   
+  // Examine whether the supplied names will match the supplied table
   if (vNewNames.size() != workingTable.getColumnNames().size()) 
   {
     cout << "Supplied column names do not match selected table!" << endl;
+    return;
   }
   
-  string sRenameTableName = workingTable.getTableName() + "_renamed";
+  string sRenameTableName = workingTable.getTableName() + " renamed";
   vector<string> vColTypes = workingTable.getColumnTypes();
   Table reNamed(sRenameTableName);
-  cout << sRenameTableName << endl;
   
+  // Create a new table with the new supplied column names
   for (int i = 0; i < vNewNames.size(); i++)
   {
     string sColumnNameIn = vNewNames[i];
@@ -285,6 +289,7 @@ void Engine::reNaming(vector<string> vNewNames, string sTableName)
     reNamed.addColumn(make_tuple(i,sColumnNameIn), sColumnTypeIn);
   }
   
+  // Copy row elements from working table to the new renamed table
   vector< vector< tuple<int,string> > > vRows = workingTable.getRows();
   
   for (int i = 0; i < vRows.size(); i++)
@@ -295,7 +300,89 @@ void Engine::reNaming(vector<string> vNewNames, string sTableName)
   vTableList.push_back(reNamed);
 }
 
-void Engine::setUnion(Table t1, Table t2)
+void Engine::setUnion(string sT1Name, string sT2Name)
 {
+  // Find the table in vTableList
+  int iT1Index = -1;
+  int iT2Index = -1;
+  for (int i = 0; i < vTableList.size(); i++) 
+  {
+    if (vTableList[i].getTableName() == sT1Name) 
+    {
+      iT1Index = i;
+    }
+    if (vTableList[i].getTableName() == sT2Name) 
+    {
+      iT2Index = i;
+    }
+  }
   
+  if (iT1Index == -1) 
+  {
+    cout << "Could not find that first table!" << endl;
+    return;
+  }
+  if (iT2Index == -1) 
+  {
+    cout << "Could not find that second table!" << endl;
+    return;
+  }
+  
+  
+  Table workingT1 = vTableList[iT1Index];
+  Table workingT2 = vTableList[iT2Index];
+  // Check if the tables are compatible/unionizable.   
+  if (workingT1.getColumnNames() != workingT2.getColumnNames()) 
+  {
+    cout << "Union not possible! Tables are different." << endl;
+    return;
+  }
+  if (workingT1.getColumnTypes() != workingT2.getColumnTypes()) 
+  {
+    cout << "Union not possible! Tables are different." << endl;
+    return;
+  }
+  
+  string sUnionTableName = workingT1.getTableName() + " and "
+    + workingT2.getTableName() + " union";
+  vector< tuple<int, string> > vColNames = workingT1.getColumnNames();
+  vector<string> vColTypes = workingT1.getColumnTypes();
+  
+  // Create a new table, using column names from the supplied table. 
+  Table unioned(sUnionTableName);
+  for (int i = 0; i < vColNames.size(); i++) 
+  {
+    string sColumnNameIn = get<1>(vColNames[i]);
+    string sColumnTypeIn = vColTypes[i];
+    unioned.addColumn(make_tuple(i,sColumnNameIn), sColumnTypeIn);
+  }
+
+  // Copy row elements from working table 1.
+  vector< vector< tuple<int,string> > > vRows1 = workingT1.getRows();
+  
+  for (int i = 0; i < vRows1.size(); i++)
+  {
+    unioned.addRow(vRows1[i]);
+  }
+
+  // Ghetto way of adding working table 2 without the duplicates
+  vector< vector< tuple<int,string> > > vRows2 = workingT2.getRows();
+  bool exists;
+  for (int i = 0; i < vRows2.size(); i++) 
+  {
+    exists = false;
+    for (int j = 0; j < vRows1.size(); j++)
+    {
+      if (vRows1[j] == vRows2[i]) {
+        exists = true;
+        break;
+      }
+    }
+    if (!exists)
+    {
+      unioned.addRow(vRows2[i]);
+    }
+  }
+  
+  vTableList.push_back(unioned);
 }

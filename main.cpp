@@ -98,7 +98,41 @@ int main()
   vector<string> renames = {"Full Name", "Oldness", "Digits", "Ma house"};
   e.reNaming(renames, "Equality Table");
   
-  e.displayTable("Equality Table_renamed");
+  e.displayTable("Equality Table renamed");
+  
+  // Union Testing
+  e.createTable("Other Table", vColumnNames);
+  e.addRow("Other Table", vRow);
+  e.addRow("Other Table", vRow2);
+  e.addRow("Other Table", vRow3);
+  
+  vector< tuple<int, string> > vURow1;
+  vector< tuple<int, string> > vURow2;
+  vector< tuple<int, string> > vURow3;
+  vector< tuple<int, string> > vURow4;
+  
+  vURow1.push_back(make_tuple(0,"Gus Pedroso"));
+  vURow1.push_back(make_tuple(1,"1"));
+  vURow1.push_back(make_tuple(2,"1234567890"));
+  vURow1.push_back(make_tuple(3,"Somewhere Off Campus 1"));
 
+  vURow2.push_back(make_tuple(0,"Levi Clark"));
+  vURow2.push_back(make_tuple(1,"2"));
+  vURow2.push_back(make_tuple(2,"0987654321"));
+  vURow2.push_back(make_tuple(3,"Somewhere Off Campus 2"));
+
+  vURow3.push_back(make_tuple(0,"Terry Chen"));
+  vURow3.push_back(make_tuple(1,"3"));
+  vURow3.push_back(make_tuple(2,"2222222222"));
+  vURow3.push_back(make_tuple(3,"Somewhere On Campus 1"));
+
+  vURow4.push_back(make_tuple(0,"Daniel He"));
+  vURow4.push_back(make_tuple(1,"4"));
+  vURow4.push_back(make_tuple(2,"3333333333"));
+  vURow4.push_back(make_tuple(3,"Somewhere Off Campus 4"));
+
+  e.setUnion("Main Table", "Other Table");
+  e.displayTable("Main Table and Other Table union");
+  
   return 0;
 }

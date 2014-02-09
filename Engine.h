@@ -75,7 +75,7 @@ public:
     string sColumn, string sAttribute); 
   void projection(); //select of a subset of the attributes of a relation
   void reNaming(vector<string> vNewNames, string sTableName); //rename the attributes in a relation
-  void setUnion(Table t1, Table t2); //compute the union of two relations, the relations must be union compatible
+  void setUnion(string sT1Name, string sT2Name); //compute the union of two relations, the relations must be union compatible
   void setDifference(); //compute the set diff of two relations and the relations must be union compatible
   void crossProduct(); //compute the cartesian product of two relations
 
