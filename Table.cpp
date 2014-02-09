@@ -32,8 +32,15 @@ using namespace std;
 *******************************************************************************/
 void Table::displayTable()
 {
-
   cout << "\n ";
+
+  for (int i = 0; i < vColumnName.size(); ++i)
+  {
+    cout << "-----------------------";
+  }
+  cout << "\n";
+
+  cout << " | " << sTableName << "\n ";
 
   for (int i = 0; i < vColumnName.size(); ++i)
   {
@@ -57,12 +64,12 @@ void Table::displayTable()
   {
     for (int a = 0; a < vColumnName.size(); ++a)
     {
-      for (vector< tuple<int,string> >::iterator it = vRows[i].begin(); 
-        it != vRows[i].end(); ++it)
+      for (vector< tuple<int,string> >::iterator current = vRows[i].begin(); 
+        current != vRows[i].end(); ++current)
       {
-        if (get<0>(*it) == get<0>(vColumnName[a]))
+        if (get<0>(*current) == get<0>(vColumnName[a]))
         {
-          cout << " | " << setw(20) << left << get<1>(*it);
+          cout << " | " << setw(20) << left << get<1>(*current);
           break;
         }
       }
@@ -111,13 +118,13 @@ vector<string> Table::getColumnValues(int iIndex)
 
   for (int i = 0; i < vRows.size(); ++i)
   {
-    for (vector< tuple<int,string> >::iterator it = vRows[i].begin(); 
-      it != vRows[i].end(); ++it)
+    for (vector< tuple<int,string> >::iterator current = vRows[i].begin(); 
+      current != vRows[i].end(); ++current)
     {
       //Execute if the column is found
-      if (get<0>(*it) == get<0>(vColumnName[iIndex]))
+      if (get<0>(*current) == get<0>(vColumnName[iIndex]))
       {
-        vReturn.push_back(get<1>(*it));
+        vReturn.push_back(get<1>(*current));
         break;
       }
     }
@@ -133,10 +140,10 @@ vector< tuple<int,string> > Table::getRow(int iIndex)
 {
   vector< tuple<int,string> > vReturn;
 
-  for (vector< tuple<int,string> >::iterator it = vRows[iIndex].begin(); 
-    it != vRows[iIndex].end(); ++it)
+  for (vector< tuple<int,string> >::iterator current = vRows[iIndex].begin(); 
+    current != vRows[iIndex].end(); ++current)
   {
-    vReturn.push_back(make_tuple(get<0>(*it), get<1>(*it)));
+    vReturn.push_back(make_tuple(get<0>(*current), get<1>(*current)));
   }
 
   return vReturn;

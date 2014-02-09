@@ -93,10 +93,6 @@ int main()
 
   //Change the table name to the table you want to view
   e.displayTable("Equality Table");
-  e.displayTable("Less Than Or Equal To Table");
-  e.displayTable("Greater Than Or Equal To Table");
-  e.displayTable("Less Than Table");
-  e.displayTable("Greater Than Table");
 
   return 0;
 }
