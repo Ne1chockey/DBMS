@@ -93,6 +93,12 @@ int main()
 
   //Change the table name to the table you want to view
   e.displayTable("Equality Table");
+   
+  // Rename Testing
+  vector<string> renames = {"Full Name", "Oldness", "Digits", "Ma house"};
+  e.reNaming(renames, "Equality Table");
+  
+  e.displayTable("Equality Table_renamed");
 
   return 0;
 }
