@@ -84,10 +84,10 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
       vector< tuple<int,string> > vNames = tCurrentTable.getColumnNames();
       vector<string> vTypes = tCurrentTable.getColumnTypes();
 
-      for (int i = 0; i < vNames.size(); ++i)
+      for (int a = 0; a < vNames.size(); ++a)
       {
         //Add column to new table
-        tNewTable.addColumn(vNames[i], vTypes[i]);
+        tNewTable.addColumn(vNames[a], vTypes[a]);
       }
       
       //See if the column exists in the table
@@ -100,76 +100,147 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
       }
       else
       {
+        //get the values for the column
         vColumnValues = tCurrentTable.getColumnValues(iColumnIndex);
 
-        if (sOperator == "==")
-        {
-          for (int x = 0; x < vColumnValues.size(); ++x)
-          {
-            //Execute if the attribute satisfies the condition
-            if (sAttribute == vColumnValues[x])
-            {
-              //push back the row into the new table
-              tNewTable.addRow(tCurrentTable.getRow(x));
+        //get the type of the column
+        string sColumnType = vTypes[iColumnIndex];
 
+        for (int x = 0; x < vColumnValues.size(); ++x)
+        {
+          int iValueToBeTested = atoi(vColumnValues[x].c_str());
+          string sValueToBeTested = vColumnValues[x];
+          int iAttribute = atoi(sAttribute.c_str());
+
+          if (sOperator == "==")
+          {
+            if (sColumnType == "string")
+            {
+              //Execute if the attribute satisfies the condition
+              if (sValueToBeTested == sAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else if (sColumnType == "int")
+            {
+              //Execute if the attribute satisfies the condition
+              if (iValueToBeTested == iAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else
+            {
+              printf("| Type of column invalid\n");
             }
           }
-        }
-        else if (sOperator == ">=")
-        {
-          for (int x = 0; x < vColumnValues.size(); ++x)
+          else if (sOperator == ">=")
           {
-            //Execute if the attribute satisfies the condition
-            if (sAttribute >= vColumnValues[x])
+            if (sColumnType == "string")
             {
-              //push back the row into the new table
-              tNewTable.addRow(tCurrentTable.getRow(x));
-
+              //Execute if the attribute satisfies the condition
+              if (sValueToBeTested >= sAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else if (sColumnType == "int")
+            {
+              //Execute if the attribute satisfies the condition
+              if (iValueToBeTested >= iAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else
+            {
+              printf("| Type of column invalid\n");
             }
           }
-        }
-        else if (sOperator == "<=")
-        {
-          for (int x = 0; x < vColumnValues.size(); ++x)
+          else if (sOperator == "<=")
           {
-            //Execute if the attribute satisfies the condition
-            if (sAttribute <= vColumnValues[x])
+            if (sColumnType == "string")
             {
-              //push back the row into the new table
-              tNewTable.addRow(tCurrentTable.getRow(x));
-
+              //Execute if the attribute satisfies the condition
+              if (sValueToBeTested <= sAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else if (sColumnType == "int")
+            {
+              //Execute if the attribute satisfies the condition
+              if (iValueToBeTested <= iAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else
+            {
+              printf("| Type of column invalid\n");
             }
           }
-        }
-        else if (sOperator == ">")
-        {
-          for (int x = 0; x < vColumnValues.size(); ++x)
+          else if (sOperator == ">")
           {
-            //Execute if the attribute satisfies the condition
-            if (sAttribute > vColumnValues[x])
+            if (sColumnType == "string")
             {
-              //push back the row into the new table
-              tNewTable.addRow(tCurrentTable.getRow(x));
-
+              //Execute if the attribute satisfies the condition
+              if (sValueToBeTested > sAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else if (sColumnType == "int")
+            {
+              //Execute if the attribute satisfies the condition
+              if (iValueToBeTested > iAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else
+            {
+              printf("| Type of column invalid\n");
             }
           }
-        }
-        else if (sOperator == "<")
-        {
-          for (int x = 0; x < vColumnValues.size(); ++x)
+          else if (sOperator == "<")
           {
-            //Execute if the attribute satisfies the condition
-            if (sAttribute < vColumnValues[x])
+            if (sColumnType == "string")
             {
-              //push back the row into the new table
-              tNewTable.addRow(tCurrentTable.getRow(x));
-
+              //Execute if the attribute satisfies the condition
+              if (sValueToBeTested < sAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else if (sColumnType == "int")
+            {
+              //Execute if the attribute satisfies the condition
+              if (iValueToBeTested < iAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else
+            {
+              printf("| Type of column invalid\n");
             }
           }
-        }
-        else
-        {
-          printf("| ERROR, invalid operator.\n");
+          else
+          {
+            printf("| ERROR, invalid operator.\n");
+          }
         }
       }
     }
