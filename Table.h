@@ -39,6 +39,7 @@ private:
   string sTableName;
 
 public:
+  //constructors
   Table(){};
   
   Table(string sTableNameIn) 
@@ -46,6 +47,15 @@ public:
     sTableName = sTableNameIn; 
   }
   
+  //Display function
+  void displayTable();
+
+  //Setters
+  void addPrimaryKey(int iKeyIn) 
+  { 
+    vPrimaryKeys.push_back(iKeyIn); 
+  }
+
   void addColumn(tuple<int,string> s, string sColumnType)
   {
     vColumnName.push_back(s);
@@ -57,33 +67,32 @@ public:
     vRows.push_back(v);
   }
 
-  tuple<int,string> getColumnIndex(string sColumnNameIn);
-  
-  vector< tuple<int,string> > getRow(int iIndex);
-  
-  vector< vector< tuple<int,string> > > getRows()
-  { 
-    return vRows; 
-  }
-  
-  vector<string> getColumnValues(int iIndex);
-  
-  vector< tuple<int,string> > getColumnNames() 
-  { 
-    return vColumnName; 
-  }
-  
-  void addPrimaryKey(int iKeyIn) 
-  { 
-    vPrimaryKeys.push_back(iKeyIn); 
-  }
-  
-  void displayTable();
-
+  //Getters
   string getTableName() 
   { 
     return sTableName; 
   }
+
+  vector< tuple<int,string> > getColumnNames() 
+  { 
+    return vColumnName; 
+  }
+
+  vector<string> getColumnTypes()
+  {
+    return vTypes;
+  }
+
+  vector< vector< tuple<int,string> > > getRows()
+  { 
+    return vRows; 
+  }
+
+  tuple<int,string> getColumnIndex(string sColumnNameIn);
+  
+  vector< tuple<int,string> > getRow(int iIndex);
+  
+  vector<string> getColumnValues(int iIndex);
 
 };
 

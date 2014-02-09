@@ -80,6 +80,16 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
     //Execute if the table is found in the list
     if (tCurrentTable.getTableName() == sTableNameIn)
     {
+      //Input the column names and types into the new table, then determine
+      //the rows to copy over
+      vector< tuple<int,string> > vNames = tCurrentTable.getColumnNames();
+      vector<string> vTypes = tCurrentTable.getColumnTypes();
+
+      for (int i = 0; i < vNames.size(); ++i)
+      {
+        tNewTable.addColumn(vNames[i], vTypes[i]);
+      }
+      
       //See if the column exists in the table
       tuple<int,string> tCurrentColumn = tCurrentTable.getColumnIndex(sColumn);
       int iColumnIndex = get<0>(tCurrentColumn);
@@ -92,11 +102,12 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
       {
         vColumnValues = tCurrentTable.getColumnValues(iColumnIndex);
 
-        //Execute if we are working with strings
         if (sOperator == "==")
         {
           for (int x = 0; x < vColumnValues.size(); ++x)
           {
+            //push back the column names into the new table 
+
             //Execute if the attribute satisfies the condition
             if (vColumnValues[x] == sAttribute)
             {
@@ -106,29 +117,25 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
             }
           }
         }
+        else if (sOperator == ">=")
+        {
+          //
+        }
+        else if (sOperator == "<=")
+        {
+          //
+        }
+        else if (sOperator == ">")
+        {
+          //
+        }
+        else if (sOperator == "<")
+        {
+          //
+        }
         else
         {
-          //Execute if we are working with integers
-          if (sOperator == ">=")
-          {
-            //
-          }
-          else if (sOperator == "<=")
-          {
-            //
-          }
-          else if (sOperator == ">")
-          {
-            //
-          }
-          else if (sOperator == "<")
-          {
-            //
-          }
-          else
-          {
-            printf("| ERROR, invalid operator.\n");
-          }
+          printf("| ERROR, invalid operator.\n");
         }
       }
     }
