@@ -149,7 +149,7 @@ int main()
   e.displayTable("Main Table and Other Table union");
   
   // Difference Testing (relies on content fron union testing)
-  e.setDifference("Main Table and Other Table");
+  e.setDifference("Main Table", "Other Table");
   e.displayTable("Main Table and Other Table difference");
   
   return 0;
