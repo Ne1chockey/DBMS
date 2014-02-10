@@ -60,6 +60,63 @@ void Engine::dropTable(string sTableNameIn)
 }
 
 /*******************************************************************************
+  compare two tables
+*******************************************************************************/
+bool Engine::compareTables(string sT1Name, string sT2Name)
+{
+  for (int i = 0; i < vTableList.size(); ++i)
+  {
+    Table t1 = vTableList[i];
+
+    //Execute if the first table is found in the list
+    if (t1.getTableName() == sT1Name)
+    {
+      for (int x = 0; x < vTableList.size(); ++x)
+      {
+        Table t2 = vTableList[x];
+
+        //Execute if the second table is found
+        if (t2.getTableName() == sT2Name)
+        {
+          //Get the columns and types for the tables
+          vector< tuple<int,string> > vT1columns = t1.getColumnNames();
+          vector< tuple<int,string> > vT2columns = t2.getColumnNames();
+          vector<string> vT1types = t1.getColumnTypes();
+          vector<string> vT2types = t2.getColumnTypes();
+
+          if (vT1columns.size() != vT2columns.size())
+          {
+            return false;
+          }
+
+          for (int y = 0; y < vT1columns.size(); ++y)
+          {
+            int iCurrentT1ColIndex = get<0>(vT1columns[y]);
+            string sCurrentT1ColName = get<1>(vT1columns[y]);
+            
+            for (int z = 0; z < vT2columns.size(); ++z)
+            {
+              int iCurrentT2ColIndex = get<0>(vT2columns[z]);
+              string sCurrentT2ColName = get<1>(vT2columns[z]);
+
+              if (iCurrentT1ColIndex == iCurrentT2ColIndex)
+              {
+                if ((sCurrentT1ColName != sCurrentT2ColName) && (vT1types[y] != vT2types[z]))
+                {
+                  return false;
+                }
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return true;
+}
+
+/*******************************************************************************
   Selects the tuples in a relation that satisfy a particular condition.
   sTableNameIn is going to be the existing table we are working with.
   sTableNameOut is the name we will give the newly created table.
@@ -555,16 +612,12 @@ void Engine::crossProduct(string sT1Name, string sT2Name)
   //Create a new table to send back 
   Table tNewTable(sT1Name + " and " + sT2Name + " cross product");
 
-  bool bOutcome = compareTables(sT1Name, sT2Name);
+  //Check to see if the tables are union compatible
+  if(!compareTables(sT1Name, sT2Name))
+  {
+    printf("| The Tables are not union compatible\n");
+  }
 
-  cout << bOutcome << endl;
-}
-
-/*******************************************************************************
-  compare two tables
-*******************************************************************************/
-bool Engine::compareTables(string sT1Name, string sT2Name)
-{
   for (int i = 0; i < vTableList.size(); ++i)
   {
     Table t1 = vTableList[i];
@@ -579,42 +632,69 @@ bool Engine::compareTables(string sT1Name, string sT2Name)
         //Execute if the second table is found
         if (t2.getTableName() == sT2Name)
         {
-          //Get the columns and types for the tables
-          vector< tuple<int,string> > vT1columns = t1.getColumnNames();
-          vector< tuple<int,string> > vT2columns = t2.getColumnNames();
-          vector<string> vT1types = t1.getColumnTypes();
-          vector<string> vT2types = t2.getColumnTypes();
+          //Get the current column names and types and rows
+          vector<string> vColTypes = t1.getColumnTypes();
+          vector< tuple<int,string> > vColNames = t1.getColumnNames();
 
-          if (vT1columns.size() != vT2columns.size())
-          {
-            printf("| The relations are not union compatible.\n");
-            return false;
-          }
+          int iCount = 0;
+          int iAmtOfTables = 2;
 
-          for (int y = 0; y < vT1columns.size(); ++y)
+          while (iCount < iAmtOfTables)
           {
-            int iCurrentT1ColIndex = get<0>(vT1columns[y]);
-            string sCurrentT1ColName = get<1>(vT1columns[y]);
-            
-            for (int z = 0; z < vT2columns.size(); ++z)
+            for (int c = 0; c < vColNames.size(); ++c)
             {
-              int iCurrentT2ColIndex = get<0>(vT2columns[z]);
-              string sCurrentT2ColName = get<1>(vT2columns[z]);
+              int iCurrentColIndex = get<0>(vColNames[c]);
+              string sCurrentColName = get<1>(vColNames[c]);
 
-              if (iCurrentT1ColIndex == iCurrentT2ColIndex)
+              if (iCount == 1)
               {
-                if ((sCurrentT1ColName != sCurrentT2ColName) && (vT1types[y] != vT2types[z]))
-                {
-                  printf("| The relations are not union compatible\n");
-                  return false;
-                }
-                break;
+                //Add the column to the new table
+                tNewTable.addColumn(make_tuple(c + vColNames.size(), 
+                  sCurrentColName), vColTypes[c]);
               }
+              else
+              {
+                //Add the column to the new table
+                tNewTable.addColumn(make_tuple(c,sCurrentColName), vColTypes[c]);
+              }
+            }
+            iCount++;
+          }
+         
+          vector< vector< tuple<int,string> > > vT1Rows = t1.getRows();
+          vector< vector< tuple<int,string> > > vT2Rows = t2.getRows();
+
+          for (int p = 0; p < vT1Rows.size(); ++p)
+          {
+            //current row from list of T2 rows
+            vector< tuple<int, string> > vT1CurrentRow = vT1Rows[p];
+
+            for (int a = 0; a < vT2Rows.size(); ++a)
+            {
+              //current row from list of T1 rows
+              vector< tuple<int, string> > vNewRow;
+              vector< tuple<int, string> > vT2Row = vT2Rows[a];
+
+              for (int r = 0; r < vT1CurrentRow.size(); ++r)
+              {
+                //current attribute from t2 row
+                string sT1Attribute = get<1>(vT1CurrentRow[r]);
+                vNewRow.push_back(make_tuple(r,sT1Attribute));
+              }
+              
+              for (int i = 0; i < vT2Row.size(); ++i)
+              {
+                string sT2Attribute = get<1>(vT2Row[i]);
+                vNewRow.push_back(make_tuple(vColNames.size()+i,sT2Attribute));
+              }
+              //Add the row to the new table
+              tNewTable.addRow(vNewRow);
             }
           }
         }
       }
     }
   }
-  return true;
+
+  vTableList.push_back(tNewTable);
 }
