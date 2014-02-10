@@ -159,6 +159,10 @@ int main()
   
   e.setDifference("Other Table", "Main Table");
   e.displayTable("Other Table and Main Table difference");
+
+  //Crossproduct testing
+  e.crossProduct("Main Table", "Other Table");
+  e.displayTable("Main Table and Other Table cross product");
   
   return 0;
 }

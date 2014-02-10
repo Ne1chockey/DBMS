@@ -42,6 +42,7 @@ public:
   void createTable(string sTableNameIn, 
     vector<tuple<string, string> > vColumnNamesIn); 
   void dropTable(string sTableNameIn);
+  bool compareTables(string sT1Name, string sT2Name);
   void displayTable(string sTableNameIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
@@ -67,17 +68,14 @@ public:
     }
   }
 
-  void insertInto(string sTableNameIn);
-  void update();
-  void deleteFrom();
-
   void selection(string sTableNameIn, string sTableNameOut, string sOperator,
     string sColumn, string sAttribute); 
   void projection(string sTableNameIn, vector<string> sColumnNamesIn);
-  void reNaming(vector<string> vNewNames, string sTableName); //rename the attributes in a relation
-  void setUnion(string sT1Name, string sT2Name); //compute the union of two relations, the relations must be union compatible
-  void setDifference(string sT1Name, string sT2Name); //compute the set diff of two relations and the relations must be union compatible
-  void crossProduct(); //compute the cartesian product of two relations
+  void reNaming(vector<string> vNewNames, string sTableName); 
+  void setUnion(string sT1Name, string sT2Name); 
+  void setDifference(string sT1Name, string sT2Name);
+  void crossProduct(string sT1Name, string sT2Name);
+  void naturalJoin();
 
 
 };

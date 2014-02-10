@@ -319,6 +319,9 @@ void Engine::projection(string sTableNameIn, vector<string> sColumnNamesIn)
   vTableList.push_back(tNewTable);
 }
 
+/*******************************************************************************
+  rename the attributes in a relation
+*******************************************************************************/
 void Engine::reNaming(vector<string> vNewNames, string sTableName) 
 {
   // Find the table in vTableList
@@ -370,6 +373,9 @@ void Engine::reNaming(vector<string> vNewNames, string sTableName)
   vTableList.push_back(reNamed);
 }
 
+/*******************************************************************************
+ compute the union of two relations; the relations must be union-compatible.
+*******************************************************************************/
 void Engine::setUnion(string sT1Name, string sT2Name)
 {
   // Find the table in vTableList
@@ -457,6 +463,9 @@ void Engine::setUnion(string sT1Name, string sT2Name)
   vTableList.push_back(unioned);
 }
 
+/*******************************************************************************
+compute the set diff of two relations and the relations must be union compatible
+*******************************************************************************/
 void Engine::setDifference(string sT1Name, string sT2Name)
 {
   int iT1Index = -1;
@@ -536,4 +545,76 @@ void Engine::setDifference(string sT1Name, string sT2Name)
   }
     
   vTableList.push_back(differenced);
+}
+
+/*******************************************************************************
+  compute the cartesian product of two relations
+*******************************************************************************/
+void Engine::crossProduct(string sT1Name, string sT2Name)
+{
+  //Create a new table to send back 
+  Table tNewTable(sT1Name + " and " + sT2Name + " cross product");
+
+  bool bOutcome = compareTables(sT1Name, sT2Name);
+
+  cout << bOutcome << endl;
+}
+
+/*******************************************************************************
+  compare two tables
+*******************************************************************************/
+bool Engine::compareTables(string sT1Name, string sT2Name)
+{
+  for (int i = 0; i < vTableList.size(); ++i)
+  {
+    Table t1 = vTableList[i];
+
+    //Execute if the first table is found in the list
+    if (t1.getTableName() == sT1Name)
+    {
+      for (int x = 0; x < vTableList.size(); ++x)
+      {
+        Table t2 = vTableList[x];
+
+        //Execute if the second table is found
+        if (t2.getTableName() == sT2Name)
+        {
+          //Get the columns and types for the tables
+          vector< tuple<int,string> > vT1columns = t1.getColumnNames();
+          vector< tuple<int,string> > vT2columns = t2.getColumnNames();
+          vector<string> vT1types = t1.getColumnTypes();
+          vector<string> vT2types = t2.getColumnTypes();
+
+          if (vT1columns.size() != vT2columns.size())
+          {
+            printf("| The relations are not union compatible.\n");
+            return false;
+          }
+
+          for (int y = 0; y < vT1columns.size(); ++y)
+          {
+            int iCurrentT1ColIndex = get<0>(vT1columns[y]);
+            string sCurrentT1ColName = get<1>(vT1columns[y]);
+            
+            for (int z = 0; z < vT2columns.size(); ++z)
+            {
+              int iCurrentT2ColIndex = get<0>(vT2columns[z]);
+              string sCurrentT2ColName = get<1>(vT2columns[z]);
+
+              if (iCurrentT1ColIndex == iCurrentT2ColIndex)
+              {
+                if ((sCurrentT1ColName != sCurrentT2ColName) && (vT1types[y] != vT2types[z]))
+                {
+                  printf("| The relations are not union compatible\n");
+                  return false;
+                }
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return true;
 }
