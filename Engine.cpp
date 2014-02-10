@@ -531,7 +531,7 @@ void Engine::setDifference(string sT1Name, string sT2Name)
     }
     if (!exists)
     {
-      differnced.addRow(vRows1[i]);
+      differenced.addRow(vRows1[i]);
     }
   }
     
