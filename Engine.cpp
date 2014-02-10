@@ -249,6 +249,76 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
   vTableList.push_back(tNewTable);
 } 
 
+/*******************************************************************************
+  Select of a subset of the attributes of a relation
+*******************************************************************************/
+void Engine::projection(string sTableNameIn, vector<string> sColumnNamesIn)
+{
+  //Create a new table to send back 
+  Table tNewTable(sTableNameIn + " projection");
+
+  for (int i = 0; i < vTableList.size(); ++i)
+  {
+    Table tCurrentTable = vTableList[i];
+
+    //Execute if the table is found
+    if (tCurrentTable.getTableName() == sTableNameIn)
+    {
+      //Get the current column names and types and rows
+      vector<string> vColTypes = tCurrentTable.getColumnTypes();
+      vector< tuple<int,string> > vColNames = tCurrentTable.getColumnNames();
+      vector< vector< tuple<int,string> > > vRows = tCurrentTable.getRows();
+
+      for (int x = 0; x < vColNames.size(); ++x)
+      {
+        int iCurrentColIndex = get<0>(vColNames[x]);
+        string sCurrentColName = get<1>(vColNames[x]);
+
+        for (int y = 0; y < sColumnNamesIn.size(); ++y)
+        {
+          //Execute if the column is found
+          if (sCurrentColName == sColumnNamesIn[y])
+          {
+            //Add the column to the new table
+            tNewTable.addColumn(vColNames[x], vColTypes[x]);
+            break;
+          }
+        }
+      }
+
+      for (int a = 0; a < vRows.size(); ++a)
+      {
+        //current row from list of rows
+        vector< tuple<int, string> > vCurrentRow = vRows[a];
+        vector< tuple<int,string> > vNewRow;
+        vector< tuple<int,string> > vNewCol = tNewTable.getColumnNames();
+        for (int p = 0; p < vNewCol.size(); ++p)
+        {
+          int iNewIndex = get<0>(vNewCol[p]);
+
+          for (int b = 0; b < vCurrentRow.size(); ++b)
+          {
+            //current attribute from row
+            int iAttributeIndex = get<0>(vCurrentRow[b]);
+            string sAttributeName = get<1>(vCurrentRow[b]);
+
+            //Execute if the index of the attribute matches the row index
+            if (iAttributeIndex == iNewIndex)
+            {
+              vNewRow.push_back(vCurrentRow[b]);
+            }
+          }
+        }
+
+        //Add the row to the new table
+        tNewTable.addRow(vNewRow);
+      }
+    }
+  }
+
+  vTableList.push_back(tNewTable);
+}
+
 void Engine::reNaming(vector<string> vNewNames, string sTableName) 
 {
   // Find the table in vTableList

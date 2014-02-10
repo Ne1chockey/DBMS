@@ -94,6 +94,15 @@ int main()
   //Change the table name to the table you want to view
   e.displayTable("Equality Table");
    
+  //Projection testing
+  vector<string> vColNames;
+  vColNames.push_back("Name");
+  vColNames.push_back("Age");
+
+  e.projection("Main Table", vColNames);
+
+  e.displayTable("Main Table projection");
+
   // Rename Testing
   vector<string> renames = {"Full Name", "Oldness", "Digits", "Ma house"};
   e.reNaming(renames, "Equality Table");
