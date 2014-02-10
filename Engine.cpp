@@ -470,12 +470,7 @@ void Engine::setUnion(string sT1Name, string sT2Name)
     cout << "Union not possible! Tables are different." << endl;
     return;
   }
-  if (workingT1.getColumnTypes() != workingT2.getColumnTypes()) 
-  {
-    cout << "Union not possible! Tables are different." << endl;
-    return;
-  }
-  
+
   string sUnionTableName = workingT1.getTableName() + " and "
     + workingT2.getTableName() + " union";
   vector< tuple<int, string> > vColNames = workingT1.getColumnNames();
@@ -616,85 +611,194 @@ void Engine::crossProduct(string sT1Name, string sT2Name)
   if(!compareTables(sT1Name, sT2Name))
   {
     printf("| The Tables are not union compatible\n");
+    return;
   }
 
-  for (int i = 0; i < vTableList.size(); ++i)
+  int iT1Index = -1;
+  int iT2Index = -1;
+
+  for (int i = 0; i < vTableList.size(); i++) 
   {
-    Table t1 = vTableList[i];
-
-    //Execute if the first table is found in the list
-    if (t1.getTableName() == sT1Name)
+    if (vTableList[i].getTableName() == sT1Name) 
     {
-      for (int x = 0; x < vTableList.size(); ++x)
+      iT1Index = i;
+    }
+    if (vTableList[i].getTableName() == sT2Name) 
+    {
+      iT2Index = i;
+    }
+  }
+  
+  if (iT1Index == -1) 
+  {
+    cout << "| Could not find that first table!" << endl;
+    return;
+  }
+  if (iT2Index == -1) 
+  {
+    cout << "| Could not find that second table!" << endl;
+    return;
+  }
+
+  //Get the current column names and types and rows
+  Table t1 = vTableList[iT1Index];
+  Table t2 = vTableList[iT2Index];
+  vector<string> vColTypes = t1.getColumnTypes();
+  vector< tuple<int,string> > vColNames = t1.getColumnNames();
+
+  int iCount = 0;
+  int iAmtOfTables = 2;
+
+  while (iCount < iAmtOfTables)
+  {
+    for (int c = 0; c < vColNames.size(); ++c)
+    {
+      int iCurrentColIndex = get<0>(vColNames[c]);
+      string sCurrentColName = get<1>(vColNames[c]);
+
+      if (iCount == 1)
       {
-        Table t2 = vTableList[x];
-
-        //Execute if the second table is found
-        if (t2.getTableName() == sT2Name)
-        {
-          //Get the current column names and types and rows
-          vector<string> vColTypes = t1.getColumnTypes();
-          vector< tuple<int,string> > vColNames = t1.getColumnNames();
-
-          int iCount = 0;
-          int iAmtOfTables = 2;
-
-          while (iCount < iAmtOfTables)
-          {
-            for (int c = 0; c < vColNames.size(); ++c)
-            {
-              int iCurrentColIndex = get<0>(vColNames[c]);
-              string sCurrentColName = get<1>(vColNames[c]);
-
-              if (iCount == 1)
-              {
-                //Add the column to the new table
-                tNewTable.addColumn(make_tuple(c + vColNames.size(), 
-                  sCurrentColName), vColTypes[c]);
-              }
-              else
-              {
-                //Add the column to the new table
-                tNewTable.addColumn(make_tuple(c,sCurrentColName), vColTypes[c]);
-              }
-            }
-            iCount++;
-          }
-         
-          vector< vector< tuple<int,string> > > vT1Rows = t1.getRows();
-          vector< vector< tuple<int,string> > > vT2Rows = t2.getRows();
-
-          for (int p = 0; p < vT1Rows.size(); ++p)
-          {
-            //current row from list of T2 rows
-            vector< tuple<int, string> > vT1CurrentRow = vT1Rows[p];
-
-            for (int a = 0; a < vT2Rows.size(); ++a)
-            {
-              //current row from list of T1 rows
-              vector< tuple<int, string> > vNewRow;
-              vector< tuple<int, string> > vT2Row = vT2Rows[a];
-
-              for (int r = 0; r < vT1CurrentRow.size(); ++r)
-              {
-                //current attribute from t2 row
-                string sT1Attribute = get<1>(vT1CurrentRow[r]);
-                vNewRow.push_back(make_tuple(r,sT1Attribute));
-              }
-              
-              for (int i = 0; i < vT2Row.size(); ++i)
-              {
-                string sT2Attribute = get<1>(vT2Row[i]);
-                vNewRow.push_back(make_tuple(vColNames.size()+i,sT2Attribute));
-              }
-              //Add the row to the new table
-              tNewTable.addRow(vNewRow);
-            }
-          }
-        }
+        //Add the column to the new table
+        tNewTable.addColumn(make_tuple(c + vColNames.size(), 
+          sCurrentColName), vColTypes[c]);
       }
+      else
+      {
+        //Add the column to the new table
+        tNewTable.addColumn(make_tuple(c,sCurrentColName), vColTypes[c]);
+      }
+    }
+    iCount++;
+  }
+ 
+  vector< vector< tuple<int,string> > > vT1Rows = t1.getRows();
+  vector< vector< tuple<int,string> > > vT2Rows = t2.getRows();
+
+  for (int p = 0; p < vT1Rows.size(); ++p)
+  {
+    //current row from list of T2 rows
+    vector< tuple<int, string> > vT1CurrentRow = vT1Rows[p];
+
+    for (int a = 0; a < vT2Rows.size(); ++a)
+    {
+      //current row from list of T1 rows
+      vector< tuple<int, string> > vNewRow;
+      vector< tuple<int, string> > vT2Row = vT2Rows[a];
+
+      for (int r = 0; r < vT1CurrentRow.size(); ++r)
+      {
+        //current attribute from t2 row
+        string sT1Attribute = get<1>(vT1CurrentRow[r]);
+        vNewRow.push_back(make_tuple(r,sT1Attribute));
+      }
+      
+      for (int i = 0; i < vT2Row.size(); ++i)
+      {
+        string sT2Attribute = get<1>(vT2Row[i]);
+        vNewRow.push_back(make_tuple(vColNames.size()+i,sT2Attribute));
+      }
+      //Add the row to the new table
+      tNewTable.addRow(vNewRow);
+    }
+  }
+  vTableList.push_back(tNewTable);
+}
+
+/*******************************************************************************
+  compute the natural join of two relations (remove duplicate data)
+*******************************************************************************/
+void Engine::naturalJoin(string sT1Name, string sT2Name)
+{
+    //Create a new table to send back 
+  Table tNewTable(sT1Name + " and " + sT2Name + " natural join");
+  int iT1Index = -1;
+  int iT2Index = -1;
+
+  for (int i = 0; i < vTableList.size(); i++) 
+  {
+    if (vTableList[i].getTableName() == sT1Name) 
+    {
+      iT1Index = i;
+    }
+    if (vTableList[i].getTableName() == sT2Name) 
+    {
+      iT2Index = i;
+    }
+  }
+  
+  if (iT1Index == -1) 
+  {
+    cout << "| Could not find that first table!" << endl;
+    return;
+  }
+  if (iT2Index == -1) 
+  {
+    cout << "| Could not find that second table!" << endl;
+    return;
+  }
+  
+  //Get t1's info
+  vector<string> vT1ColTypes = vTableList[iT1Index].getColumnTypes();
+  vector< tuple<int,string> > vT1ColNames = vTableList[iT1Index].getColumnNames();
+  vector< vector< tuple<int,string> > > vT1Rows = vTableList[iT1Index].getRows();
+
+
+  //Get t2's info
+  vector<string> vT2ColTypes = vTableList[iT2Index].getColumnTypes();
+  vector< tuple<int,string> > vT2ColNames = vTableList[iT2Index].getColumnNames();
+  vector< vector< tuple<int,string> > > vT2Rows = vTableList[iT2Index].getRows();
+  
+  //to know the indicies of the columns that are different
+  vector<int> vT1Indicies;
+  vector<int> vT2Indicies;
+
+  for (int i = 0; i < vT1ColNames.size(); ++i)
+  {
+    //Get the T1 column and type and create them in new table
+    tuple<int,string> tT1Column = vT1ColNames[i];
+    string sT1Type = vT1ColTypes[i];
+
+    tNewTable.addColumn(tT1Column, sT1Type);
+
+  }
+
+  for (int i = 0; i < vT2ColNames.size(); ++i)
+  {
+    //Get the T2 column and type and create them in new table if not already in
+    string sT2ColumnName = get<1>(vT2ColNames[i]);
+    string sT2Type = vT2ColTypes[i];
+    bool bInput = true;
+    int iInputCounter = vT1ColNames.size();
+
+    for (int i = 0; i < vT1ColNames.size(); ++i)
+    {
+      //Get the T1 column and type
+      string sT1ColumnName = get<1>(vT1ColNames[i]);
+      string sT1Type = vT1ColTypes[i];
+
+      if (sT1ColumnName == sT2ColumnName)
+      {
+        bInput = false;
+      }
+    }
+
+    if (bInput)
+    {
+      tNewTable.addColumn(make_tuple(iInputCounter,sT2ColumnName), sT2Type);
+      iInputCounter++;
     }
   }
 
   vTableList.push_back(tNewTable);
 }
+
+
+
+
+
+
+
+
+
+
+

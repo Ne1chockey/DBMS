@@ -163,6 +163,12 @@ int main()
   //Crossproduct testing
   e.crossProduct("Main Table", "Other Table");
   e.displayTable("Main Table and Other Table cross product");
-  
+
+  //Natural Join testing
+  e.addColumn("Other Table", "Extra Column", "string");
+  e.displayTable("Other Table");
+  e.naturalJoin("Main Table", "Other Table");
+  e.displayTable("Main Table and Other Table natural join");
+
   return 0;
 }

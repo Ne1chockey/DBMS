@@ -68,6 +68,20 @@ public:
     }
   }
 
+  void addColumn(string sTableNameIn, string sColNameIn, string sTypeIn)
+  {
+    for (int i = 0; i < vTableList.size(); ++i)
+    {
+      if (vTableList[i].getTableName() == sTableNameIn)
+      {
+        //get the amount of columns, to get accurate index
+        int iAmtOfCol = vTableList[i].getColumnNames().size();
+        vTableList[i].addColumn(make_tuple(iAmtOfCol, sColNameIn), sTypeIn);
+        return;
+      }
+    }
+  }
+
   void selection(string sTableNameIn, string sTableNameOut, string sOperator,
     string sColumn, string sAttribute); 
   void projection(string sTableNameIn, vector<string> sColumnNamesIn);
@@ -75,7 +89,7 @@ public:
   void setUnion(string sT1Name, string sT2Name); 
   void setDifference(string sT1Name, string sT2Name);
   void crossProduct(string sT1Name, string sT2Name);
-  void naturalJoin();
+  void naturalJoin(string sT1Name, string sT2Name);
 
 
 };
