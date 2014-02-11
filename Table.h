@@ -32,9 +32,8 @@ using namespace std;
 class Table
 {
 private:
-  vector< tuple<int,string,bool> > vColumnName;
+  vector< tuple<int,string,bool,string> > vColumnName;
   vector< vector< tuple<int,string> > > vRows;
-  vector<string> vTypes; 
   string sTableName;
 
 public:
@@ -78,10 +77,9 @@ public:
     printf("| Primary Key was not removed\n");
   }
 
-  void addColumn(tuple<int,string,bool> s, string sColumnType)
+  void addColumn(tuple<int,string,bool,string> s)
   {
     vColumnName.push_back(s);
-    vTypes.push_back(sColumnType);
   }
   
   void addRow(vector< tuple<int,string> > v)
@@ -95,14 +93,9 @@ public:
     return sTableName; 
   }
 
-  vector< tuple<int,string,bool> > getColumnNames() 
+  vector< tuple<int,string,bool,string> > getColumnNames() 
   { 
     return vColumnName; 
-  }
-
-  vector<string> getColumnTypes()
-  {
-    return vTypes;
   }
 
   vector< vector< tuple<int,string> > > getRows()
@@ -110,7 +103,7 @@ public:
     return vRows; 
   }
 
-  tuple<int,string,bool> getColumnIndex(string sColumnNameIn);
+  tuple<int,string,bool,string> getColumnIndex(string sColumnNameIn);
   
   vector< tuple<int,string> > getRow(int iIndex);
   

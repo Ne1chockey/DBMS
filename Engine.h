@@ -77,8 +77,7 @@ public:
       {
         //get the amount of columns, to get accurate index
         int iAmtOfCol = vTableList[i].getColumnNames().size();
-        vTableList[i].addColumn(make_tuple(iAmtOfCol,sColNameIn,bPrimaryKey), 
-          sTypeIn);
+        vTableList[i].addColumn(make_tuple(iAmtOfCol,sColNameIn,bPrimaryKey,sTypeIn));
         return;
       }
     }

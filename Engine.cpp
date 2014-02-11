@@ -37,10 +37,11 @@ void Engine::createTable(string sTableNameIn,
 
   for (int i = 0; i < vColumnNamesIn.size(); ++i)
   {
-    string sColumnNameIn = get<0>(vColumnNamesIn[i]);
-    string sColumnTypeIn = get<1>(vColumnNamesIn[i]);
-    bool bPrimaryKey = get<2>(vColumnNamesIn[i]);
-    t.addColumn(make_tuple(i,sColumnNameIn,bPrimaryKey), sColumnTypeIn);
+    string sName = get<0>(vColumnNamesIn[i]);
+    string sType = get<1>(vColumnNamesIn[i]);
+    bool bKey = get<2>(vColumnNamesIn[i]);
+
+    t.addColumn(make_tuple(i,sName,bKey,sType));
   }
 
   for (int i = 0; i < vKeys.size(); ++i)
@@ -61,7 +62,7 @@ void Engine::dropTable(string sTableNameIn)
   {
     if (vTableList[i].getTableName() == sTableNameIn)
     {
-      vTableList.erase(vTableList.begin() + 1);
+      vTableList.erase(vTableList.begin() + i);
     }
   }
 }
@@ -86,10 +87,8 @@ bool Engine::compareTables(string sT1Name, string sT2Name)
         if (t2.getTableName() == sT2Name)
         {
           //Get the columns and types for the tables
-          vector< tuple<int,string,bool> > vT1columns = t1.getColumnNames();
-          vector< tuple<int,string,bool> > vT2columns = t2.getColumnNames();
-          vector<string> vT1types = t1.getColumnTypes();
-          vector<string> vT2types = t2.getColumnTypes();
+          vector< tuple<int,string,bool,string> > vT1columns = t1.getColumnNames();
+          vector< tuple<int,string,bool,string> > vT2columns = t2.getColumnNames();
 
           if (vT1columns.size() != vT2columns.size())
           {
@@ -100,15 +99,18 @@ bool Engine::compareTables(string sT1Name, string sT2Name)
           {
             int iCurrentT1ColIndex = get<0>(vT1columns[y]);
             string sCurrentT1ColName = get<1>(vT1columns[y]);
+            string sCurrentT1ColType = get<3>(vT1columns[y]);
             
             for (int z = 0; z < vT2columns.size(); ++z)
             {
               int iCurrentT2ColIndex = get<0>(vT2columns[z]);
               string sCurrentT2ColName = get<1>(vT2columns[z]);
+              string sCurrentT2ColType = get<3>(vT2columns[y]);
 
               if (iCurrentT1ColIndex == iCurrentT2ColIndex)
               {
-                if ((sCurrentT1ColName != sCurrentT2ColName) && (vT1types[y] != vT2types[z]))
+                if ((sCurrentT1ColName != sCurrentT2ColName) && 
+                  (sCurrentT1ColType != sCurrentT2ColType))
                 {
                   return false;
                 }
@@ -145,17 +147,16 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
     {
       //Input the column names and types into the new table, then determine
       //the rows to copy over
-      vector< tuple<int,string,bool> > vNames = tCurrentTable.getColumnNames();
-      vector<string> vTypes = tCurrentTable.getColumnTypes();
+      vector< tuple<int,string,bool,string> > vNames = tCurrentTable.getColumnNames();
 
       for (int a = 0; a < vNames.size(); ++a)
       {
         //Add column to new table
-        tNewTable.addColumn(vNames[a], vTypes[a]);
+        tNewTable.addColumn(vNames[a]);
       }
       
       //See if the column exists in the table
-      tuple<int,string,bool> tCurrentColumn = tCurrentTable.getColumnIndex(sColumn);
+      tuple<int,string,bool,string> tCurrentColumn = tCurrentTable.getColumnIndex(sColumn);
       int iColumnIndex = get<0>(tCurrentColumn);
 
       if (iColumnIndex == -1)
@@ -168,7 +169,7 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
         vColumnValues = tCurrentTable.getColumnValues(iColumnIndex);
 
         //get the type of the column
-        string sColumnType = vTypes[iColumnIndex];
+        string sColumnType = get<3>(tCurrentColumn);
 
         for (int x = 0; x < vColumnValues.size(); ++x)
         {
@@ -342,7 +343,7 @@ void Engine::update(vector<string> vColumnNames, vector<string> vNewVals,string 
 
   //check that valid column names were given
   bool bValidColumns = true;
-  vector< tuple<int,string,bool> > vAllColumnNames = tWorkingTable.getColumnNames();
+  vector< tuple<int,string,bool,string> > vAllColumnNames = tWorkingTable.getColumnNames();
 
   for(int i = 0; i <vColumnNames.size(); i++)
   {
@@ -415,8 +416,7 @@ void Engine::projection(string sTableNameIn, vector<string> sColumnNamesIn)
     if (tCurrentTable.getTableName() == sTableNameIn)
     {
       //Get the current column names and types and rows
-      vector<string> vColTypes = tCurrentTable.getColumnTypes();
-      vector< tuple<int,string,bool> > vColNames = tCurrentTable.getColumnNames();
+      vector< tuple<int,string,bool,string> > vColNames = tCurrentTable.getColumnNames();
       vector< vector< tuple<int,string> > > vRows = tCurrentTable.getRows();
 
       for (int x = 0; x < vColNames.size(); ++x)
@@ -430,7 +430,7 @@ void Engine::projection(string sTableNameIn, vector<string> sColumnNamesIn)
           if (sCurrentColName == sColumnNamesIn[y])
           {
             //Add the column to the new table
-            tNewTable.addColumn(vColNames[x], vColTypes[x]);
+            tNewTable.addColumn(vColNames[x]);
             break;
           }
         }
@@ -441,7 +441,8 @@ void Engine::projection(string sTableNameIn, vector<string> sColumnNamesIn)
         //current row from list of rows
         vector< tuple<int, string> > vCurrentRow = vRows[a];
         vector< tuple<int,string> > vNewRow;
-        vector< tuple<int,string,bool> > vNewCol = tNewTable.getColumnNames();
+        vector< tuple<int,string,bool,string> > vNewCol = tNewTable.getColumnNames();
+
         for (int p = 0; p < vNewCol.size(); ++p)
         {
           int iNewIndex = get<0>(vNewCol[p]);
@@ -501,15 +502,17 @@ void Engine::reNaming(vector<string> vNewNames, string sTableName)
   }
   
   string sRenameTableName = workingTable.getTableName() + " renamed";
-  vector<string> vColTypes = workingTable.getColumnTypes();
+  vector< tuple<int, string,bool,string> > vColNames = workingTable.getColumnNames();
   Table reNamed(sRenameTableName);
   
   // Create a new table with the new supplied column names
   for (int i = 0; i < vNewNames.size(); i++)
   {
     string sColumnNameIn = vNewNames[i];
-    string sColumnTypeIn = vColTypes[i];
-    reNamed.addColumn(make_tuple(i,sColumnNameIn,false), sColumnTypeIn);
+    bool bOldColKey = get<2>(vColNames[i]);
+    string sOldColType = get<3>(vColNames[i]);
+
+    reNamed.addColumn(make_tuple(i,sColumnNameIn,bOldColKey,sOldColType));
   }
   
   // Copy row elements from working table to the new renamed table
@@ -566,16 +569,13 @@ void Engine::setUnion(string sT1Name, string sT2Name)
 
   string sUnionTableName = workingT1.getTableName() + " and "
     + workingT2.getTableName() + " union";
-  vector< tuple<int, string,bool> > vColNames = workingT1.getColumnNames();
-  vector<string> vColTypes = workingT1.getColumnTypes();
+  vector< tuple<int, string,bool,string> > vColNames = workingT1.getColumnNames();
   
   // Create a new table, using column names from the supplied table. 
   Table unioned(sUnionTableName);
   for (int i = 0; i < vColNames.size(); i++) 
   {
-    string sColumnNameIn = get<1>(vColNames[i]);
-    string sColumnTypeIn = vColTypes[i];
-    unioned.addColumn(make_tuple(i,sColumnNameIn,false), sColumnTypeIn);
+    unioned.addColumn(vColNames[i]);
   }
 
   // Copy row elements from working table 1.
@@ -647,24 +647,16 @@ void Engine::setDifference(string sT1Name, string sT2Name)
     cout << "Difference not possible! Tables are not comparable." << endl;
     return;
   }
-  if (workingT1.getColumnTypes() != workingT2.getColumnTypes()) 
-  {
-    cout << "Difference not possible! Tables are not comparable." << endl;
-    return;
-  }
   
   string sDiffTableName = workingT1.getTableName() + " and "
     + workingT2.getTableName() + " difference";
-  vector< tuple<int, string,bool> > vColNames = workingT1.getColumnNames();
-  vector<string> vColTypes = workingT1.getColumnTypes();
+  vector< tuple<int,string,bool,string> > vColNames = workingT1.getColumnNames();
   
   // Create a new table, using column names from the supplied table. 
   Table differenced(sDiffTableName);
   for (int i = 0; i < vColNames.size(); i++) 
   {
-    string sColumnNameIn = get<1>(vColNames[i]);
-    string sColumnTypeIn = vColTypes[i];
-    differenced.addColumn(make_tuple(i,sColumnNameIn,false), sColumnTypeIn);
+    differenced.addColumn(vColNames[i]);
   }
 
   // Copy row elements from working table 1.
@@ -736,8 +728,7 @@ void Engine::crossProduct(string sT1Name, string sT2Name)
   //Get the current column names and types and rows
   Table t1 = vTableList[iT1Index];
   Table t2 = vTableList[iT2Index];
-  vector<string> vColTypes = t1.getColumnTypes();
-  vector< tuple<int,string,bool> > vColNames = t1.getColumnNames();
+  vector< tuple<int,string,bool,string> > vColNames = t1.getColumnNames();
 
   int iCount = 0;
   int iAmtOfTables = 2;
@@ -749,18 +740,17 @@ void Engine::crossProduct(string sT1Name, string sT2Name)
       int iCurrentColIndex = get<0>(vColNames[c]);
       string sCurrentColName = get<1>(vColNames[c]);
       bool bCurrentPrimaryKey = get<2>(vColNames[c]);
+      string sCurrentColType = get<3>(vColNames[c]);
 
       if (iCount == 1)
       {
         //Add the column to the new table
-        tNewTable.addColumn(make_tuple(c + vColNames.size(), 
-          sCurrentColName,bCurrentPrimaryKey), vColTypes[c]);
+        tNewTable.addColumn(make_tuple(c + vColNames.size(),sCurrentColName,bCurrentPrimaryKey,sCurrentColType));
       }
       else
       {
         //Add the column to the new table
-        tNewTable.addColumn(make_tuple(c,sCurrentColName,bCurrentPrimaryKey), 
-          vColTypes[c]);
+        tNewTable.addColumn(make_tuple(c,sCurrentColName,bCurrentPrimaryKey,sCurrentColType));
       }
     }
     iCount++;
@@ -833,14 +823,12 @@ void Engine::naturalJoin(string sT1Name, string sT2Name)
   }
   
   //Get t1's info
-  vector<string> vT1ColTypes = vTableList[iT1Index].getColumnTypes();
-  vector< tuple<int,string,bool> > vT1ColNames = vTableList[iT1Index].getColumnNames();
+  vector< tuple<int,string,bool,string> > vT1ColNames = vTableList[iT1Index].getColumnNames();
   vector< vector< tuple<int,string> > > vT1Rows = vTableList[iT1Index].getRows();
 
 
   //Get t2's info
-  vector<string> vT2ColTypes = vTableList[iT2Index].getColumnTypes();
-  vector< tuple<int,string,bool> > vT2ColNames = vTableList[iT2Index].getColumnNames();
+  vector< tuple<int,string,bool,string> > vT2ColNames = vTableList[iT2Index].getColumnNames();
   vector< vector< tuple<int,string> > > vT2Rows = vTableList[iT2Index].getRows();
   
   //to know the indicies of the columns that are different
@@ -850,11 +838,8 @@ void Engine::naturalJoin(string sT1Name, string sT2Name)
   for (int i = 0; i < vT1ColNames.size(); ++i)
   {
     //Get the T1 column and type and create them in new table
-    tuple<int,string,bool> tT1Column = vT1ColNames[i];
-    string sT1Type = vT1ColTypes[i];
-
-    tNewTable.addColumn(tT1Column, sT1Type);
-
+    tuple<int,string,bool,string> tT1Column = vT1ColNames[i];
+    tNewTable.addColumn(tT1Column);
   }
 
   for (int i = 0; i < vT2ColNames.size(); ++i)
@@ -862,7 +847,7 @@ void Engine::naturalJoin(string sT1Name, string sT2Name)
     //Get the T2 column and type and create them in new table if not already in
     string sT2ColumnName = get<1>(vT2ColNames[i]);
     bool bT2PrimaryKey = get<2>(vT2ColNames[i]);
-    string sT2Type = vT2ColTypes[i];
+    string sT2ColumnType = get<3>(vT2ColNames[i]);
     bool bInput = true;
     int iInputCounter = vT1ColNames.size();
 
@@ -870,7 +855,6 @@ void Engine::naturalJoin(string sT1Name, string sT2Name)
     {
       //Get the T1 column and type
       string sT1ColumnName = get<1>(vT1ColNames[x]);
-      string sT1Type = vT1ColTypes[x];
 
       if (sT1ColumnName == sT2ColumnName)
       {
@@ -880,7 +864,7 @@ void Engine::naturalJoin(string sT1Name, string sT2Name)
 
     if (bInput)
     {
-      tNewTable.addColumn(make_tuple(iInputCounter,sT2ColumnName,bT2PrimaryKey), sT2Type);
+      tNewTable.addColumn(make_tuple(iInputCounter,sT2ColumnName,bT2PrimaryKey,sT2ColumnType));
       iInputCounter++;
     }
   }
@@ -921,6 +905,7 @@ void Engine::naturalJoin(string sT1Name, string sT2Name)
 /*******************************************************************************
   determines whether two tables have the same column names/types
 *******************************************************************************/
+  /*
 bool Engine::columnCheck(string sT1Name, string sT2Name) 
 {
   // Find the tables with the given names
@@ -954,11 +939,8 @@ bool Engine::columnCheck(string sT1Name, string sT2Name)
   Table workingT2 = vTableList[iT2Index];
   
   // Get the actual vectors so we're not getting it so much later on
-  vector< tuple<int, string,bool> > vT1ColNames = workingT1.getColumnNames();
-  vector< tuple<int, string,bool> > vT2ColNames = workingT2.getColumnNames();
-  vector< string > vT1ColTypes = workingT1.getColumnTypes();
-  vector< string > vT2ColTypes = workingT2.getColumnTypes();
-  
+  vector< tuple<int,string,bool,string> > vT1ColNames = workingT1.getColumnNames();
+  vector< tuple<int,string,bool,string> > vT2ColNames = workingT2.getColumnNames();
   
   // Check if the tables are identical.    
   if (vT1ColNames == vT2ColNames) 
@@ -983,7 +965,7 @@ bool Engine::columnCheck(string sT1Name, string sT2Name)
   vector< pair<int, int> > vIndexPairing;
   for (int i = 0; i < vT1ColNames.size(); i++) 
   {
-    tuple<int, string,bool> tRef = vT1ColNames[i];
+    tuple<int,string,bool,string> tRef = vT1ColNames[i];
     for (int j = 0; j < vT2ColNames.size(); j++) {
       if (tRef == vT2ColNames[j]) {
         pair<int, int> indexPair = make_pair(i, j);
@@ -997,19 +979,10 @@ bool Engine::columnCheck(string sT1Name, string sT2Name)
     return false;
   }
   
-  // Now using the pairs match up the types.
-  for (int i = 0; i < vIndexPairing.size(); i++) {
-    int iT1typeIndex = vIndexPairing[i].first;
-    int iT2typeIndex = vIndexPairing[i].second;
-    if (vT1ColTypes[iT1typeIndex] != vT2ColTypes[iT2typeIndex]) {
-      return false;
-    }
-  }
-  
   // We've exhausted all the checks. Therefore they're the same. 
   return true;
 }
-
+*/
 
 
 
