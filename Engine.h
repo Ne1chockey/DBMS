@@ -91,7 +91,7 @@ public:
   void crossProduct(string sT1Name, string sT2Name);
   void naturalJoin(string sT1Name, string sT2Name);
 
-
+  bool columnCheck(string sT1Name, string sT2Name);
 };
 
 #endif

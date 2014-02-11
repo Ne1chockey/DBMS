@@ -792,6 +792,98 @@ void Engine::naturalJoin(string sT1Name, string sT2Name)
   vTableList.push_back(tNewTable);
 }
 
+/*******************************************************************************
+  determines whether two tables have the same column names/types
+*******************************************************************************/
+bool Engine::columnCheck(string sT1Name, string sT2Name) 
+{
+  // Find the tables with the given names
+  int iT1Index = -1;
+  int iT2Index = -1;
+
+  for (int i = 0; i < vTableList.size(); i++) 
+  {
+    if (vTableList[i].getTableName() == sT1Name) 
+    {
+      iT1Index = i;
+    }
+    if (vTableList[i].getTableName() == sT2Name) 
+    {
+      iT2Index = i;
+    }
+  }
+  
+  if (iT1Index == -1) 
+  {
+    cout << "Could not find that first table!" << endl;
+    return false;
+  }
+  if (iT2Index == -1) 
+  {
+    cout << "Could not find that second table!" << endl;
+    return false;
+  }  
+  
+  Table workingT1 = vTableList[iT1Index];
+  Table workingT2 = vTableList[iT2Index];
+  
+  // Get the actual vectors so we're not getting it so much later on
+  vector< tuple<int, string> > vT1ColNames = workingT1.getColumnNames();
+  vector< tuple<int, string> > vT2ColNames = workingT2.getColumnNames();
+  vector< string > vT1ColTypes = workingT1.getColumnTypes();
+  vector< string > vT2ColTypes = workingT2.getColumnTypes();
+  
+  
+  // Check if the tables are identical.    
+  if (vT1ColNames == vT2ColNames) 
+  {
+    if (vT1ColTypes == vT2ColTypes) 
+    {
+      return true;
+    }
+  }
+  
+  // Check if the tables have the same size
+  if (vT1ColNames.size() != vT2ColNames.size()) 
+  {
+    return false;
+  }
+  if (vT1ColTypes.size() != vT2ColTypes.size()) 
+  {
+    return false;
+  }
+  // Check if the names have the same contents. 
+  // Start by making a vector to match the types later
+  vector< pair<int, int> > vIndexPairing;
+  for (int i = 0; i < vT1ColNames.size(); i++) 
+  {
+    tuple<int, string> tRef = vT1ColNames[i];
+    for (int j = 0; j < vT2ColNames.size(); j++) {
+      if (tRef == vT2ColNames[j]) {
+        pair<int, int> indexPair = make_pair(i, j);
+        vIndexPairing.push_back(indexPair);
+        break;
+      }
+    }
+  }
+  // Reject if the resulting pair list is not the same size
+  if (vIndexPairing.size() != vT1ColNames.size()) {
+    return false;
+  }
+  
+  // Now using the pairs match up the types.
+  for (int i = 0; i < vIndexPairing.size(); i++) {
+    int iT1typeIndex = vIndexPairing[i].first;
+    int iT2typeIndex = vIndexPairing[i].second;
+    if (vT1ColTypes[iT1typeIndex] != vT2ColTypes[iT2typeIndex]) {
+      return false;
+    }
+  }
+  
+  // We've exhausted all the checks. Therefore they're the same. 
+  return true;
+}
+
 
 
 
