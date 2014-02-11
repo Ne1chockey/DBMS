@@ -172,5 +172,15 @@ int main()
   e.naturalJoin("Main Table", "Other Table");
   e.displayTable("Main Table and Other Table natural join");
 
+    //testing update
+  vector <string> vCN;
+  vCN.push_back("Nameddd");
+  vector <string> vNVal;
+  vNVal.push_back("lllllevi");
+  vector<tuple<string, string, string> > comparison;
+  comparison.push_back(make_tuple("Name", "==", "Levi Clark"));
+
+  e.update(vCN, vNVal, "Other Table", comparison);
+
   return 0;
 }

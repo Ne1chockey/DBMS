@@ -83,7 +83,9 @@ public:
   }
 
   void selection(string sTableNameIn, string sTableNameOut, string sOperator,
-    string sColumn, string sAttribute); 
+    string sColumn, string sAttribute);
+  void update(vector<string> vColumnNames, vector<string> vNewVals,
+             string sTableNameIn, vector<tuple<string, string, string> > comparison);
   void projection(string sTableNameIn, vector<string> sColumnNamesIn);
   void reNaming(vector<string> vNewNames, string sTableName); 
   void setUnion(string sT1Name, string sT2Name); 

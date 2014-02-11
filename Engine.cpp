@@ -307,6 +307,92 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
 } 
 
 /*******************************************************************************
+  Updates row elements for a relation based on an input condition
+  comparison <oeprand, op, operand>
+*******************************************************************************/
+void Engine::update(vector<string> vColumnNames, vector<string> vNewVals,string sTableNameIn,
+            vector< tuple <string, string, string> > comparison)
+{
+  //find table of sTableNameIn in vTableList
+  int iTableIndex = -1;
+  Table tWorkingTable;
+
+  for(int i = 0; i < vTableList.size(); i++)
+  {
+    if(sTableNameIn == vTableList[i].getTableName())
+    {
+      tWorkingTable = vTableList[i];
+      iTableIndex = i;
+      break;
+    }
+  }
+
+  if(iTableIndex == -1)
+  {
+    cout << "No such table with name \"" <<sTableNameIn << "\"" <<endl;
+    return;
+  }
+
+  //check that valid column names were given
+  bool bValidColumns = true;
+  vector< tuple<int,string> > vAllColumnNames = tWorkingTable.getColumnNames();
+
+  for(int i = 0; i <vColumnNames.size(); i++)
+  {
+
+    for(int j = 0; j<vAllColumnNames.size(); j++)
+    {
+
+      if(get<1>(vAllColumnNames[j]) == vColumnNames[i])
+      {
+        bValidColumns = true;
+        break;
+      }
+
+      bValidColumns = false;
+    }
+
+    if(!bValidColumns)
+    {
+      cout << "There is not a column named \"" << vColumnNames[i] << "\"" << endl;
+      return;
+    }
+  }
+
+  //update attributes
+  //comparison || comparison || comparison... 
+  //so if a comparison is true, it will update the item
+
+  /*for(int i = 0; i<comparison.size(); i++)
+  {
+
+    string operand1 = get<0>(comparison[i]);
+    string operand2 = get<2>(comparison[i]);
+    string op = get<1>(comparison[i]);
+    //== | != | < | > | <= | >=
+    bool bValidOperand;
+    for(int j = 0; j<vAllColumnNames.size(); j++)
+    {
+      bValidOperand = false;
+      if(operand1 == vAllColumnNames[j])
+      {
+        bValidOperand = true;
+        break;
+      }
+    }
+
+    if(!bValidOperand)
+    {
+      cout << "There is not an attribute named \"" << operand1 << "\"" << endl;
+      return;
+    }
+
+
+  }*/
+    return;
+}
+
+/*******************************************************************************
   Select of a subset of the attributes of a relation
 *******************************************************************************/
 void Engine::projection(string sTableNameIn, vector<string> sColumnNamesIn)
