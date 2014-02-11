@@ -153,7 +153,7 @@ int main()
   
   e.displayTable("Main Table");
   e.displayTable("Other Table");
-  
+ 
   e.setDifference("Main Table", "Other Table");
   e.displayTable("Main Table and Other Table difference");
   
@@ -166,6 +166,8 @@ int main()
 
   //Natural Join testing
   e.addColumn("Other Table", "Extra Column", "string");
+  e.addColumn("Other Table", "Another Column", "string");
+  e.addColumn("Other Table", "And Another", "string");
   e.displayTable("Other Table");
   e.naturalJoin("Main Table", "Other Table");
   e.displayTable("Main Table and Other Table natural join");

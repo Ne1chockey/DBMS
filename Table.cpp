@@ -50,6 +50,7 @@ void Table::displayTable()
 
   for (int i = 0; i < vColumnName.size(); ++i)
   {
+    
     cout << " | " << setw(20) << left << get<1>(vColumnName[i]);
   }
   cout << "\n ";

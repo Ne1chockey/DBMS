@@ -770,11 +770,11 @@ void Engine::naturalJoin(string sT1Name, string sT2Name)
     bool bInput = true;
     int iInputCounter = vT1ColNames.size();
 
-    for (int i = 0; i < vT1ColNames.size(); ++i)
+    for (int x = 0; x < vT1ColNames.size(); ++x)
     {
       //Get the T1 column and type
-      string sT1ColumnName = get<1>(vT1ColNames[i]);
-      string sT1Type = vT1ColTypes[i];
+      string sT1ColumnName = get<1>(vT1ColNames[x]);
+      string sT1Type = vT1ColTypes[x];
 
       if (sT1ColumnName == sT2ColumnName)
       {
@@ -786,6 +786,33 @@ void Engine::naturalJoin(string sT1Name, string sT2Name)
     {
       tNewTable.addColumn(make_tuple(iInputCounter,sT2ColumnName), sT2Type);
       iInputCounter++;
+    }
+  }
+
+  for (int i = 0; i < vT1Rows.size(); ++i)
+  {
+    vector< tuple<int,string> > vT1CurrentRow = vT1Rows[i];
+    tNewTable.addRow(vT1CurrentRow);
+  }
+
+  for (int i = 0; i < vT2Rows.size(); ++i)
+  {
+    //get the current T2 row
+    vector< tuple<int,string> > vT2CurrentRow = vT2Rows[i];
+    bool bInput = true;
+
+    for (int x = 0; x < vT1Rows.size(); ++x)
+    {
+      //get the current T1 row
+      vector< tuple<int,string> > vT1CurrentRow = vT1Rows[x];
+      if (vT1CurrentRow == vT2CurrentRow)
+      {
+        bInput = false;
+      }
+    }
+    if (bInput)
+    {
+      tNewTable.addRow(vT2CurrentRow);
     }
   }
 
