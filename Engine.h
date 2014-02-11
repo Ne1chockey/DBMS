@@ -40,7 +40,7 @@ public:
   Engine() {};
   
   void createTable(string sTableNameIn, 
-    vector<tuple<string, string> > vColumnNamesIn); 
+    vector<tuple<string, string,bool> > vColumnNamesIn, vector<string> vKeys); 
   void dropTable(string sTableNameIn);
   bool compareTables(string sT1Name, string sT2Name);
   void displayTable(string sTableNameIn)
@@ -68,7 +68,8 @@ public:
     }
   }
 
-  void addColumn(string sTableNameIn, string sColNameIn, string sTypeIn)
+  void addColumn(string sTableNameIn, string sColNameIn, string sTypeIn,
+    bool bPrimaryKey)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -76,7 +77,8 @@ public:
       {
         //get the amount of columns, to get accurate index
         int iAmtOfCol = vTableList[i].getColumnNames().size();
-        vTableList[i].addColumn(make_tuple(iAmtOfCol, sColNameIn), sTypeIn);
+        vTableList[i].addColumn(make_tuple(iAmtOfCol,sColNameIn,bPrimaryKey), 
+          sTypeIn);
         return;
       }
     }

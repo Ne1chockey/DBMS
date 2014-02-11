@@ -97,7 +97,7 @@ void Table::displayTable()
   This function returns the index of the column or -1 if the column is not found
   and the type of the column
 *******************************************************************************/
-tuple<int,string> Table::getColumnIndex(string sColumnNameIn)
+tuple<int,string,bool> Table::getColumnIndex(string sColumnNameIn)
 {
   for (int i = 0; i < vColumnName.size(); ++i)
   {
@@ -105,15 +105,16 @@ tuple<int,string> Table::getColumnIndex(string sColumnNameIn)
     if (get<1>(vColumnName[i]) == sColumnNameIn)
     {
       int iColumnIndex = get<0>(vColumnName[i]);
+      bool bColumnKey = get<2>(vColumnName[i]);
       string sColumnType = vTypes.at(iColumnIndex);
 
-      return make_tuple(iColumnIndex, sColumnType);
+      return make_tuple(iColumnIndex, sColumnType, bColumnKey);
     }
   }
 
   printf("| We didnt find it\n");
   //The column was not found
-  return make_tuple(-1,"n/a");
+  return make_tuple(-1,"n/a",false);
 }
 
 /*******************************************************************************

@@ -32,10 +32,10 @@ using namespace std;
 class Table
 {
 private:
-  vector< tuple<int,string> > vColumnName;
+  vector< tuple<int,string,bool> > vColumnName;
   vector< vector< tuple<int,string> > > vRows;
   vector<string> vTypes; 
-  vector<int> vPrimaryKeys;
+  vector<string> vPrimaryKeys;
   string sTableName;
 
 public:
@@ -51,12 +51,12 @@ public:
   void displayTable();
 
   //Setters
-  void addPrimaryKey(int iKeyIn) 
+  void addPrimaryKey(string sKeyIn) 
   { 
-    vPrimaryKeys.push_back(iKeyIn); 
+    vPrimaryKeys.push_back(sKeyIn); 
   }
 
-  void addColumn(tuple<int,string> s, string sColumnType)
+  void addColumn(tuple<int,string,bool> s, string sColumnType)
   {
     vColumnName.push_back(s);
     vTypes.push_back(sColumnType);
@@ -73,7 +73,7 @@ public:
     return sTableName; 
   }
 
-  vector< tuple<int,string> > getColumnNames() 
+  vector< tuple<int,string,bool> > getColumnNames() 
   { 
     return vColumnName; 
   }
@@ -88,7 +88,7 @@ public:
     return vRows; 
   }
 
-  tuple<int,string> getColumnIndex(string sColumnNameIn);
+  tuple<int,string,bool> getColumnIndex(string sColumnNameIn);
   
   vector< tuple<int,string> > getRow(int iIndex);
   

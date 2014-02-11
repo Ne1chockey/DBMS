@@ -30,12 +30,13 @@ using namespace std;
 int main() 
 {
   //Declare variables
-  vector< tuple<string, string> > vColumnNames;
+  vector< tuple<string,string,bool> > vColumnNames;
   vector< tuple<int, string> > vRow;
   vector< tuple<int, string> > vRow2;
   vector< tuple<int, string> > vRow3;
   vector< tuple<int, string> > vRow4;
   vector< tuple<int, string> > vRow5;
+  vector<string> vKeys;
   Engine e;
 
   //NOTE TO SELF: change this to where the function takes in the two parameters
@@ -43,13 +44,13 @@ int main()
   //dont make the user make a tuple and send it, lets do that on our end.
 
   //Create columns for the main table
-  vColumnNames.push_back(make_tuple("Name","string"));
-  vColumnNames.push_back(make_tuple("Age","int"));
-  vColumnNames.push_back(make_tuple("Phone Number","string"));
-  vColumnNames.push_back(make_tuple("Address","string"));
-
+  vColumnNames.push_back(make_tuple("Name","string",false));
+  vColumnNames.push_back(make_tuple("Age","int",false));
+  vColumnNames.push_back(make_tuple("Phone Number","string",false));
+  vColumnNames.push_back(make_tuple("Address","string",false));
+  vKeys.push_back("Name");
   //create a main table to work with
-  e.createTable("Main Table", vColumnNames);
+  e.createTable("Main Table", vColumnNames, vKeys);
 
   //Push the row values into each row
   vRow.push_back(make_tuple(0,"John Doe"));
@@ -128,7 +129,7 @@ int main()
   cin.get();
   
   // Union Testing
-  e.createTable("Other Table", vColumnNames);
+  e.createTable("Other Table", vColumnNames, vKeys);
   e.addRow("Other Table", vRow);
   e.addRow("Other Table", vRow2);
   e.addRow("Other Table", vRow3);
@@ -196,9 +197,9 @@ int main()
   cin.get();
 
   //Natural Join testing
-  e.addColumn("Other Table", "Extra Column", "string");
-  e.addColumn("Other Table", "Another Column", "string");
-  e.addColumn("Other Table", "And Another", "string");
+  e.addColumn("Other Table", "Extra Column", "string",false);
+  e.addColumn("Other Table", "Another Column", "string",false);
+  e.addColumn("Other Table", "And Another", "string",false);
   e.displayTable("Main Table");
   e.displayTable("Other Table");
   e.naturalJoin("Main Table", "Other Table");
