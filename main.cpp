@@ -92,7 +92,12 @@ int main()
   e.selection("Main Table","Greater Than Table", ">","Age","23");
 
   //Change the table name to the table you want to view
+  e.displayTable("Main Table");
   e.displayTable("Equality Table");
+  cout << "The equality test is age == 23" << endl;
+  cout << "Press Enter to continue..." << endl;
+  cin.get();
+
    
   //Projection testing
   vector<string> vColNames;
@@ -102,12 +107,25 @@ int main()
   e.projection("Main Table", vColNames);
 
   e.displayTable("Main Table projection");
+  cout << "Name and Age values are projected. " << endl;
+  cout << "Press Enter to continue..." << endl;
+  cin.get();
 
   // Rename Testing
-  vector<string> renames = {"Full Name", "Oldness", "Digits", "Ma house"};
+  string testValue1 = "Full Name";
+  string testValue2 = "Oldness";
+  string testValue3 = "Digits";
+  string testValue4 = "Ma house";
+  vector<string> renames;
+  renames.push_back(testValue1);
+  renames.push_back(testValue2);
+  renames.push_back(testValue3);
+  renames.push_back(testValue4);
   e.reNaming(renames, "Equality Table");
   
   e.displayTable("Equality Table renamed");
+  cout << "Press Enter to continue..." << endl;
+  cin.get();
   
   // Union Testing
   e.createTable("Other Table", vColumnNames);
@@ -144,9 +162,12 @@ int main()
   e.addRow("Other Table", vURow2);
   e.addRow("Other Table", vURow3);
   e.addRow("Other Table", vURow4);
-  
+  e.displayTable("Main Table");
+  e.displayTable("Other Table");
   e.setUnion("Main Table", "Other Table");
   e.displayTable("Main Table and Other Table union");
+  cout << "Press Enter to continue..." << endl;
+  cin.get();
   
   // Difference Testing (relies on content fron union testing)
   cout << endl << endl;
@@ -156,23 +177,37 @@ int main()
  
   e.setDifference("Main Table", "Other Table");
   e.displayTable("Main Table and Other Table difference");
+  cout << "Press Enter to continue..." << endl;
+  cin.get();
   
   e.setDifference("Other Table", "Main Table");
+  e.displayTable("Main Table");
+  e.displayTable("Other Table");
   e.displayTable("Other Table and Main Table difference");
+  cout << "Press Enter to continue..." << endl;
+  cin.get();
   
   //Crossproduct testing
   e.crossProduct("Main Table", "Other Table");
+  e.displayTable("Main Table");
+  e.displayTable("Other Table");
   e.displayTable("Main Table and Other Table cross product");
+  cout << "Press Enter to continue..." << endl;
+  cin.get();
 
   //Natural Join testing
   e.addColumn("Other Table", "Extra Column", "string");
   e.addColumn("Other Table", "Another Column", "string");
   e.addColumn("Other Table", "And Another", "string");
+  e.displayTable("Main Table");
   e.displayTable("Other Table");
   e.naturalJoin("Main Table", "Other Table");
   e.displayTable("Main Table and Other Table natural join");
+  cout << "Press Enter to continue..." << endl;
+  cin.get();
 
-    //testing update
+  //testing update
+  e.displayTable("Other Table");
   vector <string> vCN;
   vCN.push_back("Nameddd");
   vector <string> vNVal;
@@ -181,6 +216,15 @@ int main()
   comparison.push_back(make_tuple("Name", "==", "Levi Clark"));
 
   e.update(vCN, vNVal, "Other Table", comparison);
-
+  e.displayTable("Other Table");
+  cout << "Press Enter to continue..." << endl;
+  cin.get();
+  e.displayTable("Main Table");
+  e.displayTable("Other Table");
+  e.dropTable("Other Table");
+  e.displayTable("Main Table");
+  e.displayTable("Other Table");
+  cout << "Press Enter to continue..." << endl;
+  cin.get();
   return 0;
 }
