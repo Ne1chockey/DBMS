@@ -2,7 +2,7 @@
     File: Engine.h
 
     Authors: Gustavo Pedroso UIN: 423002834
-             Levi Clark      UIN:
+             Levi Clark      UIN: 520007880
              Terry Chen      UIN: 121007055
              Daniel He       UIN: 620006827
 

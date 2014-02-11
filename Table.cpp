@@ -2,7 +2,7 @@
     File: Table.cpp
 
     Authors: Gustavo Pedroso UIN: 423002834
-             Levi Clark      UIN:
+             Levi Clark      UIN: 520007880
              Terry Chen      UIN: 121007055
              Daniel He       UIN: 620006827
 
@@ -74,7 +74,7 @@ void Table::displayTable()
           string sCurrent = get<1>(*current);
           if (sCurrent.size() > COLUMN_WIDTH)
           {
-            sCurrent.resize(20);
+            sCurrent.resize(COLUMN_WIDTH);
           }
           cout << " | " << setw(COLUMN_WIDTH) << left << sCurrent;
           

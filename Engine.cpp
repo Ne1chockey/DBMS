@@ -795,7 +795,7 @@ void Engine::crossProduct(string sT1Name, string sT2Name)
 *******************************************************************************/
 void Engine::naturalJoin(string sT1Name, string sT2Name)
 {
-    //Create a new table to send back 
+  //Create a new table to send back 
   Table tNewTable(sT1Name + " and " + sT2Name + " natural join");
   int iT1Index = -1;
   int iT2Index = -1;
