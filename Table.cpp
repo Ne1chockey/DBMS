@@ -51,8 +51,17 @@ void Table::displayTable()
 
   for (int i = 0; i < vColumnName.size(); ++i)
   {
-
-    cout << " | " << setw(COLUMN_WIDTH) << left << get<1>(vColumnName[i]);
+    string sColName = get<1>(vColumnName[i]);
+    bool bPrimaryKey = get<2>(vColumnName[i]);
+    if (bPrimaryKey)
+    {
+      cout << " | " << setw(COLUMN_WIDTH) << left << "*" + sColName + "*";
+    }
+    else
+    {
+      cout << " | " << setw(COLUMN_WIDTH) << left << sColName;
+    }
+    
   }
   cout << "\n ";
 

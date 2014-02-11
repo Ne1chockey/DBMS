@@ -43,10 +43,9 @@ void Engine::createTable(string sTableNameIn,
     t.addColumn(make_tuple(i,sColumnNameIn,bPrimaryKey), sColumnTypeIn);
   }
 
-  //add primary keys
   for (int i = 0; i < vKeys.size(); ++i)
   {
-    t.addPrimaryKey(vKeys[i]);
+    t.setPrimaryKey(vKeys[i]);
   }
 
   //push table into the table list

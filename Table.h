@@ -35,7 +35,6 @@ private:
   vector< tuple<int,string,bool> > vColumnName;
   vector< vector< tuple<int,string> > > vRows;
   vector<string> vTypes; 
-  vector<string> vPrimaryKeys;
   string sTableName;
 
 public:
@@ -51,9 +50,32 @@ public:
   void displayTable();
 
   //Setters
-  void addPrimaryKey(string sKeyIn) 
+  void setPrimaryKey(string sKeyIn) 
   { 
-    vPrimaryKeys.push_back(sKeyIn); 
+    for (int i = 0; i < vColumnName.size(); ++i)
+    {
+      if (get<1>(vColumnName[i]) == sKeyIn)
+      {
+        get<2>(vColumnName[i]) = true;
+        return;
+      }
+    }
+
+    printf("| Primary Key was not set\n");
+  }
+
+  void removePrimaryKey(string sKeyIn)
+  {
+    for (int i = 0; i < vColumnName.size(); ++i)
+    {
+      if (get<1>(vColumnName[i]) == sKeyIn)
+      {
+        get<2>(vColumnName[i]) = false;
+        return;
+      }
+    }
+
+    printf("| Primary Key was not removed\n");
   }
 
   void addColumn(tuple<int,string,bool> s, string sColumnType)

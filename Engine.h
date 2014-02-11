@@ -84,6 +84,30 @@ public:
     }
   }
 
+  void setPrimaryKey(string sTableNameIn, string sPrimaryKey)
+  {
+    for (int i = 0; i < vTableList.size(); ++i)
+    {
+      if (vTableList[i].getTableName() == sTableNameIn)
+      {
+        vTableList[i].setPrimaryKey(sPrimaryKey);
+        return;
+      }
+    }
+  }
+
+  void removePrimaryKey(string sTableNameIn, string sPrimaryKey)
+  {
+    for (int i = 0; i < vTableList.size(); ++i)
+    {
+      if (vTableList[i].getTableName() == sTableNameIn)
+      {
+        vTableList[i].removePrimaryKey(sPrimaryKey);
+        return;
+      }
+    }
+  }
+
   void selection(string sTableNameIn, string sTableNameOut, string sOperator,
     string sColumn, string sAttribute);
   void update(vector<string> vColumnNames, vector<string> vNewVals,
