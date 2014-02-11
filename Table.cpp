@@ -27,6 +27,7 @@
 #include "Table.h"
 using namespace std;
 
+const int COLUMN_WIDTH = 20;
 /*******************************************************************************
   Display the table, need to put formatting for n/a
 *******************************************************************************/
@@ -50,8 +51,8 @@ void Table::displayTable()
 
   for (int i = 0; i < vColumnName.size(); ++i)
   {
-    
-    cout << " | " << setw(20) << left << get<1>(vColumnName[i]);
+
+    cout << " | " << setw(COLUMN_WIDTH) << left << get<1>(vColumnName[i]);
   }
   cout << "\n ";
 
@@ -70,7 +71,13 @@ void Table::displayTable()
       {
         if (get<0>(*current) == get<0>(vColumnName[a]))
         {
-          cout << " | " << setw(20) << left << get<1>(*current);
+          string sCurrent = get<1>(*current);
+          if (sCurrent.size() > COLUMN_WIDTH)
+          {
+            sCurrent.resize(20);
+          }
+          cout << " | " << setw(COLUMN_WIDTH) << left << sCurrent;
+          
           break;
         }
       }
