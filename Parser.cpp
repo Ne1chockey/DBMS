@@ -30,7 +30,7 @@ using namespace std;
 /*******************************************************************************
 
 *******************************************************************************/
-void Parser::readFromFile()
+bool Parser::readFromFile()
 {
     ifstream fhIn; //file handler
     string sFilenameIn; //Declaring string for holding filename from the user
@@ -47,18 +47,17 @@ void Parser::readFromFile()
     //Open the file and validate it opened properly
     fhIn.open(sFilenameIn.c_str());
 
-    //Input validation
-    while (sFilenameIn == NULL)
-    {
-        printf("\nERROR: Bad file name");
-        printf("\nEnter File Name: ");
-        cin >> sFileNameIn;
+    if (!fhIn)
+    { 
+        //Output error message
+        printf("|--------------------------------------");
+        printf("-----------------------------------------\n");
+        printf("| ERROR, file did not open, exiting...\n"); 
+        return false; //Ends function
     }
 
-    fhIn.open(sFilenameIn);
-
     //Reading the first line from the file
-    getline(fhIn, sLineIn, '\n');
+    getline(fhIn, sLineIn, ';');
 
     //Formatting
     printf("\n|--------------------------------------");
@@ -91,5 +90,6 @@ void Parser::parse(string sLineIn)
     //Declare and initialize variables
     int iPosStart, iPosEnd; 
     string sTemp;
+    printf("%s\n", sLineIn.c_str());
 
 }

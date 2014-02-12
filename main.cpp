@@ -25,6 +25,7 @@
 #include <iomanip>
 #include <tuple>
 #include "Engine.h"
+#include "Parser.h"
 using namespace std;
 
 int main() 
@@ -38,11 +39,24 @@ int main()
   vector< tuple<int, string> > vRow5;
   vector<string> vKeys;
   Engine e;
+  Parser p;
 
-  //NOTE TO SELF: change this to where the function takes in the two parameters
-  //instead of making a tuple and sending, have the function make the tuple
-  //dont make the user make a tuple and send it, lets do that on our end.
+  //calls read function and returns true if file opened successfully
+  if (p.readFromFile())
+  {
+    //the file was read properly and values were parsed 
+  }
+  else
+  {
+    //The file was not read
+  }
 
+
+
+  /***********************************************************************
+    ENGINE TESTING BELOW, UNCOMMENT TO SEE
+  ************************************************************************/
+  /*
   //Create columns for the main table
   vColumnNames.push_back(make_tuple("Name","string",false));
   vColumnNames.push_back(make_tuple("Age","int",false));
@@ -227,5 +241,6 @@ int main()
   e.displayTable("Other Table");
   cout << "Press Enter to continue..." << endl;
   cin.get();
+  */
   return 0;
 }

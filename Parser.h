@@ -38,9 +38,11 @@ public:
   //Declare class methods
   Parser(){};
 
-  void readFromFile();
+  bool readFromFile();
   void parse(string sLineIn);
   void validate();
+
+  //Grammar functions
 
 
 };
