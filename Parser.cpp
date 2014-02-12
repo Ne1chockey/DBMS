@@ -2,7 +2,7 @@
     File: Parser.cpp
 
     Authors: Gustavo Pedroso UIN: 423002834
-             Levi Clark      UIN:
+             Levi Clark      UIN: 520007880
              Terry Chen      UIN: 121007055
              Daniel He       UIN: 620006827
 
@@ -21,7 +21,75 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 #include "Parser.h"
 using namespace std;
+
+/*******************************************************************************
+
+*******************************************************************************/
+void Parser::readFromFile()
+{
+    ifstream fhIn; //file handler
+    string sFilenameIn; //Declaring string for holding filename from the user
+    string sLineIn; //Hold the line that is read off file
+    int iCount = 0;
+
+    //Output for gathering filename from the user
+    printf("\n\n");
+    printf("|--------------------------------------");
+    printf("-----------------------------------------\n");
+    printf("| Enter the filename: ");
+    getline(cin, sFilenameIn);
+
+    //Open the file and validate it opened properly
+    fhIn.open(sFilenameIn.c_str());
+
+    //Input validation
+    while (sFilenameIn == NULL)
+    {
+        printf("\nERROR: Bad file name");
+        printf("\nEnter File Name: ");
+        cin >> sFileNameIn;
+    }
+
+    fhIn.open(sFilenameIn);
+
+    //Reading the first line from the file
+    getline(fhIn, sLineIn, '\n');
+
+    //Formatting
+    printf("\n|--------------------------------------");
+    printf("-----------------------------------------\n");
+
+    //Loop to read in file information
+    while(!fhIn.eof())
+    {
+        int *ptrTemp;
+
+        //Parse the line of text and interpret it
+        parse(sLineIn);
+
+        //Prepare to loop again, read in next record & update
+        getline(fhIn, sLineIn, '\n');
+
+        //Increase the counter
+        iCount++;
+    }
+
+    //Close the file
+    fhIn.close();
+}
+
+/*******************************************************************************
+
+*******************************************************************************/
+void Parser::parse(string sLineIn)
+{
+    //Declare and initialize variables
+    int iPosStart, iPosEnd; 
+    string sTemp;
+
+}

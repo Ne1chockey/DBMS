@@ -2,7 +2,7 @@
     File: Parser.h
 
     Authors: Gustavo Pedroso UIN: 423002834
-             Levi Clark      UIN:
+             Levi Clark      UIN: 520007880
              Terry Chen      UIN: 121007055
              Daniel He       UIN: 620006827
 
@@ -32,10 +32,15 @@ class Parser
 {
 private:
   //Declare private variables
+  vector <string> vValuesRead;
 
 public:
   //Declare class methods
   Parser(){};
+
+  void readFromFile();
+  void parse(string sLineIn);
+  void validate();
 
 
 };
