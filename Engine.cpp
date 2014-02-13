@@ -118,8 +118,10 @@ bool Engine::compareTables(string sT1Name, string sT2Name)
               }
             }
           }
+          break;
         }
       }
+      break;
     }
   }
   return true;
