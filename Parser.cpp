@@ -38,7 +38,7 @@ const int VALUES_FROM_SIZE = 11;
 const int PRIMARY_KEY_SIZE = 11;
 
 /*******************************************************************************
-
+Read a file and call parse function on each line read
 *******************************************************************************/
 bool Parser::readFromFile()
 {
@@ -74,7 +74,9 @@ bool Parser::readFromFile()
     printf("-----------------------------------------\n");
 
     //Loop to read in file information
-    //CHANGE ICOUNT TO THE AMOUNT OF LINES YOU WANT TO SEE! FOR TESTING PURPOSES
+    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    CHANGE ICOUNT TO THE AMOUNT OF LINES YOU WANT TO SEE! FOR TESTING PURPOSES
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     while(!fhIn.eof() && iCount != 20)
     {
         int *ptrTemp;
@@ -94,7 +96,7 @@ bool Parser::readFromFile()
 }
 
 /*******************************************************************************
-
+Parse the line in and call the appropiate functions
 *******************************************************************************/
 void Parser::parse(string sLineIn)
 {
@@ -127,76 +129,109 @@ void Parser::parse(string sLineIn)
         string sPrimaryKeys = sLineIn.substr(iPosStart+PRIMARY_KEY_SIZE,iPosEnd-PRIMARY_KEY_SIZE);
         printf("The primary keys are %s\n", sPrimaryKeys.c_str());
 
-        //create a function to parse out the columns and primary keys and 
-        //returns a vector of strings so we can call the create table function with them in parameters  <------------- TO DO
-
-        //e.createTable(sTableName,createColVector(sColumns),createPrimaryVector(sPrimaryKeys));
+        
+        //UNCOMMENT THIS WHEN THE HELPER FUNCTIONS ARE DONE TO SEE IF IT WORKS!!!!!!!!!
+        //e.createTable(sTableName,createColVector(sColumns),createVector(sPrimaryKeys));
     }
 
-    iPosStart = sLineIn.find("INSERT INTO");
+    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    The if statments below should be implemented in the way the above if statement is.
+    The sizes for the different constant values are declared global.
+    There are more operations below that havent been added that need to be.
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    iPosStart = sLineIn.find("INSERT INTO"); 
 
-    if (iPosStart!=std::string::npos)
+    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
         printf("INSERT INTO found at %i\n", iPosStart);
+
+        iPosStart = sLineIn.find("VALUES FROM");
+
+        if (iPosStart!=std::string::npos)                                   //<------------- TO DO
+        {
+            printf("VALUES FROM found at %i\n", iPosStart);
+        }
     }
 
     iPosStart = sLineIn.find("WRITE");
 
-    if (iPosStart!=std::string::npos)
+    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
         printf("WRITE found at %i\n", iPosStart);
     }
 
     iPosStart = sLineIn.find("CLOSE");
 
-    if (iPosStart!=std::string::npos)
+    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
         printf("CLOSE found at %i\n", iPosStart);
     }
 
     iPosStart = sLineIn.find("EXIT");
 
-    if (iPosStart!=std::string::npos)
+    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
         printf("EXIT found at %i\n", iPosStart);
     }
 
-    iPosStart = sLineIn.find("VALUES FROM");
-
-    if (iPosStart!=std::string::npos)
-    {
-        printf("VALUES FROM found at %i\n", iPosStart);
-    }
-
     iPosStart = sLineIn.find("OPEN");
 
-    if (iPosStart!=std::string::npos)
+    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
         printf("OPEN found at %i\n", iPosStart);
     }
 
     iPosStart = sLineIn.find("SHOW");
 
-    if (iPosStart!=std::string::npos)
+    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
         printf("SHOW found at %i\n", iPosStart);
     }
 
     iPosStart = sLineIn.find("<=");
 
-    if (iPosStart!=std::string::npos)
+    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
         printf("<= found at %i\n", iPosStart);
     }
 
     iPosStart = sLineIn.find("==");
 
-    if (iPosStart!=std::string::npos)
+    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
         printf("== found at %i\n", iPosStart);
     }
+    
+    //There are more of these to add, like <, >, && and any others you can think of
+
 
     //Save the indicies of where each function was found, compare them and
     //execute the first function found and call parse recursively on rest of string
+    //Still thinking about this part, after we implement the above cases
+    //we can look more in depth into this
+
+}
+
+/*******************************************************************************
+Takes in a string, parses it, and creates a vector of columns to send back
+*******************************************************************************/    //<------------- TO DO
+vector<tuple<string,string,bool> > createColVector(string sLineIn)                  
+{
+    //<type, name, primarykey>
+}
+
+/*******************************************************************************
+Takes in a string, parses it, and creates a vector of strings to send back
+*******************************************************************************/    //<------------- TO DO
+vector<string> createVector (string sLineIn)
+{
+
+}
+
+/*******************************************************************************
+Takes in a string, parses it, and creates a vector of strings to send back
+*******************************************************************************/    //<------------- TO DO
+vector< tuple<int, string> > createRowVector (string sLineIn)
+{
 
 }

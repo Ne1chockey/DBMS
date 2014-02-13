@@ -48,7 +48,7 @@ int main()
   }
   else
   {
-    //The file was not read
+    //The file was not FOUND
   }
 
 

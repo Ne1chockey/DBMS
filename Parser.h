@@ -43,8 +43,21 @@ public:
   void validate();
 
   //Grammar functions
+  /*
+  string query(string sRelationName, string sExpr);
+  string relationName(string iIdentifier);
+  string identifier(char cAlpha, char cAlphaOrDigit);
+  string alpha(char cAlpha);
+  string digit(char cDigit);
+  string expr(string sExpr);
+  string atomicExpr(string sRelationNameOrExpr);
+  string selection(string sCondition, string sAtomicExpr);
+  */
 
-
+  //helper functions 
+  vector<tuple<string, string,bool> > createColVector (string sLineIn);
+  vector<string> createPrimaryVector (string sLineIn);
+  vector< tuple<int, string> > createRowVector (string sLineIn);
 };
 
 #endif
