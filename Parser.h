@@ -46,6 +46,8 @@ public:
 
 
   //Grammar functions
+  bool findCreateTable(string sLineIn);
+  bool findInsertInto(string sLineIn);
   /*
   string query(string sRelationName, string sExpr);
   string relationName(string iIdentifier);

@@ -103,56 +103,21 @@ void Parser::parse(string sLineIn)
     //Declare and initialize variables
     string sTemp;
 
+    //Output the line we are working with so we know we have the parsing correct
     printf("%s\n", sLineIn.c_str());
 
-    size_t iPosStart = sLineIn.find("CREATE TABLE");
-
-    if (iPosStart!=std::string::npos)
+    if (findCreateTable(sLineIn))
     {
-        //get the table name
-        size_t iPosEnd = sLineIn.find("(");
-        string sTableName = sLineIn.substr(iPosStart+CREATE_TABLE_SIZE,iPosEnd-CREATE_TABLE_SIZE-2);
-
-        //get the column names
-        iPosStart = iPosEnd;
-        iPosEnd = sLineIn.find("PRIMARY KEY",iPosStart+1);
-        string sColumns = sLineIn.substr(iPosStart,iPosEnd-CREATE_TABLE_SIZE-PRIMARY_KEY_SIZE+1);
-
-        //get the primary keys
-        iPosStart = iPosEnd;
-        iPosEnd = sLineIn.find(")",iPosStart+1);
-        string sPrimaryKeys = sLineIn.substr(iPosStart+PRIMARY_KEY_SIZE,iPosEnd-PRIMARY_KEY_SIZE);
-
-        //remove the spaces from the name of the table
-        sTableName = cleanSpaces(sTableName);
-
-        //call the create table function after the helper functions finish 
-        e.createTable(sTableName,createColVector(sColumns),createVector(sPrimaryKeys));
-
-        //Display table to see that it works
-        e.displayTable(sTableName);
+        printf("CREATE TABLE was found in this line, executed.\n");
     }
 
-    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    The if statments below should be implemented in the way the above if statement is.
-    The sizes for the different constant values are declared global.
-    There are more operations below that havent been added that need to be.
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-    iPosStart = sLineIn.find("INSERT INTO"); 
-
-    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
+    if (findInsertInto(sLineIn))
     {
-        printf("INSERT INTO found at %i\n", iPosStart);
-
-        iPosStart = sLineIn.find("VALUES FROM");
-
-        if (iPosStart!=std::string::npos)                                   //<------------- TO DO
-        {
-            printf("VALUES FROM found at %i\n", iPosStart);
-        }
+        printf("INSERT INTO was found in this line, executed.\n");
     }
 
-    iPosStart = sLineIn.find("WRITE");
+
+    size_t iPosStart = sLineIn.find("WRITE");
 
     if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
@@ -222,7 +187,6 @@ vector<tuple<string,string,bool> > Parser::createColVector(string sLineIn)
 
     for (int i = 0; i < vCol.size(); i++)
     {
-        printf("%s, and the size is %i\n", vCol[i].c_str(), vCol[i].length());
         string sType, sName;
         
         //See what type of column it is and create a tuple with the name & type
@@ -260,7 +224,6 @@ vector<string> Parser::createVector (string sLineIn)
     int iCount = 0;
     int iAmountOfCommas = 0;
 
-    printf("sLineIn is %s\n", sLineIn.c_str());
     //Check to see how many commas are in the string 
     for (int i = 0; i < sLineIn.length(); ++i)
     {
@@ -275,7 +238,6 @@ vector<string> Parser::createVector (string sLineIn)
     while (iCount <= iAmountOfCommas)
     {
         iPosEnd = sLineIn.find(",",iPosStart+1);
-        printf("iPosStart is at %i and iPosEnd is at %i\n", iPosStart, iPosEnd);
         vReturn.push_back(sLineIn.substr(iPosStart,iPosEnd-iPosStart));
         iPosStart = iPosEnd+1;
         iCount++;
@@ -285,7 +247,6 @@ vector<string> Parser::createVector (string sLineIn)
     for (int i = 0; i < vReturn.size(); ++i)
     {
         vReturn[i] = cleanSpaces(vReturn[i]);
-        printf("%s\n", vReturn[i].c_str());
     }
 
     return vReturn;
@@ -293,10 +254,20 @@ vector<string> Parser::createVector (string sLineIn)
 
 /*******************************************************************************
 Takes in a string, parses it, and creates a vector of strings to send back
-*******************************************************************************/    //<------------- TO DO
+*******************************************************************************/   
 vector< tuple<int, string> > Parser::createRowVector (string sLineIn)
 {
+    vector< tuple<int, string> > vRowOut;
+    vector<string> vRowAttributes = createVector(sLineIn);
 
+    for (int i = 0; i < vRowAttributes.size(); i++)
+    {
+        int iColIndex = i;
+        string sName = vRowAttributes[i];
+
+        vRowOut.push_back(make_tuple(iColIndex, sName));
+    }
+    return vRowOut;
 }
 
 /*******************************************************************************
@@ -308,7 +279,7 @@ string Parser::cleanSpaces (string sLineIn)
     for (int i = 0; i < sLineIn.length(); ++i)
     {
         //Append the value from the string into the return string, if its alpha
-        if (isalpha(sLineIn[i]))
+        if (isalnum(sLineIn[i]))
         {
             sOut += sLineIn[i];
         }
@@ -316,3 +287,103 @@ string Parser::cleanSpaces (string sLineIn)
 
     return sOut;
 }
+
+/*******************************************************************************
+Function that sees if CREATE TABLE is in the string and executes the command
+*******************************************************************************/ 
+bool Parser::findCreateTable(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("CREATE TABLE");
+
+    if (iPosStart!=std::string::npos)
+    {
+        //get the table name
+        size_t iPosEnd = sLineIn.find("(");
+        string sTableName = sLineIn.substr(iPosStart+CREATE_TABLE_SIZE,iPosEnd-CREATE_TABLE_SIZE-1);
+
+        //get the column names
+        iPosStart = iPosEnd;
+        iPosEnd = sLineIn.find("PRIMARY KEY",iPosStart+1);
+        string sColumns = sLineIn.substr(iPosStart,iPosEnd-CREATE_TABLE_SIZE-PRIMARY_KEY_SIZE+1);
+
+        //get the primary keys
+        iPosStart = iPosEnd;
+        iPosEnd = sLineIn.find(")",iPosStart+1);
+        string sPrimaryKeys = sLineIn.substr(iPosStart+PRIMARY_KEY_SIZE,iPosEnd-PRIMARY_KEY_SIZE);
+
+        //remove the spaces from the name of the table
+        sTableName = cleanSpaces(sTableName);
+
+        //call the create table function after the helper functions finish 
+        e.createTable(sTableName,createColVector(sColumns),createVector(sPrimaryKeys));
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/*******************************************************************************
+Function that sees if INSERT INTO is in the string and executes the command
+handles both INSERT FROM and INSERT FROM RELATION
+*******************************************************************************/ 
+bool Parser::findInsertInto(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("INSERT INTO"); 
+
+    if (iPosStart!=std::string::npos)                                       
+    {
+        size_t iPosEnd = sLineIn.find("VALUES FROM");
+
+        //Get the name of the table from the string
+        string sTableName = sLineIn.substr(iPosStart+VALUES_FROM_SIZE,iPosEnd-VALUES_FROM_SIZE-2);
+        sTableName = cleanSpaces(sTableName);
+
+        //reposition the iterators to get the row values
+        iPosStart = iPosEnd + 1;
+        iPosEnd = sLineIn.find(")");
+
+        //Get the row attributes from the string
+        string sRow = sLineIn.substr(iPosStart+VALUES_FROM_SIZE,iPosEnd-VALUES_FROM_SIZE-2);
+        
+        //Clean up and add the row to the table
+        e.addRow(sTableName, createRowVector(sRow));
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
