@@ -46,17 +46,17 @@ bool Parser::readFromFile()
     string sFilenameIn; //Declaring string for holding filename from the user
     string sLineIn; //Hold the line that is read off file
     int iCount = 0;
-
-    //Output for gathering filename from the user
+    /*
+    //Output for gathering filename from the user                       <------remember to uncomment this when submitting
     printf("\n\n");
     printf("|--------------------------------------");
     printf("-----------------------------------------\n");
     printf("| Enter the filename: ");
     getline(cin, sFilenameIn);
-
+    
     //Open the file and validate it opened properly
-    fhIn.open(sFilenameIn.c_str());
-
+    fhIn.open(sFilenameIn.c_str());*/
+    fhIn.open("testInput.txt"); 
     if (!fhIn)
     { 
         //Output error message
@@ -77,7 +77,7 @@ bool Parser::readFromFile()
     /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CHANGE ICOUNT TO THE AMOUNT OF LINES YOU WANT TO SEE! FOR TESTING PURPOSES
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-    while(!fhIn.eof() && iCount != 20)
+    while(!fhIn.eof() && iCount != 10)
     {
         int *ptrTemp;
 
@@ -100,38 +100,37 @@ Parse the line in and call the appropiate functions
 *******************************************************************************/
 void Parser::parse(string sLineIn)
 {
-    Engine e;
     //Declare and initialize variables
-    //int iPosStart, iPosEnd; 
     string sTemp;
+
     printf("%s\n", sLineIn.c_str());
 
     size_t iPosStart = sLineIn.find("CREATE TABLE");
 
     if (iPosStart!=std::string::npos)
     {
-        printf("CREATE TABLE found at %i\n", iPosStart);
-
         //get the table name
         size_t iPosEnd = sLineIn.find("(");
         string sTableName = sLineIn.substr(iPosStart+CREATE_TABLE_SIZE,iPosEnd-CREATE_TABLE_SIZE-2);
-        printf("The name of the table is %s\n", sTableName.c_str());
 
         //get the column names
         iPosStart = iPosEnd;
         iPosEnd = sLineIn.find("PRIMARY KEY",iPosStart+1);
         string sColumns = sLineIn.substr(iPosStart,iPosEnd-CREATE_TABLE_SIZE-PRIMARY_KEY_SIZE+1);
-        printf("The columns are %s\n", sColumns.c_str());
 
         //get the primary keys
         iPosStart = iPosEnd;
         iPosEnd = sLineIn.find(")",iPosStart+1);
         string sPrimaryKeys = sLineIn.substr(iPosStart+PRIMARY_KEY_SIZE,iPosEnd-PRIMARY_KEY_SIZE);
-        printf("The primary keys are %s\n", sPrimaryKeys.c_str());
 
-        
-        //UNCOMMENT THIS WHEN THE HELPER FUNCTIONS ARE DONE TO SEE IF IT WORKS!!!!!!!!!
-        //e.createTable(sTableName,createColVector(sColumns),createVector(sPrimaryKeys));
+        //remove the spaces from the name of the table
+        sTableName = cleanSpaces(sTableName);
+
+        //call the create table function after the helper functions finish 
+        e.createTable(sTableName,createColVector(sColumns),createVector(sPrimaryKeys));
+
+        //Display table to see that it works
+        e.displayTable(sTableName);
     }
 
     /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -214,24 +213,106 @@ void Parser::parse(string sLineIn)
 
 /*******************************************************************************
 Takes in a string, parses it, and creates a vector of columns to send back
-*******************************************************************************/    //<------------- TO DO
-vector<tuple<string,string,bool> > createColVector(string sLineIn)                  
+*******************************************************************************/ 
+vector<tuple<string,string,bool> > Parser::createColVector(string sLineIn)                  
 {
     //<type, name, primarykey>
+    vector<tuple<string,string,bool> > vColVectorOut;
+    vector<string> vCol = createVector(sLineIn);
+
+    for (int i = 0; i < vCol.size(); i++)
+    {
+        printf("%s, and the size is %i\n", vCol[i].c_str(), vCol[i].length());
+        string sType, sName;
+        
+        //See what type of column it is and create a tuple with the name & type
+        size_t iVar = vCol[i].find("VARCHAR");
+
+        if (iVar!=std::string::npos)
+        {
+            sType = "string";
+            sName = vCol[i].substr(0,iVar);
+        }
+
+        size_t iInt = vCol[i].find("INTEGER");
+
+        if (iInt!=std::string::npos)
+        {
+            sType = "int";
+            sName = vCol[i].substr(0,iInt);
+        }
+        //printf("%s and %s\n", sType.c_str(), sName.c_str());
+        //push the newly created column into the vector to send back
+        vColVectorOut.push_back(make_tuple(sName,sType,false));
+
+    }
+    return vColVectorOut;
+}
+
+/*******************************************************************************
+Takes in a string, parses it, and creates a vector of strings to send back
+*******************************************************************************/ 
+vector<string> Parser::createVector (string sLineIn)
+{
+    vector<string> vReturn;
+    int iPosStart = 0;
+    int iPosEnd = 0;
+    int iCount = 0;
+    int iAmountOfCommas = 0;
+
+    printf("sLineIn is %s\n", sLineIn.c_str());
+    //Check to see how many commas are in the string 
+    for (int i = 0; i < sLineIn.length(); ++i)
+    {
+        //Execute if the comma is found and increment the counter
+        if (sLineIn[i] == ',')
+        {
+            iAmountOfCommas++;
+        }
+    }
+
+    //Loop to parser out the comma seperated values
+    while (iCount <= iAmountOfCommas)
+    {
+        iPosEnd = sLineIn.find(",",iPosStart+1);
+        printf("iPosStart is at %i and iPosEnd is at %i\n", iPosStart, iPosEnd);
+        vReturn.push_back(sLineIn.substr(iPosStart,iPosEnd-iPosStart));
+        iPosStart = iPosEnd+1;
+        iCount++;
+    }
+
+    //clean up the words that were seperated out
+    for (int i = 0; i < vReturn.size(); ++i)
+    {
+        vReturn[i] = cleanSpaces(vReturn[i]);
+        printf("%s\n", vReturn[i].c_str());
+    }
+
+    return vReturn;
 }
 
 /*******************************************************************************
 Takes in a string, parses it, and creates a vector of strings to send back
 *******************************************************************************/    //<------------- TO DO
-vector<string> createVector (string sLineIn)
+vector< tuple<int, string> > Parser::createRowVector (string sLineIn)
 {
 
 }
 
 /*******************************************************************************
-Takes in a string, parses it, and creates a vector of strings to send back
-*******************************************************************************/    //<------------- TO DO
-vector< tuple<int, string> > createRowVector (string sLineIn)
+Remove any additional spaces from the string
+*******************************************************************************/ 
+string Parser::cleanSpaces (string sLineIn)
 {
+    string sOut = "";
+    for (int i = 0; i < sLineIn.length(); ++i)
+    {
+        //Append the value from the string into the return string, if its alpha
+        if (isalpha(sLineIn[i]))
+        {
+            sOut += sLineIn[i];
+        }
+    }
 
+    return sOut;
 }

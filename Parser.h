@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
+#include "Engine.h"
 using namespace std;
 
 class Parser 
@@ -33,6 +34,7 @@ class Parser
 private:
   //Declare private variables
   vector <string> vValuesRead;
+  Engine e;
 
 public:
   //Declare class methods
@@ -41,6 +43,7 @@ public:
   bool readFromFile();
   void parse(string sLineIn);
   void validate();
+
 
   //Grammar functions
   /*
@@ -55,9 +58,10 @@ public:
   */
 
   //helper functions 
-  vector<tuple<string, string,bool> > createColVector (string sLineIn);
-  vector<string> createPrimaryVector (string sLineIn);
+  vector<tuple<string,string,bool> > createColVector (string sLineIn);
+  vector<string> createVector (string sLineIn);
   vector< tuple<int, string> > createRowVector (string sLineIn);
+  string cleanSpaces(string sLineIn);
 };
 
 #endif

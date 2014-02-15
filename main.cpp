@@ -45,11 +45,9 @@ int main()
   if (p.readFromFile())
   {
     //the file was read properly and values were parsed 
+    printf("The file was found\n");
   }
-  else
-  {
-    //The file was not FOUND
-  }
+
 
 
 
