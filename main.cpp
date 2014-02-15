@@ -39,16 +39,29 @@ int main()
   vector< tuple<int, string> > vRow5;
   vector<string> vKeys;
   Engine e;
-  Parser p;
+  Parser pFileTest;
+  Parser pCommandLineTest;
+  string sLineIn;
+  int iParse = 1;
 
-  //calls read function and returns true if file opened successfully
-  if (p.readFromFile())
+  //Test the parser reading from a file
+  if (pFileTest.readFromFile())
   {
     //the file was read properly and values were parsed 
-    printf("The file was found\n");
+    printf("The file was found.\n");
   }
 
+  //Test the parser reading from command line input
+  while (iParse)
+  {
+    printf("Enter line for parser: ");
+    cin >> sLineIn;
 
+    pCommandLineTest.parse(sLineIn);
+
+    printf("Enter another line? 1 or 0: ");
+    cin >> iParse;
+  }
 
 
   /***********************************************************************

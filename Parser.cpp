@@ -104,61 +104,41 @@ void Parser::parse(string sLineIn)
     string sTemp;
 
     //Output the line we are working with so we know we have the parsing correct
-    printf("%s\n", sLineIn.c_str());
+    //printf("%s\n", sLineIn.c_str());
 
     if (findCreateTable(sLineIn))
     {
-        printf("CREATE TABLE was found in this line, executed.\n");
+        printf("| CREATE TABLE was found in this line, executed.\n");
     }
 
     if (findInsertInto(sLineIn))
     {
-        printf("INSERT INTO was found in this line, executed.\n");
+        printf("| INSERT INTO was found in this line, executed.\n");
     }
 
     if (findShow(sLineIn))
     {
-        printf("SHOW was found in this line, executed.\n");
+        printf("| SHOW was found in this line, executed.\n");
     }
 
     if (findWrite(sLineIn))
     {
-        printf("WRITE was found in this line, executed.\n");
+        printf("| WRITE was found in this line, executed.\n");
     }
 
-    size_t iPosStart = sLineIn.find("CLOSE");
-
-    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
+    if (findOpen(sLineIn))
     {
-        printf("CLOSE found at %i\n", iPosStart);
+        printf("| OPEN was found in this line, executed.\n");
     }
 
-    iPosStart = sLineIn.find("EXIT");
-
-    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
+    if (findClose(sLineIn))
     {
-        printf("EXIT found at %i\n", iPosStart);
+        printf("| CLOSE was found in this line, executed.\n");
     }
 
-    iPosStart = sLineIn.find("OPEN");
-
-    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
+    if (findExit(sLineIn))
     {
-        printf("OPEN found at %i\n", iPosStart);
-    }
-
-    iPosStart = sLineIn.find("<=");
-
-    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
-    {
-        printf("<= found at %i\n", iPosStart);
-    }
-
-    iPosStart = sLineIn.find("==");
-
-    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
-    {
-        printf("== found at %i\n", iPosStart);
+        printf("| EXIT was found in this line, executed.\n");
     }
     
     //There are more of these to add, like <, >, && and any others you can think of
@@ -402,11 +382,72 @@ bool Parser::findWrite(string sLineIn)
     }
 }
 
+/*******************************************************************************
+Function that sees if OPEN is in the string and executes the command
+*******************************************************************************/ 
+bool Parser::findOpen(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("OPEN"); 
 
+    if (iPosStart!=std::string::npos)                                       
+    {
+        //Get the name of the table from the string
+        string sTableName = sLineIn.substr(iPosStart+WRITE_CLOSE_SIZE);
+        sTableName = cleanSpaces(sTableName);
+        
+        //call the function to display table
+        e.openTable(sTableName);                  //<---------------- NEEDS TO BE IMPLEMENTED IN TABLE CLASS
 
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
+/*******************************************************************************
+Function that sees if CLOSE is in the string and executes the command
+*******************************************************************************/ 
+bool Parser::findClose(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("CLOSE"); 
 
+    if (iPosStart!=std::string::npos)                                       
+    {
+        //Get the name of the table from the string
+        string sTableName = sLineIn.substr(iPosStart+WRITE_CLOSE_SIZE);
+        sTableName = cleanSpaces(sTableName);
+        
+        //call the function to display table
+        e.closeTable(sTableName);                  //<---------------- NEEDS TO BE IMPLEMENTED IN TABLE CLASS
 
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/*******************************************************************************
+Function that sees if EXIT is in the string and executes the command
+*******************************************************************************/ 
+bool Parser::findExit(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("EXIT"); 
+
+    if (iPosStart!=std::string::npos)                                       
+    {
+        //WE HAVE TO EXIT SOMETHING HERE?
+        printf("Exiting..\n");
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 
 

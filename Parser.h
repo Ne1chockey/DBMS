@@ -49,6 +49,9 @@ public:
   bool findInsertInto(string sLineIn);
   bool findShow(string sLineIn);
   bool findWrite(string sLineIn);
+  bool findOpen(string sLineIn);
+  bool findClose(string sLineIn);
+  bool findExit(string sLineIn);
   /*
   string query(string sRelationName, string sExpr);
   string relationName(string iIdentifier);

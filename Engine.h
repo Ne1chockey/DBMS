@@ -69,6 +69,32 @@ public:
     printf("| The table was not found\n");
   }
 
+  void openTable(string sTableNameIn)
+  {
+    for (int i = 0; i < vTableList.size(); ++i)
+    {
+      if (vTableList[i].getTableName() == sTableNameIn)
+      {
+        vTableList[i].openTable();
+        return;
+      }
+    }
+    printf("| The table was not found\n");
+  }
+
+  void closeTable(string sTableNameIn)
+  {
+    for (int i = 0; i < vTableList.size(); ++i)
+    {
+      if (vTableList[i].getTableName() == sTableNameIn)
+      {
+        vTableList[i].closeTable();
+        return;
+      }
+    }
+    printf("| The table was not found\n");
+  }
+
   void addRow(string sTableNameIn, vector< tuple<int, string> > vRowIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)

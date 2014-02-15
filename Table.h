@@ -45,9 +45,11 @@ public:
     sTableName = sTableNameIn; 
   }
   
-  //Display function and write function
+  //Display function and write function and open function
   void displayTable();
   void writeTable();
+  void openTable() {}; //NEEDS TO BE IMPLEMENTED
+  void closeTable() {}; //NEEDS TO BE IMPLEMENTED
 
   //Setters
   void setPrimaryKey(string sKeyIn) 
