@@ -44,10 +44,11 @@ public:
   void parse(string sLineIn);
   void validate();
 
-
   //Grammar functions
   bool findCreateTable(string sLineIn);
   bool findInsertInto(string sLineIn);
+  bool findShow(string sLineIn);
+  bool findWrite(string sLineIn);
   /*
   string query(string sRelationName, string sExpr);
   string relationName(string iIdentifier);

@@ -24,12 +24,13 @@
 #include <iostream>
 #include <iomanip>
 #include <tuple>
+#include <fstream>
 #include "Table.h"
 using namespace std;
 
 const int COLUMN_WIDTH = 20;
 /*******************************************************************************
-  Display the table, need to put formatting for n/a
+  Display the table
 *******************************************************************************/
 void Table::displayTable()
 {
@@ -100,6 +101,83 @@ void Table::displayTable()
     cout << "\n";
   }
   cout << "\n";
+}
+/*******************************************************************************
+  Write the table to a file
+*******************************************************************************/
+void Table::writeTable()
+{
+  ofstream outputFile;
+  outputFile.open(sTableName + ".txt");
+  outputFile << "\n ";
+
+  for (int i = 0; i < vColumnName.size(); ++i)
+  {
+    outputFile << "-----------------------";
+  }
+  outputFile << "\n";
+
+  outputFile << " | " << sTableName << "\n ";
+
+  for (int i = 0; i < vColumnName.size(); ++i)
+  {
+    outputFile << "+----------------------";
+  }
+  outputFile << "\n";
+
+  for (int i = 0; i < vColumnName.size(); ++i)
+  {
+    string sColName = get<1>(vColumnName[i]);
+    bool bPrimaryKey = get<2>(vColumnName[i]);
+    if (bPrimaryKey)
+    {
+      outputFile << " | " << setw(COLUMN_WIDTH) << left << "*" + sColName + "*";
+    }
+    else
+    {
+      outputFile << " | " << setw(COLUMN_WIDTH) << left << sColName;
+    }
+    
+  }
+  outputFile << "\n ";
+
+  for (int i = 0; i < vColumnName.size(); ++i)
+  {
+    outputFile << "+----------------------";
+  }
+  outputFile << "\n";
+
+  for (int i = 0; i < vRows.size(); ++i)
+  {
+    for (int a = 0; a < vColumnName.size(); ++a)
+    {
+      for (vector< tuple<int,string> >::iterator current = vRows[i].begin(); 
+        current != vRows[i].end(); ++current)
+      {
+        if (get<0>(*current) == get<0>(vColumnName[a]))
+        {
+          string sCurrent = get<1>(*current);
+          if (sCurrent.size() > COLUMN_WIDTH)
+          {
+            sCurrent.resize(COLUMN_WIDTH);
+          }
+          outputFile << " | " << setw(COLUMN_WIDTH) << left << sCurrent;
+          
+          break;
+        }
+      }
+    }
+
+    outputFile << "\n ";
+    for (int y = 0; y < vColumnName.size(); ++y)
+    {
+      outputFile << "+----------------------";
+    }
+    outputFile << "\n";
+  }
+  outputFile << "\n";
+  
+  outputFile.close();
 }
 
 /*******************************************************************************

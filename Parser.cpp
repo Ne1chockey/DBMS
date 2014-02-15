@@ -116,15 +116,17 @@ void Parser::parse(string sLineIn)
         printf("INSERT INTO was found in this line, executed.\n");
     }
 
-
-    size_t iPosStart = sLineIn.find("WRITE");
-
-    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
+    if (findShow(sLineIn))
     {
-        printf("WRITE found at %i\n", iPosStart);
+        printf("SHOW was found in this line, executed.\n");
     }
 
-    iPosStart = sLineIn.find("CLOSE");
+    if (findWrite(sLineIn))
+    {
+        printf("WRITE was found in this line, executed.\n");
+    }
+
+    size_t iPosStart = sLineIn.find("CLOSE");
 
     if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
@@ -143,13 +145,6 @@ void Parser::parse(string sLineIn)
     if (iPosStart!=std::string::npos)                                       //<------------- TO DO
     {
         printf("OPEN found at %i\n", iPosStart);
-    }
-
-    iPosStart = sLineIn.find("SHOW");
-
-    if (iPosStart!=std::string::npos)                                       //<------------- TO DO
-    {
-        printf("SHOW found at %i\n", iPosStart);
     }
 
     iPosStart = sLineIn.find("<=");
@@ -359,7 +354,53 @@ bool Parser::findInsertInto(string sLineIn)
     }
 }
 
+/*******************************************************************************
+Function that sees if SHOW is in the string and executes the command
+*******************************************************************************/ 
+bool Parser::findShow(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("SHOW"); 
 
+    if (iPosStart!=std::string::npos)                                       
+    {
+        //Get the name of the table from the string
+        string sTableName = sLineIn.substr(iPosStart+OPEN_EXIT_SHOW_SIZE);
+        sTableName = cleanSpaces(sTableName);
+        
+        //call the function to display table
+        e.displayTable(sTableName);
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/*******************************************************************************
+Function that sees if WRITE is in the string and executes the command
+*******************************************************************************/ 
+bool Parser::findWrite(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("WRITE"); 
+
+    if (iPosStart!=std::string::npos)                                       
+    {
+        //Get the name of the table from the string
+        string sTableName = sLineIn.substr(iPosStart+WRITE_CLOSE_SIZE);
+        sTableName = cleanSpaces(sTableName);
+        
+        //call the function to display table
+        e.writeTable(sTableName);
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 
 
