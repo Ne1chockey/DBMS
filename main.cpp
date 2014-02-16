@@ -43,14 +43,14 @@ int main()
   Parser pCommandLineTest;
   string sLineIn;
   int iParse = 1;
-
+  
   //Test the parser reading from a file
   if (pFileTest.readFromFile())
   {
     //the file was read properly and values were parsed 
     printf("The file was found.\n");
   }
-
+  
   //Test the parser reading from command line input
   while (iParse)
   {
@@ -58,7 +58,8 @@ int main()
     cin >> sLineIn;
 
     pCommandLineTest.parse(sLineIn);
-
+    cin.clear();
+    cin.ignore();
     printf("Enter another line? 1 or 0: ");
     cin >> iParse;
   }

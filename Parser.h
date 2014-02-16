@@ -68,6 +68,7 @@ public:
   vector<string> createVector (string sLineIn);
   vector< tuple<int, string> > createRowVector (string sLineIn);
   string cleanSpaces(string sLineIn);
+  bool checkParenthesis(string sLineIn);
 };
 
 #endif

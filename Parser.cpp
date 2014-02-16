@@ -77,7 +77,7 @@ bool Parser::readFromFile()
     /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CHANGE ICOUNT TO THE AMOUNT OF LINES YOU WANT TO SEE! FOR TESTING PURPOSES
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-    while(!fhIn.eof() && iCount != 10)
+    while(!fhIn.eof()&& iCount < 1)
     {
         int *ptrTemp;
 
@@ -104,51 +104,48 @@ void Parser::parse(string sLineIn)
     string sTemp;
 
     //Output the line we are working with so we know we have the parsing correct
-    //printf("%s\n", sLineIn.c_str());
+    printf("%s\n", sLineIn.c_str());
+    if (checkParenthesis(sLineIn))
+    {
+        printf("They are balanced\n");
+    }
+    else
+    {
+        printf("They are not balanced\n");
+    }
 
     if (findCreateTable(sLineIn))
     {
         printf("| CREATE TABLE was found in this line, executed.\n");
     }
-
-    if (findInsertInto(sLineIn))
+    else if (findInsertInto(sLineIn))
     {
         printf("| INSERT INTO was found in this line, executed.\n");
     }
-
-    if (findShow(sLineIn))
+    else if (findShow(sLineIn))
     {
         printf("| SHOW was found in this line, executed.\n");
     }
-
-    if (findWrite(sLineIn))
+    else if (findWrite(sLineIn))
     {
         printf("| WRITE was found in this line, executed.\n");
     }
-
-    if (findOpen(sLineIn))
+    else if (findOpen(sLineIn))
     {
         printf("| OPEN was found in this line, executed.\n");
     }
-
-    if (findClose(sLineIn))
+    else if (findClose(sLineIn))
     {
         printf("| CLOSE was found in this line, executed.\n");
     }
-
-    if (findExit(sLineIn))
+    else if (findExit(sLineIn))
     {
         printf("| EXIT was found in this line, executed.\n");
     }
-    
-    //There are more of these to add, like <, >, && and any others you can think of
-
-
-    //Save the indicies of where each function was found, compare them and
-    //execute the first function found and call parse recursively on rest of string
-    //Still thinking about this part, after we implement the above cases
-    //we can look more in depth into this
-
+    else
+    {
+        printf("| None of the lines executed\n");
+    }
 }
 
 /*******************************************************************************
@@ -265,39 +262,58 @@ string Parser::cleanSpaces (string sLineIn)
 
 /*******************************************************************************
 Function that sees if CREATE TABLE is in the string and executes the command
+correct format = CREATE TABLE () PRIMARY KEY ()
 *******************************************************************************/ 
 bool Parser::findCreateTable(string sLineIn)
 {
     size_t iPosStart = sLineIn.find("CREATE TABLE");
-
+    
     if (iPosStart!=std::string::npos)
     {
-        //get the table name
-        size_t iPosEnd = sLineIn.find("(");
-        string sTableName = sLineIn.substr(iPosStart+CREATE_TABLE_SIZE,iPosEnd-CREATE_TABLE_SIZE-1);
+        printf("CREATE TABLE WAS FOUND AT %i\n", iPosStart);
+        size_t iPosEnd = sLineIn.find("(",iPosStart+1);
+        
+        if (iPosEnd!=std::string::npos)
+        {
+            printf("( WAS FOUND AT %i\n", iPosEnd);
+            //get the table name
+            string sTableName = sLineIn.substr(iPosStart+CREATE_TABLE_SIZE,
+                iPosEnd-CREATE_TABLE_SIZE-1);
+        
+            iPosStart = iPosEnd;
+            iPosEnd = sLineIn.find("PRIMARY KEY",iPosStart+1);
+            
+            if (iPosEnd!=std::string::npos)
+            {
+                printf("PRIMARY KEY WAS FOUND AT %i\n", iPosEnd);
+                //get the column names
+                string sColumns = sLineIn.substr(iPosStart,
+                    iPosEnd-CREATE_TABLE_SIZE-PRIMARY_KEY_SIZE+1);
 
-        //get the column names
-        iPosStart = iPosEnd;
-        iPosEnd = sLineIn.find("PRIMARY KEY",iPosStart+1);
-        string sColumns = sLineIn.substr(iPosStart,iPosEnd-CREATE_TABLE_SIZE-PRIMARY_KEY_SIZE+1);
+                iPosStart = iPosEnd;
+                iPosEnd = sLineIn.find(")",iPosStart+1);
 
-        //get the primary keys
-        iPosStart = iPosEnd;
-        iPosEnd = sLineIn.find(")",iPosStart+1);
-        string sPrimaryKeys = sLineIn.substr(iPosStart+PRIMARY_KEY_SIZE,iPosEnd-PRIMARY_KEY_SIZE);
+                if (iPosEnd!=std::string::npos)
+                {
+                    printf(") WAS FOUND AT %i\n", iPosEnd);
+                    //get the primary keys
+                    string sPrimaryKeys = sLineIn.substr(iPosStart+PRIMARY_KEY_SIZE,
+                    iPosEnd-PRIMARY_KEY_SIZE);
 
-        //remove the spaces from the name of the table
-        sTableName = cleanSpaces(sTableName);
+                    //remove the spaces from the name of the table
+                    sTableName = cleanSpaces(sTableName);
 
-        //call the create table function after the helper functions finish 
-        e.createTable(sTableName,createColVector(sColumns),createVector(sPrimaryKeys));
+                    //call the create table function after the helper functions
+                    e.createTable(sTableName,createColVector(sColumns),
+                        createVector(sPrimaryKeys));
 
-        return true;
+                    return true;
+                }
+            }
+        }
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 
 /*******************************************************************************
@@ -312,26 +328,29 @@ bool Parser::findInsertInto(string sLineIn)
     {
         size_t iPosEnd = sLineIn.find("VALUES FROM");
 
-        //Get the name of the table from the string
-        string sTableName = sLineIn.substr(iPosStart+VALUES_FROM_SIZE,iPosEnd-VALUES_FROM_SIZE-2);
-        sTableName = cleanSpaces(sTableName);
+        if (iPosStart!=std::string::npos)
+        {
+            //Get the name of the table from the string
+            string sTableName = sLineIn.substr(iPosStart+VALUES_FROM_SIZE,
+                iPosEnd-VALUES_FROM_SIZE-2);
+            sTableName = cleanSpaces(sTableName);
 
-        //reposition the iterators to get the row values
-        iPosStart = iPosEnd + 1;
-        iPosEnd = sLineIn.find(")");
+            //reposition the iterators to get the row values
+            iPosStart = iPosEnd + 1;
+            iPosEnd = sLineIn.find(")");
 
-        //Get the row attributes from the string
-        string sRow = sLineIn.substr(iPosStart+VALUES_FROM_SIZE,iPosEnd-VALUES_FROM_SIZE-2);
-        
-        //Clean up and add the row to the table
-        e.addRow(sTableName, createRowVector(sRow));
+            //Get the row attributes from the string
+            string sRow = sLineIn.substr(iPosStart+VALUES_FROM_SIZE,
+                iPosEnd-VALUES_FROM_SIZE-2);
+            
+            //Clean up and add the row to the table
+            e.addRow(sTableName, createRowVector(sRow));
 
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+            return true;
+        }
+    }  
+
+    return false;
 }
 
 /*******************************************************************************
@@ -449,6 +468,38 @@ bool Parser::findExit(string sLineIn)
     }
 }
 
+/*******************************************************************************
+Function that sees if the parenthesis are balanced in a line
+*******************************************************************************/ 
+bool Parser::checkParenthesis(string sLineIn)
+{
+    int iBalance = 0;
+
+    for (int i = 0; i < sLineIn.length(); ++i)
+    {
+        if (sLineIn[i] == '(')
+        {
+            iBalance++;
+        }
+        else if (sLineIn[i] == ')')
+        {
+            iBalance--;
+        }
+        if (iBalance < 0)
+        {
+            return false;
+        }
+    }
+
+    if (iBalance == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 
 
