@@ -1,21 +1,21 @@
 /*******************************************************************************
-    File: Table.h
+File: Table.h
 
-    Authors: Gustavo Pedroso UIN: 423002834
-             Levi Clark      UIN: 520007880
-             Terry Chen      UIN: 121007055
-             Daniel He       UIN: 620006827
+Authors: Gustavo Pedroso UIN: 423002834
+Levi Clark      UIN: 520007880
+Terry Chen      UIN: 121007055
+Daniel He       UIN: 620006827
 
-            Department of Computer Science
-            Texas A&M University
-    Date  : 2/2/2014
+Department of Computer Science
+Texas A&M University
+Date  : 2/2/2014
 
-    Formatting: * 80 pt width is used for code, for the most part
-                * Hungarian naming convention is used for variables
-                * Comments are applied for explanations
-                * Spacing and brackets are applied for readability
+Formatting: * 80 pt width is used for code, for the most part
+* Hungarian naming convention is used for variables
+* Comments are applied for explanations
+* Spacing and brackets are applied for readability
 
-    This file contains the header for the table attributes
+This file contains the header for the table attributes
 *******************************************************************************/
 
 #ifndef TABLE_H
@@ -27,24 +27,23 @@
 #include <iostream>
 #include <iomanip>
 #include <tuple>
-using namespace std;
 
 class Table
 {
 private:
-  vector< tuple<int,string,bool,string> > vColumnName;
-  vector< vector< tuple<int,string> > > vRows;
-  string sTableName;
+  std::vector< std::tuple<int, std::string,bool,std::string> > vColumnName;
+  std::vector< std::vector< std::tuple<int,std::string> > > vRows;
+  std::string sTableName;
 
 public:
   //constructors
   Table(){};
-  
-  Table(string sTableNameIn) 
+
+  Table(std::string sTableNameIn) 
   {
     sTableName = sTableNameIn; 
   }
-  
+
   //Display function and write function and open function
   void displayTable();
   void writeTable();
@@ -52,13 +51,13 @@ public:
   void closeTable() {}; //NEEDS TO BE IMPLEMENTED
 
   //Setters
-  void setPrimaryKey(string sKeyIn) 
+  void setPrimaryKey(std::string sKeyIn) 
   { 
     for (int i = 0; i < vColumnName.size(); ++i)
     {
-      if (get<1>(vColumnName[i]) == sKeyIn)
+      if (std::get<1>(vColumnName[i]) == sKeyIn)
       {
-        get<2>(vColumnName[i]) = true;
+        std::get<2>(vColumnName[i]) = true;
         return;
       }
     }
@@ -66,13 +65,13 @@ public:
     printf("| Primary Key was not set\n");
   }
 
-  void removePrimaryKey(string sKeyIn)
+  void removePrimaryKey(std::string sKeyIn)
   {
     for (int i = 0; i < vColumnName.size(); ++i)
     {
-      if (get<1>(vColumnName[i]) == sKeyIn)
+      if (std::get<1>(vColumnName[i]) == sKeyIn)
       {
-        get<2>(vColumnName[i]) = false;
+        std::get<2>(vColumnName[i]) = false;
         return;
       }
     }
@@ -80,37 +79,38 @@ public:
     printf("| Primary Key was not removed\n");
   }
 
-  void addColumn(tuple<int,string,bool,string> s)
+  void addColumn(std::tuple<int,std::string,bool,std::string> s)
   {
     vColumnName.push_back(s);
   }
-  
-  void addRow(vector< tuple<int,string> > v)
+
+  void addRow(std::vector< std::tuple<int,std::string> > v)
   {
     vRows.push_back(v);
   }
 
   //Getters
-  string getTableName() 
+  std::string getTableName() 
   { 
     return sTableName; 
   }
 
-  vector< tuple<int,string,bool,string> > getColumnNames() 
+  std::vector< std::tuple<int,std::string,bool,std::string> > getColumnNames() 
   { 
     return vColumnName; 
   }
 
-  vector< vector< tuple<int,string> > > getRows()
+  std::vector< std::vector< std::tuple<int, std::string> > > getRows()
   { 
     return vRows; 
   }
 
-  tuple<int,string,bool,string> getColumnIndex(string sColumnNameIn);
-  
-  vector< tuple<int,string> > getRow(int iIndex);
-  
-  vector<string> getColumnValues(int iIndex);
+	std::tuple<int, std::string, bool, std::string> getColumnIndex(
+			std::string sColumnNameIn);
+
+  std::vector< std::tuple<int,std::string> > getRow(int iIndex);
+
+  std::vector<std::string> getColumnValues(int iIndex);
 
 };
 
