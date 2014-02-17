@@ -37,12 +37,15 @@ private:
   Engine e;
 
 public:
-
+	//Tree data structure
 	struct treeNode{
 		char data;
-		treeNode *left;
-		treeNode *right;
+		treeNode *leftChild;
+		treeNode *rightChild;
 	};
+	
+	//Tree functions
+	void traversal(treeNode *start); //In Order Traversal
   //Declare class methods
   Parser(){};
 

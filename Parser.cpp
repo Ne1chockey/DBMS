@@ -552,7 +552,18 @@ bool Parser::findArrow(string sLineIn)
     }
 }
 
+/*******************************************************************************
+Function that traverses the current tree and prints out values
+*******************************************************************************/
 
+void Parser::traversal(treeNode *start){
+	if( start != NULL ){
+		traversal(start->leftChild);	//Visits Left subtree
+		cout << start->data;  // Displays Data
+		traversal(start->rightChild);    //Visits Right Subtree
+	}
+
+}
 
 
 
