@@ -52,6 +52,7 @@ public:
   bool findOpen(string sLineIn);
   bool findClose(string sLineIn);
   bool findExit(string sLineIn);
+  bool findArrow(string sLineIn);
   /*
   string query(string sRelationName, string sExpr);
   string relationName(string iIdentifier);
