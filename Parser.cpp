@@ -51,6 +51,10 @@ static const string operant[] =
 static const char symExpr[] =
 { '+', '-', '*' };
 
+//Array of all symbols
+static const string allOp[] =
+{ "==", "!=", "<=", ">=" , "<" , ">" , "+", "-", "*"};
+
 const string sError = "ERR:: INVALID INPUT";
 
 /*******************************************************************************
@@ -592,22 +596,31 @@ Function that inserts everything after <- into a tree.
 //Update function may need another function to parse because <- operator is not present
 //and there can be cases of multiple conditions. May modify this function later for that case
 //if needs be.
-Parser::treeNode * Parser::createTree(string sLineIn)
+/*Parser::treeNode * Parser::createTree(string sLineIn)
 {
 	string sParameters = getAfterArrow(sLineIn);
 	treeNode *nodeStart;
+	treeNode *nodeA;
+	treeNode *nodeB;
+	string sTemp;
 	if( sParameters == sError ) //Invalid Input Checking
 	{	
 			cout << "Invalid Parameters" << endl;
 			return NULL;
 	}
-	else
+	
+	
+	for(int i = 0; i < sLineIn.size(); i++)
 	{
+			if(isalpha(sLineIn[i]))
+			{
+				sTemp = sTemp + sLineIn[i];
+			}
+	}
 			//Adding values to tree.... Needs work.
 			//Need to first identify precedence... Which identifier should be done first
 			//before the others. Least precedence would be name of table.
-			
-			
+
 			//Highest precedence should be non-symbolic operations, such as selection,
 			//followed by symbolic operations, then symbolic comparator, and then
 			//values/names.
@@ -620,10 +633,41 @@ Parser::treeNode * Parser::createTree(string sLineIn)
 			//Need a function to determine whether or not a set of parenthesis are
 			//part of an operation. Non-operational parenthesis will determine highest
 			//precedence...
+			
 			return nodeStart;
-	}
+
 	
 
+}*/
+
+vector<string> makeTokens(string sLineIn)
+{
+		vector<string> someTokens;
+		string sTemp = "";
+		string sSymTemp = "";
+		for(int i = 0; i < sLineIn.size(); i++)
+		{
+				while(isalnum(sLineIn[i]) || sLineIn[i] == '_')
+				{
+						sTemp = sTemp + sLineIn[i];
+				}
+				if(sTemp != "")
+				{
+						someTokens.push_back(sTemp);
+						sTemp = "";
+				}
+				while(!isalnum(sLineIn[i]) && sLineIn[i] != '_')
+				{
+						sSymTemp = sSymTemp + sLineIn[i];
+						
+				}
+				if(sSymTemp != "")
+				{
+					someTokens.push_back(sSymTemp);
+				}
+				
+		}
+		return someTokens;
 }
 
 /*******************************************************************************

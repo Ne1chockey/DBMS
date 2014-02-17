@@ -80,6 +80,7 @@ public:
   vector< tuple<int, string> > createRowVector (string sLineIn);
   string cleanSpaces(string sLineIn);
   bool checkParenthesis(string sLineIn);
+	vector<string> makeTokens(string sLineIn); //tokenizes some shit
 	treeNode * createTree(string sLineIn);
 };
 
