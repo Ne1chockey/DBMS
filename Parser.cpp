@@ -39,6 +39,18 @@ const int VALUES_FROM_SIZE = 11;
 const int VAL_FROM_REL_SIZE = 20;
 const int PRIMARY_KEY_SIZE = 11;
 
+//Array of String identifiers for non-symbolic operations
+static const string expr[] = 
+{"select", "project", "rename", "natural-join"};
+
+//Array of String identifiers for symbolic comparisons
+static const string operant[] =
+{ "==", "!=", "<=", ">=" , "<" , ">" };
+
+//Array of Char identifiers for symbolic operations
+static const char symExpr[] =
+{ '+', '-', '*' };
+
 const string sError = "ERR:: INVALID INPUT";
 
 /*******************************************************************************
@@ -577,6 +589,9 @@ string Parser::getAfterArrow(string sLineIn)
 /*******************************************************************************
 Function that inserts everything after <- into a tree.
 *******************************************************************************/ 
+//Update function may need another function to parse because <- operator is not present
+//and there can be cases of multiple conditions. May modify this function later for that case
+//if needs be.
 Parser::treeNode * Parser::createTree(string sLineIn)
 {
 	string sParameters = getAfterArrow(sLineIn);
@@ -589,6 +604,22 @@ Parser::treeNode * Parser::createTree(string sLineIn)
 	else
 	{
 			//Adding values to tree.... Needs work.
+			//Need to first identify precedence... Which identifier should be done first
+			//before the others. Least precedence would be name of table.
+			
+			
+			//Highest precedence should be non-symbolic operations, such as selection,
+			//followed by symbolic operations, then symbolic comparator, and then
+			//values/names.
+			
+			//We will need multiple tree check functions in order to insert the values into
+			//the tree in the right order...
+			//There should be a separate function that for each operation that will be
+			//looked for and then those values will be inserted into the tree first.
+			
+			//Need a function to determine whether or not a set of parenthesis are
+			//part of an operation. Non-operational parenthesis will determine highest
+			//precedence...
 			return nodeStart;
 	}
 	
