@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <stdio.h>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -37,6 +38,8 @@ const int DOUBLE_OP_SIZE = 2;
 const int VALUES_FROM_SIZE = 11;
 const int VAL_FROM_REL_SIZE = 20;
 const int PRIMARY_KEY_SIZE = 11;
+
+const string sError = "ERR:: INVALID INPUT";
 
 /*******************************************************************************
 Read a file and call parse function on each line read
@@ -553,10 +556,51 @@ bool Parser::findArrow(string sLineIn)
 }
 
 /*******************************************************************************
+Function that finds the <- and returns the string of everything after it.
+*******************************************************************************/ 
+string Parser::getAfterArrow(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("<-"); 
+    if (iPosStart!=std::string::npos)                                       
+    {
+        string sAfterArrow = sLineIn.substr(iPosStart + 2);
+        sAfterArrow = cleanSpaces(sAfterArrow);
+        printf("THE PARAMETERS ARE %s\n", sAfterArrow.c_str());
+        return sAfterArrow;
+    }
+    else
+    {
+        return sError;
+    }
+}
+
+/*******************************************************************************
+Function that inserts everything after <- into a tree.
+*******************************************************************************/ 
+Parser::treeNode * Parser::createTree(string sLineIn)
+{
+	string sParameters = getAfterArrow(sLineIn);
+	treeNode *nodeStart;
+	if( sParameters == sError ) //Invalid Input Checking
+	{	
+			cout << "Invalid Parameters" << endl;
+			return NULL;
+	}
+	else
+	{
+			//Adding values to tree.... Needs work.
+			return nodeStart;
+	}
+	
+
+}
+
+/*******************************************************************************
 Function that traverses the current tree and prints out values
 *******************************************************************************/
 
-void Parser::traversal(treeNode *start){
+void Parser::traversal(treeNode *start)
+{
 	if( start != NULL ){
 		traversal(start->leftChild);	//Visits Left subtree
 		cout << start->data;  // Displays Data

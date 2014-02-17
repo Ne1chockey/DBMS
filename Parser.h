@@ -39,7 +39,7 @@ private:
 public:
 	//Tree data structure
 	struct treeNode{
-		char data;
+		string data;
 		treeNode *leftChild;
 		treeNode *rightChild;
 	};
@@ -62,6 +62,7 @@ public:
   bool findClose(string sLineIn);
   bool findExit(string sLineIn);
   bool findArrow(string sLineIn);
+	string getAfterArrow(string sLineIn);
   /*
   string query(string sRelationName, string sExpr);
   string relationName(string iIdentifier);
@@ -79,6 +80,7 @@ public:
   vector< tuple<int, string> > createRowVector (string sLineIn);
   string cleanSpaces(string sLineIn);
   bool checkParenthesis(string sLineIn);
+	treeNode * createTree(string sLineIn);
 };
 
 #endif
