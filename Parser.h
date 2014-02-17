@@ -37,6 +37,12 @@ private:
   Engine e;
 
 public:
+
+	struct treeNode{
+		char data;
+		treeNode *left;
+		treeNode *right;
+	};
   //Declare class methods
   Parser(){};
 
