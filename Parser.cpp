@@ -640,30 +640,41 @@ Function that inserts everything after <- into a tree.
 
 }*/
 
-vector<string> makeTokens(string sLineIn)
+vector<string> Parser::makeTokens(string sLineIn)
 {
 		vector<string> someTokens;
 		string sTemp = "";
 		string sSymTemp = "";
 		for(int i = 0; i < sLineIn.size(); i++)
 		{
-				while(isalnum(sLineIn[i]) || sLineIn[i] == '_')
+				if(isalnum(sLineIn[i]) || sLineIn[i] == '_')
 				{
+						if(sSymTemp != "")
+						{
+								someTokens.push_back(sSymTemp);
+								sSymTemp = "";
+						}
 						sTemp = sTemp + sLineIn[i];
-				}
-				if(sTemp != "")
-				{
-						someTokens.push_back(sTemp);
-						sTemp = "";
-				}
-				while(!isalnum(sLineIn[i]) && sLineIn[i] != '_')
-				{
-						sSymTemp = sSymTemp + sLineIn[i];
 						
 				}
-				if(sSymTemp != "")
+				if(!isalnum(sLineIn[i]) && sLineIn[i] != '_')
 				{
-					someTokens.push_back(sSymTemp);
+						if(sTemp != "")
+						{
+						someTokens.push_back(sTemp);
+						sTemp = "";
+						}
+						if(sLineIn[i] == ')' || sLineIn[i] == '(')
+						{
+								sSymTemp = sLineIn[i];
+								someTokens.push_back(sSymTemp);
+								sSymTemp = "";
+						}
+						else
+						{
+								sSymTemp = sSymTemp + sLineIn[i];
+						}
+						
 				}
 				
 		}
