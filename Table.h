@@ -47,8 +47,8 @@ public:
   //Display function and write function and open function
   void displayTable();
   void writeTable();
-  void openTable() {}; //NEEDS TO BE IMPLEMENTED
-  void closeTable() {}; //NEEDS TO BE IMPLEMENTED
+  void openTable();
+  void closeTable();
 
   //Setters
   void setPrimaryKey(std::string sKeyIn) 

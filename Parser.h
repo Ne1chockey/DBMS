@@ -56,23 +56,15 @@ public:
   //Grammar functions
   bool findCreateTable(string sLineIn);
   bool findInsertInto(string sLineIn);
+  bool findDeleteFrom(string sLineIn);
+  bool findUpdate(string sLineIn);
   bool findShow(string sLineIn);
   bool findWrite(string sLineIn);
   bool findOpen(string sLineIn);
   bool findClose(string sLineIn);
   bool findExit(string sLineIn);
   bool findArrow(string sLineIn);
-	string getAfterArrow(string sLineIn);
-  /*
-  string query(string sRelationName, string sExpr);
-  string relationName(string iIdentifier);
-  string identifier(char cAlpha, char cAlphaOrDigit);
-  string alpha(char cAlpha);
-  string digit(char cDigit);
-  string expr(string sExpr);
-  string atomicExpr(string sRelationNameOrExpr);
-  string selection(string sCondition, string sAtomicExpr);
-  */
+  string getAfterArrow(string sLineIn);
 
   //helper functions 
   vector<tuple<string,string,bool> > createColVector (string sLineIn);

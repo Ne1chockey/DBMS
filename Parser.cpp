@@ -32,6 +32,10 @@ using namespace std;
 const int CREATE_TABLE_SIZE = 12;
 const int INSERT_INTO_SIZE = 11;
 const int WRITE_CLOSE_SIZE = 5;
+const int DELETE_FROM_SIZE = 11;
+const int UPDATE_SIZE = 5;
+const int WHERE_SIZE = 5;
+const int SET_SIZE = 3;
 const int OPEN_EXIT_SHOW_SIZE = 4;
 const int SINGLE_OP_SIZE = 1;
 const int DOUBLE_OP_SIZE = 2;
@@ -134,6 +138,14 @@ void Parser::parse(string sLineIn)
         else if (findInsertInto(sLineIn))
         {
             printf("| INSERT INTO was found in this line, executed.\n");
+        }
+        else if (findDeleteFrom(sLineIn))
+        {
+            printf("| DELETE FROM was found in this line, executed.\n");
+        }
+        else if (findUpdate(sLineIn))
+        {
+            printf("| UPDATE was found in this line, executed.\n");
         }
         else if (findShow(sLineIn))
         {
@@ -367,7 +379,7 @@ bool Parser::findInsertInto(string sLineIn)
                     iPosEnd1-VAL_FROM_REL_SIZE-2);
                 sTableNameIn = cleanSpaces(sTableNameIn);
 
-                printf("WE NEED TO WORK ON THIS PART\n");              //<--------------------------
+                printf("WE NEED TO WORK ON THIS PART\n");              //<-------------------------- tree
                 //Clean up and add the row to the table
                 //e.addRow(sTableNameOut, createRowVector(sRow));
 
@@ -399,6 +411,62 @@ bool Parser::findInsertInto(string sLineIn)
             }
         }
     }  
+
+    return false;
+}
+
+/*******************************************************************************
+Function that sees if DELETE FROM is in the string and executes the command
+*******************************************************************************/ 
+bool Parser::findDeleteFrom(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("DELETE FROM");
+    
+    if (iPosStart!=std::string::npos)
+    {
+        size_t iPosEnd = sLineIn.find("WHERE",iPosStart+1);
+        
+        if (iPosEnd!=std::string::npos)
+        {
+            //get the table name
+            string sTableName = sLineIn.substr(iPosStart+DELETE_FROM_SIZE,
+                iPosEnd-DELETE_FROM_SIZE-2);
+
+            sTableName = cleanSpaces(sTableName);            //<----------------------------
+
+            iPosStart = iPosEnd;
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/*******************************************************************************
+Function that sees if Update is in the string and executes the command
+*******************************************************************************/ 
+bool Parser::findUpdate(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("UPDATE");
+    
+    if (iPosStart!=std::string::npos)
+    {
+        size_t iPosEnd = sLineIn.find("SET",iPosStart+1);
+        
+        if (iPosEnd!=std::string::npos)
+        {
+            //get the table name
+            string sTableName = sLineIn.substr(iPosStart+UPDATE_SIZE+1,
+                iPosEnd-UPDATE_SIZE-SET_SIZE);
+
+            sTableName = cleanSpaces(sTableName);   //<------------------------------------
+
+            iPosStart = iPosEnd;
+
+            return true;
+        }
+    }
 
     return false;
 }
@@ -465,7 +533,7 @@ bool Parser::findOpen(string sLineIn)
         sTableName = cleanSpaces(sTableName);
         
         //call the function to display table
-        e.openTable(sTableName);                  //<---------------- NEEDS TO BE IMPLEMENTED IN TABLE CLASS
+        e.openTable(sTableName);        
 
         return true;
     }
@@ -489,7 +557,7 @@ bool Parser::findClose(string sLineIn)
         sTableName = cleanSpaces(sTableName);
         
         //call the function to display table
-        e.closeTable(sTableName);                  //<---------------- NEEDS TO BE IMPLEMENTED IN TABLE CLASS
+        e.closeTable(sTableName);             
 
         return true;
     }

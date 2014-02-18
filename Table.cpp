@@ -28,6 +28,8 @@
 #include "Table.h"
 
 const int COLUMN_WIDTH = 20;
+std::fstream outputFile;
+
 /*******************************************************************************
   Display the table
 *******************************************************************************/
@@ -108,8 +110,7 @@ void Table::displayTable()
 *******************************************************************************/
 void Table::writeTable()
 {
-  std::ofstream outputFile;
-  outputFile.open(sTableName + ".txt");
+  outputFile.open(sTableName + ".db");
   outputFile << "\n ";
 
   for (int i = 0; i < vColumnName.size(); ++i)
@@ -180,6 +181,22 @@ void Table::writeTable()
   }
   outputFile << "\n";
 
+  outputFile.close();
+}
+
+/*******************************************************************************
+  opens the file
+*******************************************************************************/
+void Table::openTable()
+{
+  outputFile.open(sTableName + ".db",std::ios::app);
+}
+
+/*******************************************************************************
+  closes the file
+*******************************************************************************/
+void Table::closeTable()
+{
   outputFile.close();
 }
 
