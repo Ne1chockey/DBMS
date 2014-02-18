@@ -49,7 +49,7 @@ public:
   //Declare class methods
   Parser(){};
 
-  bool readFromFile();
+  bool readFromFile(string sFileName);
   void parse(string sLineIn);
   void validate();
   void op(string sNewTableName, string sRestOfLine);

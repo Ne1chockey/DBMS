@@ -64,10 +64,10 @@ const string sError = "ERR:: INVALID INPUT";
 /*******************************************************************************
 Read a file and call parse function on each line read
 *******************************************************************************/
-bool Parser::readFromFile()
+bool Parser::readFromFile(string sFileName)
 {
     ifstream fhIn; //file handler
-    string sFilenameIn; //Declaring string for holding filename from the user
+   // string sFilenameIn; //Declaring string for holding filename from the user
     string sLineIn; //Hold the line that is read off file
     int iCount = 0;
     /*
@@ -78,9 +78,9 @@ bool Parser::readFromFile()
     printf("| Enter the filename: ");
     getline(cin, sFilenameIn);
     
-    //Open the file and validate it opened properly
-    fhIn.open(sFilenameIn.c_str());*/
-    fhIn.open("testInput.txt"); 
+    //Open the file and validate it opened properly*/
+    fhIn.open(sFileName.c_str());
+ //   fhIn.open("testInput.txt"); 
     if (!fhIn)
     { 
         //Output error message

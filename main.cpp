@@ -46,7 +46,7 @@ int main()
   int iParse = 1;
   
   //Test the parser reading from a file
-  if (pFileTest.readFromFile())
+  if (pFileTest.readFromFile("testInput.txt"))
   {
     //the file was read properly and values were parsed 
     printf("The file was found.\n");
