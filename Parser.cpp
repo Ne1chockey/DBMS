@@ -679,6 +679,11 @@ bool Parser::findArrow(string sLineIn)
         string sRestOfLine = sLineIn.substr(iPosStart+DOUBLE_OP_SIZE);
         sRestOfLine = removeSpaces(sRestOfLine);
         op(sTableNameOut,sRestOfLine);
+        
+        if (sRestOfLine.substr(0, 7) == "project") {
+          projection(sRestOfLine, sTableNameOut);
+        }
+        
         return true;
     }
     else
@@ -849,9 +854,17 @@ void Parser::traversal(treeNode *start)
 
 }
 
-
-
-
+/*******************************************************************************
+Function that does the projection
+*******************************************************************************/
+void Parser::projection(string sRestOfLine, string sTableNameOut) {
+  size_t iParenth1 = sRestOfLine.find("(");
+  size_t iParenth2 = sRestOfLine.find(")",iParenth1+1);
+  string sColNames = sRestOfLine.substr(iParenth1, iParenth2-iParenth1);
+  string sTableNameIn = cleanSpaces(sRestOfLine.substr(iParenth2+1));
+  vector<string> vColVector = createVector(sColNames);
+  e.projection(sTableNameIn, sTableNameOut, vColVector);
+}
 
 
 
