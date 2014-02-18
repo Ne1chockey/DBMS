@@ -484,7 +484,7 @@ void Engine::projection(string sTableNameIn, string sTableNameOut, vector<string
 /*******************************************************************************
  rename the attributes in a relation
  *******************************************************************************/
-void Engine::reNaming(vector<string> vNewNames, string sTableName)
+void Engine::reNaming(string sTableName, string sTableNameOut, vector<string> vNewNames)
 {
   // Find the table in vTableList
   int iTableIndex = -1;
@@ -512,7 +512,7 @@ void Engine::reNaming(vector<string> vNewNames, string sTableName)
     return;
   }
 
-  string sRenameTableName = workingTable.getTableName() + " renamed";
+  string sRenameTableName = sTableNameOut;
   vector < tuple<int, string, bool, string> > vColNames =
       workingTable.getColumnNames();
   Table reNamed(sRenameTableName);

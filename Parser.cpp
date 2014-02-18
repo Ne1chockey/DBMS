@@ -683,6 +683,10 @@ bool Parser::findArrow(string sLineIn)
         if (sRestOfLine.substr(0, 7) == "project") {
           projection(sRestOfLine, sTableNameOut);
         }
+
+        if (sRestOfLine.substr(0, 6) == "rename") {
+          rename(sRestOfLine, sTableNameOut);
+        }
         
         return true;
     }
@@ -857,7 +861,8 @@ void Parser::traversal(treeNode *start)
 /*******************************************************************************
 Function that does the projection
 *******************************************************************************/
-void Parser::projection(string sRestOfLine, string sTableNameOut) {
+void Parser::projection(string sRestOfLine, string sTableNameOut)
+{
   size_t iParenth1 = sRestOfLine.find("(");
   size_t iParenth2 = sRestOfLine.find(")",iParenth1+1);
   string sColNames = sRestOfLine.substr(iParenth1, iParenth2-iParenth1);
@@ -866,6 +871,15 @@ void Parser::projection(string sRestOfLine, string sTableNameOut) {
   e.projection(sTableNameIn, sTableNameOut, vColVector);
 }
 
+void Parser::rename(string sRestOfLine, string sTableNameOut)
+{
+    size_t iParenth1 = sRestOfLine.find("(");
+    size_t iParenth2 = sRestOfLine.find(")",iParenth1+1);
+    string sColNames = sRestOfLine.substr(iParenth1, iParenth2-iParenth1);
+    string sTableNameIn = cleanSpaces(sRestOfLine.substr(iParenth2+1));
+    vector<string> vColVector = createVector(sColNames);
+    e.reNaming(sTableNameIn, sTableNameOut, vColVector);
+}
 
 
 
