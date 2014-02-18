@@ -412,10 +412,10 @@ void Engine::update(vector<string> vColumnNames, vector<string> vNewVals,
 /*******************************************************************************
  Select of a subset of the attributes of a relation
  *******************************************************************************/
-void Engine::projection(string sTableNameIn, vector<string> sColumnNamesIn)
+void Engine::projection(string sTableNameIn, string sTableNameOut, vector<string> sColumnNamesIn)
 {
   //Create a new table to send back 
-  Table tNewTable(sTableNameIn + " projection");
+  Table tNewTable(sTableNameOut);
 
   for (int i = 0; i < vTableList.size(); ++i)
   {
