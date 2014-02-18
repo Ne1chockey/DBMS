@@ -30,8 +30,8 @@ using namespace std;
   This function will take in a vector of column names and trailing primary keys,
   and an integer specifying how many columns are in the vector.
 *******************************************************************************/
-void Engine::createTable(string sTableNameIn, 
-  vector< tuple<string,string,bool> > vColumnNamesIn, vector<string> vKeys)
+void Engine::createTable(std::string sTableNameIn, 
+  std::vector< std::tuple<std::string,std::string,bool> > vColumnNamesIn, std::vector<std::string> vKeys)
 {
   Table t(sTableNameIn);
 

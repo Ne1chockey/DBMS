@@ -37,13 +37,13 @@ private:
 
 public:
   //Declare class methods
-  Engine() {};
+  Engine::Engine() {};
   
-  void createTable(string sTableNameIn, 
-    vector<tuple<string, string,bool> > vColumnNamesIn, vector<string> vKeys); 
-  void dropTable(string sTableNameIn);
-  bool compareTables(string sT1Name, string sT2Name);
-  void displayTable(string sTableNameIn)
+  void Engine::createTable(std::string sTableNameIn, 
+    std::vector<std::tuple<std::string,std::string,bool> > vColumnNamesIn, std::vector<std::string> vKeys); 
+  void Engine::dropTable(string sTableNameIn);
+  bool Engine::compareTables(string sT1Name, string sT2Name);
+  void Engine::displayTable(string sTableNameIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -56,7 +56,7 @@ public:
     printf("| The table was not found\n");
   }
 
-  void writeTable(string sTableNameIn)
+  void Engine::writeTable(string sTableNameIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -69,7 +69,7 @@ public:
     printf("| The table was not found\n");
   }
 
-  void openTable(string sTableNameIn)
+  void Engine::openTable(string sTableNameIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -82,7 +82,7 @@ public:
     printf("| The table was not found\n");
   }
 
-  void closeTable(string sTableNameIn)
+  void Engine::closeTable(string sTableNameIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -95,7 +95,7 @@ public:
     printf("| The table was not found\n");
   }
 
-  void addRow(string sTableNameIn, vector< tuple<int, string> > vRowIn)
+  void Engine::addRow(string sTableNameIn, vector< tuple<int, string> > vRowIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -107,7 +107,7 @@ public:
     }
   }
 
-  void addColumn(string sTableNameIn, string sColNameIn, string sTypeIn,
+  void Engine::addColumn(string sTableNameIn, string sColNameIn, string sTypeIn,
     bool bPrimaryKey)
   {
     for (int i = 0; i < vTableList.size(); ++i)
@@ -122,7 +122,7 @@ public:
     }
   }
 
-  void setPrimaryKey(string sTableNameIn, string sPrimaryKey)
+  void Engine::setPrimaryKey(string sTableNameIn, string sPrimaryKey)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -134,7 +134,7 @@ public:
     }
   }
 
-  void removePrimaryKey(string sTableNameIn, string sPrimaryKey)
+  void Engine::removePrimaryKey(string sTableNameIn, string sPrimaryKey)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -146,18 +146,22 @@ public:
     }
   }
 
-  void selection(string sTableNameIn, string sTableNameOut, string sOperator,
+  void Engine::selection(string sTableNameIn, string sTableNameOut, string sOperator,
     string sColumn, string sAttribute);
-  void update(vector<string> vColumnNames, vector<string> vNewVals,
+  void Engine::update(vector<string> vColumnNames, vector<string> vNewVals,
              string sTableNameIn, vector<tuple<string, string, string> > comparison);
-  void projection(string sTableNameIn, vector<string> sColumnNamesIn);
-  void reNaming(vector<string> vNewNames, string sTableName); 
-  void setUnion(string sT1Name, string sT2Name); 
-  void setDifference(string sT1Name, string sT2Name);
-  void crossProduct(string sT1Name, string sT2Name);
-  void naturalJoin(string sT1Name, string sT2Name);
+  void Engine::projection(string sTableNameIn, vector<string> sColumnNamesIn);
+  void Engine::reNaming(vector<string> vNewNames, string sTableName); 
+  void Engine::setUnion(string sT1Name, string sT2Name); 
+  void Engine::setDifference(string sT1Name, string sT2Name);
+  void Engine::crossProduct(string sT1Name, string sT2Name);
+  void Engine::naturalJoin(string sT1Name, string sT2Name);
 
-  bool columnCheck(string sT1Name, string sT2Name);
+  bool Engine::columnCheck(string sT1Name, string sT2Name);
+  
+  vector<Table> Engine::getTableList() {
+    return vTableList;
+  }
 };
 
 #endif
