@@ -182,7 +182,7 @@ public:
   void update(vector<string> vColumnNames, vector<string> vNewVals,
       string sTableNameIn, vector<tuple<string, string, string> > comparison);
   void projection(string sTableNameIn, string sTableNameOut, vector<string> sColumnNamesIn);
-  void reNaming(vector<string> vNewNames, string sTableName);
+  void reNaming(string sTableName, string sTableNameOut, vector<string> vNewNames);
   void setUnion(string sT1Name, string sT2Name, string sNewName);
   void setDifference(string sT1Name, string sT2Name, string sNewName);
   void crossProduct(string sT1Name, string sT2Name, string sNewName);

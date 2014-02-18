@@ -76,7 +76,7 @@ public:
   bool checkParenthesis(string sLineIn);
 	vector<string> makeTokens(string sLineIn); //tokenizes some shit
 	treeNode * createTree(string sLineIn);
-  void Parser::projection(string sRestOfLine, string sTableNameOut);	
+  void projection(string sRestOfLine, string sTableNameOut);	
   void rename(string sRestOfLine, string sTableNameOut);
 };
 
