@@ -38,21 +38,21 @@ private:
 public:
 
   //Declare class methods
-  Engine::Engine()
+  Engine()
   {
   }
   ;
 
-  void Engine::createTable(std::string sTableNameIn,
+  void createTable(std::string sTableNameIn,
       std::vector<std::tuple<std::string, std::string, bool> > vColumnNamesIn,
       std::vector<std::string> vKeys);
-  void Engine::dropTable(string sTableNameIn);
-  bool Engine::compareTables(string sT1Name, string sT2Name);
+  void dropTable(string sTableNameIn);
+  bool compareTables(string sT1Name, string sT2Name);
 
   /*****************************************************************************
     Print out the table with the given name
    ****************************************************************************/
-  void Engine::displayTable(string sTableNameIn)
+  void displayTable(string sTableNameIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -68,7 +68,7 @@ public:
   /****************************************************************************
     Calls Table's writeTable to write the specified table to file
    ****************************************************************************/
-  void Engine::writeTable(string sTableNameIn)
+  void writeTable(string sTableNameIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -84,7 +84,7 @@ public:
   /****************************************************************************
     Calls Table's openTable to open the specified table from file
    ****************************************************************************/
-  void Engine::openTable(string sTableNameIn)
+  void openTable(string sTableNameIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -100,7 +100,7 @@ public:
   /****************************************************************************
     Calls Table's closeTable to close the specified table file
    ***************************************************************************/
-  void Engine::closeTable(string sTableNameIn)
+  void closeTable(string sTableNameIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -116,7 +116,7 @@ public:
   /****************************************************************************
     Adds a row to the specified table
    ****************************************************************************/
-  void Engine::addRow(string sTableNameIn, vector<tuple<int, string> > vRowIn)
+  void addRow(string sTableNameIn, vector<tuple<int, string> > vRowIn)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -131,7 +131,7 @@ public:
   /****************************************************************************
     Adds a column to the specified table with name, type, and key
    ***************************************************************************/
-  void Engine::addColumn(string sTableNameIn, string sColNameIn, string sTypeIn,
+  void addColumn(string sTableNameIn, string sColNameIn, string sTypeIn,
       bool bPrimaryKey)
   {
     for (int i = 0; i < vTableList.size(); ++i)
@@ -150,7 +150,7 @@ public:
   /****************************************************************************
     Sets the primary key of the specified table
    ***************************************************************************/
-  void Engine::setPrimaryKey(string sTableNameIn, string sPrimaryKey)
+  void setPrimaryKey(string sTableNameIn, string sPrimaryKey)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -165,7 +165,7 @@ public:
   /****************************************************************************
     Removes a primary key from the specified table
    ***************************************************************************/
-  void Engine::removePrimaryKey(string sTableNameIn, string sPrimaryKey)
+  void removePrimaryKey(string sTableNameIn, string sPrimaryKey)
   {
     for (int i = 0; i < vTableList.size(); ++i)
     {
@@ -177,22 +177,22 @@ public:
     }
   }
 
-  void Engine::selection(string sTableNameIn, string sTableNameOut,
+  void selection(string sTableNameIn, string sTableNameOut,
       string sOperator, string sColumn, string sAttribute);
-  void Engine::update(vector<string> vColumnNames, vector<string> vNewVals,
+  void update(vector<string> vColumnNames, vector<string> vNewVals,
       string sTableNameIn, vector<tuple<string, string, string> > comparison);
-  void Engine::projection(string sTableNameIn, vector<string> sColumnNamesIn);
-  void Engine::reNaming(vector<string> vNewNames, string sTableName);
-  void Engine::setUnion(string sT1Name, string sT2Name);
-  void Engine::setDifference(string sT1Name, string sT2Name);
-  void Engine::crossProduct(string sT1Name, string sT2Name);
-  void Engine::naturalJoin(string sT1Name, string sT2Name);
-  bool Engine::columnCheck(string sT1Name, string sT2Name);
+  void projection(string sTableNameIn, vector<string> sColumnNamesIn);
+  void reNaming(vector<string> vNewNames, string sTableName);
+  void setUnion(string sT1Name, string sT2Name);
+  void setDifference(string sT1Name, string sT2Name);
+  void crossProduct(string sT1Name, string sT2Name);
+  void naturalJoin(string sT1Name, string sT2Name);
+  bool columnCheck(string sT1Name, string sT2Name);
 
   /****************************************************************************
     Getter for the table list vector, returns the list of tables
    ***************************************************************************/
-  vector<Table> Engine::getTableList()
+  vector<Table> getTableList()
   {
     return vTableList;
   }

@@ -296,6 +296,24 @@ string Parser::cleanSpaces (string sLineIn)
 }
 
 /*******************************************************************************
+Remove any additional spaces from the string
+*******************************************************************************/ 
+string Parser::removeSpaces (string sLineIn)
+{
+    string sOut = "";
+    for (int i = 0; i < sLineIn.length(); ++i)
+    {
+        //Append the value from the string into the return string, if its alpha
+        if (sLineIn[i] != ' ')
+        {
+            sOut += sLineIn[i];
+        }
+    }
+
+    return sOut;
+}
+
+/*******************************************************************************
 Function that sees if CREATE TABLE is in the string and executes the command
 correct format = CREATE TABLE () PRIMARY KEY ()
 *******************************************************************************/ 
@@ -379,7 +397,13 @@ bool Parser::findInsertInto(string sLineIn)
                     iPosEnd1-VAL_FROM_REL_SIZE-2);
                 sTableNameIn = cleanSpaces(sTableNameIn);
 
-                printf("WE NEED TO WORK ON THIS PART\n");              //<-------------------------- tree
+                iPosStart = iPosEnd1;
+
+                string sRestOfLine = sLineIn.substr(iPosStart,
+                    iPosEnd1);
+
+                sRestOfLine = removeSpaces(sRestOfLine);
+                printf("The rest: %s\n", sRestOfLine.c_str());
                 //Clean up and add the row to the table
                 //e.addRow(sTableNameOut, createRowVector(sRow));
 
@@ -432,9 +456,15 @@ bool Parser::findDeleteFrom(string sLineIn)
             string sTableName = sLineIn.substr(iPosStart+DELETE_FROM_SIZE,
                 iPosEnd-DELETE_FROM_SIZE-2);
 
-            sTableName = cleanSpaces(sTableName);            //<----------------------------
+            sTableName = cleanSpaces(sTableName);      
 
             iPosStart = iPosEnd;
+
+            string sRestOfLine = sLineIn.substr(iPosStart+WHERE_SIZE,
+                iPosEnd-WHERE_SIZE);
+
+            sRestOfLine = removeSpaces(sRestOfLine);
+
 
             return true;
         }
@@ -460,11 +490,26 @@ bool Parser::findUpdate(string sLineIn)
             string sTableName = sLineIn.substr(iPosStart+UPDATE_SIZE+1,
                 iPosEnd-UPDATE_SIZE-SET_SIZE);
 
-            sTableName = cleanSpaces(sTableName);   //<------------------------------------
+            sTableName = cleanSpaces(sTableName);
 
             iPosStart = iPosEnd;
+            size_t iPosEnd = sLineIn.find("WHERE",iPosStart+1);
+        
+            if (iPosEnd!=std::string::npos)
+            {
+                //Get the values 
+                string sValues = sLineIn.substr(iPosStart+UPDATE_SIZE-1,
+                iPosEnd-UPDATE_SIZE-SET_SIZE-WHERE_SIZE-5);
+                sValues = removeSpaces(sValues);
+                iPosStart = iPosEnd;
 
-            return true;
+                //Get the condition
+                string sCondition = sLineIn.substr(iPosStart+UPDATE_SIZE,
+                iPosEnd-UPDATE_SIZE-SET_SIZE-WHERE_SIZE);
+                sCondition = removeSpaces(sCondition);
+
+                return true;
+            }
         }
     }
 
@@ -630,7 +675,10 @@ bool Parser::findArrow(string sLineIn)
     {
         string sTableNameOut = sLineIn.substr(0, iPosStart);
         sTableNameOut = cleanSpaces(sTableNameOut);
-        printf("THE TABLE NAME IS %s\n", sTableNameOut.c_str());
+
+        string sRestOfLine = sLineIn.substr(iPosStart+DOUBLE_OP_SIZE);
+        sRestOfLine = removeSpaces(sRestOfLine);
+
         return true;
     }
     else
@@ -648,7 +696,7 @@ string Parser::getAfterArrow(string sLineIn)
     if (iPosStart!=std::string::npos)                                       
     {
         string sAfterArrow = sLineIn.substr(iPosStart + 2);
-        sAfterArrow = cleanSpaces(sAfterArrow);
+        sAfterArrow = removeSpaces(sAfterArrow);
         printf("THE PARAMETERS ARE %s\n", sAfterArrow.c_str());
         return sAfterArrow;
     }
@@ -710,43 +758,40 @@ Function that inserts everything after <- into a tree.
 
 vector<string> Parser::makeTokens(string sLineIn)
 {
-		vector<string> someTokens;
-		string sTemp = "";
-		string sSymTemp = "";
-		for(int i = 0; i < sLineIn.size(); i++)
+	vector<string> someTokens;
+	string sTemp = "";
+	string sSymTemp = "";
+	for(int i = 0; i < sLineIn.size(); i++)
+	{
+		if(isalnum(sLineIn[i]) || sLineIn[i] == '_')
 		{
-				if(isalnum(sLineIn[i]) || sLineIn[i] == '_')
-				{
-						if(sSymTemp != "")
-						{
-								someTokens.push_back(sSymTemp);
-								sSymTemp = "";
-						}
-						sTemp = sTemp + sLineIn[i];
-						
-				}
-				if(!isalnum(sLineIn[i]) && sLineIn[i] != '_')
-				{
-						if(sTemp != "")
-						{
-						someTokens.push_back(sTemp);
-						sTemp = "";
-						}
-						if(sLineIn[i] == ')' || sLineIn[i] == '(')
-						{
-								sSymTemp = sLineIn[i];
-								someTokens.push_back(sSymTemp);
-								sSymTemp = "";
-						}
-						else
-						{
-								sSymTemp = sSymTemp + sLineIn[i];
-						}
-						
-				}
-				
+			if(sSymTemp != "")
+			{
+					someTokens.push_back(sSymTemp);
+					sSymTemp = "";
+			}
+			sTemp = sTemp + sLineIn[i];
+    	}
+    	if(!isalnum(sLineIn[i]) && sLineIn[i] != '_')
+    	{
+			if(sTemp != "")
+			{
+			someTokens.push_back(sTemp);
+			sTemp = "";
+			}
+			if(sLineIn[i] == ')' || sLineIn[i] == '(')
+			{
+					sSymTemp = sLineIn[i];
+					someTokens.push_back(sSymTemp);
+					sSymTemp = "";
+			}
+			else
+			{
+					sSymTemp = sSymTemp + sLineIn[i];
+			}
 		}
-		return someTokens;
+	}
+	return someTokens;
 }
 
 /*******************************************************************************
