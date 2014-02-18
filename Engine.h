@@ -183,9 +183,9 @@ public:
       string sTableNameIn, vector<tuple<string, string, string> > comparison);
   void projection(string sTableNameIn, vector<string> sColumnNamesIn);
   void reNaming(vector<string> vNewNames, string sTableName);
-  void setUnion(string sT1Name, string sT2Name);
-  void setDifference(string sT1Name, string sT2Name);
-  void crossProduct(string sT1Name, string sT2Name);
+  void setUnion(string sT1Name, string sT2Name, string sNewName);
+  void setDifference(string sT1Name, string sT2Name, string sNewName);
+  void crossProduct(string sT1Name, string sT2Name, string sNewName);
   void naturalJoin(string sT1Name, string sT2Name);
   bool columnCheck(string sT1Name, string sT2Name);
 

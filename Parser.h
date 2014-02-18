@@ -52,6 +52,7 @@ public:
   bool readFromFile();
   void parse(string sLineIn);
   void validate();
+  void op(string sNewTableName, string sRestOfLine);
 
   //Grammar functions
   bool findCreateTable(string sLineIn);

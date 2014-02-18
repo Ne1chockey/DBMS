@@ -678,7 +678,7 @@ bool Parser::findArrow(string sLineIn)
 
         string sRestOfLine = sLineIn.substr(iPosStart+DOUBLE_OP_SIZE);
         sRestOfLine = removeSpaces(sRestOfLine);
-
+        op(sTableNameOut,sRestOfLine);
         return true;
     }
     else
@@ -706,6 +706,47 @@ string Parser::getAfterArrow(string sLineIn)
     }
 }
 
+/*******************************************************************************
+Handle the operation from the query
+*******************************************************************************/ 
+void Parser::op(string sNewTableName, string sRestOfLine)
+{
+    size_t iPosAdd = sRestOfLine.find("+"); 
+    size_t iPosSub = sRestOfLine.find("-"); 
+    size_t iPosMul = sRestOfLine.find("*"); 
+
+    if (iPosAdd!=std::string::npos)                                       
+    {
+        string sFirst = sRestOfLine.substr(0, iPosAdd);
+        sFirst = cleanSpaces(sFirst);
+
+        string sLast = sRestOfLine.substr(iPosAdd+1);
+        sLast = removeSpaces(sLast);
+
+        e.setUnion(sFirst,sLast,sNewTableName);
+    }
+    else if (iPosSub!=std::string::npos)                                       
+    {
+        string sFirst = sRestOfLine.substr(0, iPosSub);
+        sFirst = cleanSpaces(sFirst);
+
+        string sLast = sRestOfLine.substr(iPosSub+1);
+        sLast = removeSpaces(sLast);
+
+        e.setDifference(sFirst,sLast,sNewTableName);
+    }
+    else if (iPosMul!=std::string::npos)                                       
+    {
+        string sFirst = sRestOfLine.substr(0, iPosMul);
+        sFirst = cleanSpaces(sFirst);
+
+        string sLast = sRestOfLine.substr(iPosMul+1);
+        sLast = removeSpaces(sLast);
+        e.displayTable("shapes");
+        e.displayTable("colors");
+        e.crossProduct(sFirst,sLast,sNewTableName);
+    }
+}
 /*******************************************************************************
 Function that inserts everything after <- into a tree.
 *******************************************************************************/ 

@@ -541,7 +541,7 @@ void Engine::reNaming(vector<string> vNewNames, string sTableName)
 /*******************************************************************************
  compute the union of two relations; the relations must be union-compatible.
  *******************************************************************************/
-void Engine::setUnion(string sT1Name, string sT2Name)
+void Engine::setUnion(string sT1Name, string sT2Name, string sNewName)
 {
   // Find the table in vTableList
   int iT1Index = -1;
@@ -578,8 +578,7 @@ void Engine::setUnion(string sT1Name, string sT2Name)
     return;
   }
 
-  string sUnionTableName = workingT1.getTableName() + " and "
-      + workingT2.getTableName() + " union";
+  string sUnionTableName = sNewName;
   vector < tuple<int, string, bool, string> > vColNames =
       workingT1.getColumnNames();
 
@@ -624,7 +623,7 @@ void Engine::setUnion(string sT1Name, string sT2Name)
 /*******************************************************************************
  compute the set diff of two relations and the relations must be union compatible
  *******************************************************************************/
-void Engine::setDifference(string sT1Name, string sT2Name)
+void Engine::setDifference(string sT1Name, string sT2Name, string sNewName)
 {
   int iT1Index = -1;
   int iT2Index = -1;
@@ -661,8 +660,7 @@ void Engine::setDifference(string sT1Name, string sT2Name)
     return;
   }
 
-  string sDiffTableName = workingT1.getTableName() + " and "
-      + workingT2.getTableName() + " difference";
+  string sDiffTableName = sNewName;
   vector < tuple<int, string, bool, string> > vColNames =
       workingT1.getColumnNames();
 
@@ -702,10 +700,10 @@ void Engine::setDifference(string sT1Name, string sT2Name)
 /*******************************************************************************
  compute the cartesian product of two relations
  *******************************************************************************/
-void Engine::crossProduct(string sT1Name, string sT2Name)
+void Engine::crossProduct(string sT1Name, string sT2Name, string sNewName)
 {
   //Create a new table to send back 
-  Table tNewTable(sT1Name + " and " + sT2Name + " cross product");
+  Table tNewTable(sNewName);
 
   //Check to see if the tables are union compatible
   if (!compareTables(sT1Name, sT2Name))
