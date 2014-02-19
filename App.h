@@ -28,7 +28,7 @@
 #include <iomanip>
 using namespace std;
 
-class App 
+/*class App 
 {
 private:
   //Declare private variables
@@ -38,6 +38,30 @@ public:
   App(){};
 
 
-};
+};*/
+
+/*******************************************************************************
+Database Schema:
+
+Hair Dresser: ID, name, Phone number, address
+Customers: ID, anme, phone number, address
+Appointments: ID, customer_id, hairdresser_id, time
+*******************************************************************************/
+
+  void showHairDressers();
+  void addHairDresser(string sName, string sPhonenumber, string sAddress);
+  void removeHairDresser(int id, string sName, string sPhonenumber, string sAddress);
+
+  void showCustomers();
+  void addCustomer(string sName, string sPhonenumber, string sAddress);
+  void removeCustomer(int id, string sName, string sPhonenumber, string sAddress);
+
+
+  void addAppt(int iCustomer_id, int iHairdresser_id, string sTime);
+  void removeAppt(int id, int iCustomer_id, int iHairdresser_id, string sTime);
+  void showAppts(string sStartDate, string sEndDate);
+  void showApptsByCustomer(int iCustomer_id, string sStartDate, string sEndDate);
+  void showApptsByHairdresser(int iHairdresser_id, string sStartDate, string sEndDate);
+  
 
 #endif
