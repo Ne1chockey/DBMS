@@ -1,0 +1,113 @@
+CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (name, kind);
+INSERT INTO animals VALUES FROM ("Joe", "cat", 4);
+INSERT INTO animals VALUES FROM ("Spot", "dog", 10);
+INSERT INTO animals VALUES FROM ("Snoopy", "dog", 3);
+INSERT INTO animals VALUES FROM ("Tweety", "bird", 1);
+INSERT INTO animals VALUES FROM ("Joe", "bird", 2);
+SHOW animals;
+WRITE animals;
+
+OPEN animals;
+EXIT;
+
+CREATE TABLE tools (kind VARCHAR(8), weight INTEGER, cost INTEGER) PRIMARY KEY (kind);
+INSERT INTO tools VALUES FROM ("hammer", 3, 10);
+INSERT INTO tools VALUES FROM ("screw driver", 1, 2);
+INSERT INTO tools VALUES FROM ("plane", 2, 10);
+INSERT INTO tools VALUES FROM ("hand saw", 2, 22);
+INSERT INTO tools VALUES FROM ("blow torch", 3, 25);
+INSERT INTO tools VALUES FROM ("jack hammer", 55, 300);
+INSERT INTO tools VALUES FROM ("plow", 300, 500);
+SHOW tools;
+
+CREATE TABLE friends (fname VARCHAR(20), lname VARCHAR(20), personality VARCHAR(20), value INTEGER) PRIMARY KEY (fname, lname);
+INSERT INTO friends VALUES FROM ("X", "N/A", "Awesome!", 100);
+INSERT INTO friends VALUES FROM ("Smith", "Smith", "Annoying", 5);
+INSERT INTO friends VALUES FROM ("Algebra", "Homework", "Boring", -100);
+SHOW friends;
+
+CREATE TABLE enemies (fname VARCHAR(20), lname VARCHAR(20), personality VARCHAR(20), value INTEGER) PRIMARY KEY (fname, lname);
+INSERT INTO enemies VALUES FROM ("X", "N/A", "Awesome!", 100);
+INSERT INTO enemies VALUES FROM ("The", "Penguin", "Weird", 100);
+INSERT INTO enemies VALUES FROM ("Joker", "N/A", "Weird", 150);
+
+project_test <- project (fname, lname) friends;
+SHOW project_test;
+
+rename_test <- rename (v_fname, v_lname, v_personality, v_bounty) enemies;
+SHOW rename_test;
+
+good_and_bad_guys <- friends + enemies;
+SHOW good_and_bad_guys;
+
+diff_test <- friends - enemies;
+SHOW diff_test;
+
+CREATE TABLE baseball_players (fname VARCHAR(20), lname VARCHAR(30), team VARCHAR(20), homeruns INTEGER, salary INTEGER) PRIMARY KEY (fname, lname);
+INSERT INTO baseball_players VALUES FROM ("Joe", "Swatter", "Pirates", 40, 1000000);
+INSERT INTO baseball_players VALUES FROM ("Sarah", "Batter", "Dinosaurs", 100, 5000000);
+INSERT INTO baseball_players VALUES FROM ("Snoopy", "Slinger", "Pirates", 3, 200000);
+INSERT INTO baseball_players VALUES FROM ("Donald", "Runner", "Dinosaurs", 89, 200000);
+INSERT INTO baseball_players VALUES FROM ("Alexander", "Smith", "Pirates", 2, 150000);
+
+high_hitters <- select (homeruns >= 40) baseball_players;
+SHOW high_hitters;
+
+dinosaur_players <- select (team == "Dinosaurs") baseball_players;
+SHOW dinosaur_players;
+
+high_hit_pirates <- select (team == "Pirates") (select (homeruns >= 40) baseball_players);
+SHOW high_hit_pirates;
+
+CREATE TABLE shapes (shape VARCHAR(20)) PRIMARY KEY (shape);
+INSERT INTO shapes VALUES FROM ("circle");
+INSERT INTO shapes VALUES FROM ("square");
+INSERT INTO shapes VALUES FROM ("rectangle");
+INSERT INTO shapes VALUES FROM ("triangle");
+
+CREATE TABLE colors (color VARCHAR(20)) PRIMARY KEY (color);
+INSERT INTO colors VALUES FROM ("red");
+INSERT INTO colors VALUES FROM ("blue");
+
+product_test <- shapes * colors;
+SHOW product_test;
+
+CREATE TABLE shape_color (shape VARCHAR(20), color VARCHAR(20)) PRIMARY KEY (shape, color);
+INSERT INTO shape_color VALUES FROM ("circle", "red");
+INSERT INTO shape_color VALUES FROM ("circle", "blue");
+INSERT INTO shape_color VALUES FROM ("square", "red");
+INSERT INTO shape_color VALUES FROM ("rectangle", "blue");
+INSERT INTO shape_color VALUES FROM ("sphere", "orange");
+
+set_diff_test <- product_test - shape_color;
+SHOW set_diff_test;
+
+CREATE TABLE points (x INTEGER, y INTEGER, z INTEGER) PRIMARY KEY (x, y, z);
+INSERT INTO points VALUES FROM (0, 0, 0);
+INSERT INTO points VALUES FROM (1, 1, 1);
+INSERT INTO points VALUES FROM (0, 1, 2);
+INSERT INTO points VALUES FROM (-1, 20, 3);
+INSERT INTO points VALUES FROM (-15, 0, 5);
+
+CREATE TABLE dots (x1 INTEGER, y1 INTEGER, z1 INTEGER) PRIMARY KEY (x1, y1, z1);
+INSERT INTO dots VALUES FROM (-1, 0, 20);
+INSERT INTO dots VALUES FROM (3, 2, 5);
+INSERT INTO dots VALUES FROM (0, 0, 0);
+
+SHOW no_such_relation;
+
+bad_query <- project (t) points;
+dots_to_points <- rename (x2, y2, z2) dots;
+
+UPDATE dots SET x1 = 0 WHERE x1 < 0;
+SHOW dots;
+
+INSERT INTO points VALUES FROM RELATION (select (z2 > 0) dots_to_points);
+SHOW points;
+
+DELETE FROM dots WHERE (y1 <= 0);
+SHOW dots;
+
+advanced_query <- project (x) (select (y == y2) (points * dots_to_points));
+SHOW advanced_query;
+

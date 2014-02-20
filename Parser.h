@@ -78,6 +78,10 @@ public:
 	treeNode * createTree(string sLineIn);
   void projection(string sRestOfLine, string sTableNameOut);	
   void rename(string sRestOfLine, string sTableNameOut);
+
+   Engine getEngine() {
+     return e;
+   }
 };
 
 #endif

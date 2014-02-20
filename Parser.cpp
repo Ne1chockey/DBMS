@@ -117,6 +117,7 @@ bool Parser::readFromFile(string sFileName)
 
     //Close the file
     fhIn.close();
+    return true;
 }
 
 /*******************************************************************************
@@ -129,6 +130,12 @@ void Parser::parse(string sLineIn)
 
     //Output the line we are working with so we know we have the parsing correct
     printf("%s\n", sLineIn.c_str());
+    
+    if (sLineIn[0] == '\n') 
+    {
+      sLineIn.erase(0,1);
+    }
+
     if (checkParenthesis(sLineIn))
     {
         if (findCreateTable(sLineIn))
@@ -383,8 +390,9 @@ bool Parser::findInsertInto(string sLineIn)
         {
             //Get the name of the table from the string
             string sTableNameOut = sLineIn.substr(iPosStart+VAL_FROM_REL_SIZE,
-                iPosEnd1-VAL_FROM_REL_SIZE-2);
+                iPosEnd1-VAL_FROM_REL_SIZE);
             sTableNameOut = cleanSpaces(sTableNameOut);
+                        cout << sTableNameOut << endl;
 
             //reposition the iterators to get the row values
             iPosStart = iPosEnd1 + 1;
@@ -396,6 +404,7 @@ bool Parser::findInsertInto(string sLineIn)
                 string sTableNameIn = sLineIn.substr(iPosStart+VAL_FROM_REL_SIZE,
                     iPosEnd1-VAL_FROM_REL_SIZE-2);
                 sTableNameIn = cleanSpaces(sTableNameIn);
+
 
                 iPosStart = iPosEnd1;
 
@@ -415,8 +424,9 @@ bool Parser::findInsertInto(string sLineIn)
         {
             //Get the name of the table from the string
             string sTableName = sLineIn.substr(iPosStart+VALUES_FROM_SIZE,
-                iPosEnd2-VALUES_FROM_SIZE-2);
+                iPosEnd2-VALUES_FROM_SIZE);
             sTableName = cleanSpaces(sTableName);
+            cout << sTableName << endl;
 
             //reposition the iterators to get the row values
             iPosStart = iPosEnd2 + 1;
