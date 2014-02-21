@@ -27,16 +27,17 @@
 #include "App.h"
 using namespace std;
 
-bool validatePhone(string &sPhoneIn);
-bool validateDate(string &sDateIn);
+bool validatePhone(string sPhoneIn);
+bool validateDate(string sDateIn);
 
 int main() 
 {
   //Declaring and initializing variables
   App a;
   char cMainChoice;
-  int iAppointmentID, iCustomerID, iHairdresserID;
-  string sName, sPhoneNumber, sAddress, sStartDate, sEndDate, sTime;
+  string sAppointmentID, sCustomerID, sHairdresserID;
+  string sName, sPhoneNumber, sAddress, sStartDate, sEndDate, 
+  sTime;
 
   do
   {
@@ -55,27 +56,8 @@ int main()
       case 'B': 
         //Gather hair dresser's information
         printf("| Enter the Hair Dresser's name: ");
-        cin >> sName;
-        printf("| Enter the Hair Dresser's phone number: ");
-        cin >> sPhoneNumber;
-
-        while(!validatePhone(sPhoneNumber))
-        {
-          printf("| Phone number format incorrect, try again: ");
-          cin >> sPhoneNumber;
-        }
-
-        printf("| Enter the Hair Dresser's address: ");
-        cin >> sAddress;
-        a.addHairDresser(sName, sPhoneNumber, sAddress);
-        break;
-      case 'c':
-      case 'C':
-        //Gather info to delete hair dresser
-        printf("| Enter the Hair Dresser's id: ");
-        cin >> iHairdresserID;
-        printf("| Enter the Hair Dresser's name: ");
-        cin >> sName;
+        cin.ignore();
+        getline(cin,sName);
         printf("| Enter the Hair Dresser's phone number: ");
         cin >> sPhoneNumber;
 
@@ -86,8 +68,33 @@ int main()
         }
 
         printf("| Enter the Hair Dresser's address: ");
-        cin >> sAddress;
-        a.removeHairDresser(iHairdresserID, sName, sPhoneNumber, sAddress);
+        cin.ignore();
+        getline(cin,sAddress);
+
+        a.addHairDresser(sName, sPhoneNumber, sAddress);
+        break;
+      case 'c':
+      case 'C':
+        //Gather info to delete hair dresser
+        printf("| Enter the Hair Dresser's id: ");
+        cin >> sHairdresserID;
+        printf("| Enter the Hair Dresser's name: ");
+        cin.ignore();
+        getline(cin,sName);
+        printf("| Enter the Hair Dresser's phone number: ");
+        cin >> sPhoneNumber;
+
+        while(validatePhone(sPhoneNumber))
+        {
+          printf("| Phone number format incorrect, try again: ");
+          cin >> sPhoneNumber;
+        }
+
+        printf("| Enter the Hair Dresser's address: ");
+        cin.ignore();
+        getline(cin,sAddress);
+
+        a.removeHairDresser(sHairdresserID, sName, sPhoneNumber, sAddress);
         break;
       case 'd':
       case 'D': a.showCustomers();
@@ -96,7 +103,8 @@ int main()
       case 'E':
         //Gather customer's information
         printf("| Enter the Customer's name: ");
-        cin >> sName;
+        cin.ignore();
+        getline(cin,sName);
         printf("| Enter the Customer's phone number: ");
         cin >> sPhoneNumber;
 
@@ -107,16 +115,19 @@ int main()
         }
 
         printf("| Enter the Customer's address: ");
-        cin >> sAddress;
+        cin.ignore();
+        getline(cin,sAddress);
+
         a.addCustomer(sName, sPhoneNumber, sAddress);
         break;
       case 'f':
       case 'F':
         //Gather info to delete customer
         printf("| Enter the Customer's id: ");
-        cin >> iCustomerID;
+        cin >> sCustomerID;
         printf("| Enter the Customer's name: ");
-        cin >> sName;
+        cin.ignore();
+        getline(cin,sName);
         printf("| Enter the Customer's phone number: ");
         cin >> sPhoneNumber;
 
@@ -127,39 +138,60 @@ int main()
         }
 
         printf("| Enter the Customer's address: ");
-        cin >> sAddress;
-        a.removeCustomer(iCustomerID, sName, sPhoneNumber, sAddress);
+        getline(cin,sName);
+
+        a.removeCustomer(sCustomerID, sName, sPhoneNumber, sAddress);
         break;
       case 'g':
       case 'G':
         //Gather info to add appointment
         printf("| Enter the Customer's id: ");
-        cin >> iCustomerID;
+        cin >> sCustomerID;
         printf("| Enter the Hairdresser's id: ");
-        cin >> iHairdresserID;
+        cin >> sHairdresserID;
         printf("| Enter the time: ");
-        cin >> sTime;
-        a.addAppt(iCustomerID, iHairdresserID, sTime);
+        cin.ignore();
+        getline(cin,sTime);
+        printf("| Enter the date (MM/DD/YYYY): ");
+        cin >> sStartDate;
+
+        while(validateDate(sStartDate))
+        {
+          printf("| Date format incorrect, try again: ");
+          cin >> sStartDate;
+        }
+
+        a.addAppt(sCustomerID, sHairdresserID, sTime, sStartDate);
         break;
       case 'h':
       case 'H':
         //Gather info to remove appointment
         printf("| Enter the Appointment's id: ");
-        cin >> iAppointmentID;
+        cin >> sAppointmentID;
         printf("| Enter the Customer's id: ");
-        cin >> iCustomerID;
+        cin >> sCustomerID;
         printf("| Enter the Hairdresser's id: ");
-        cin >> iHairdresserID;
+        cin >> sHairdresserID;
         printf("| Enter the time: ");
         cin >> sTime;
-        a.removeAppt(iAppointmentID, iCustomerID, iHairdresserID, sTime);
+        printf("| Enter the date (MM/DD/YYYY): ");
+        cin >> sStartDate;
+
+        while(validateDate(sStartDate))
+        {
+          printf("| Date format incorrect, try again: ");
+          cin >> sStartDate;
+        }
+
+        a.removeAppt(sAppointmentID, sCustomerID, sHairdresserID, sTime, 
+          sStartDate);
         break;
       case 'i':
       case 'I':
         //Gather info to show customer's appointments
         printf("| Enter the Customer's id: ");
-        cin >> iCustomerID;
-        printf("| Enter a Start date: ");
+        cin >> sCustomerID;
+        printf("| Enter a Start date (MM/DD/YYYY): ");
         cin >> sStartDate;
 
         while(validateDate(sStartDate))
@@ -168,7 +200,7 @@ int main()
           cin >> sStartDate;
         }
 
-        printf("| Enter an End dat: ");
+        printf("| Enter an End date (MM/DD/YYYY): ");
         cin >> sEndDate;
 
         while(validateDate(sEndDate))
@@ -177,14 +209,14 @@ int main()
           cin >> sEndDate;
         }
 
-        a.showApptsByCustomer(iCustomerID, sStartDate, sEndDate);
+        a.showApptsByCustomer(sCustomerID, sStartDate, sEndDate);
         break;
       case 'j':
       case 'J':
         //Gather info to show hairdresser's appointments
         printf("| Enter the Hairdresser's id: ");
-        cin >> iHairdresserID;
-        printf("| Enter a Start date: ");
+        cin >> sHairdresserID;
+        printf("| Enter a Start date (MM/DD/YYYY): ");
         cin >> sStartDate;
 
         while(validateDate(sStartDate))
@@ -193,7 +225,7 @@ int main()
           cin >> sStartDate;
         }
 
-        printf("| Enter an End dat: ");
+        printf("| Enter an End date (MM/DD/YYYY): ");
         cin >> sEndDate;
 
         while(validateDate(sEndDate))
@@ -202,12 +234,12 @@ int main()
           cin >> sEndDate;
         }
 
-        a.showApptsByCustomer(iHairdresserID, sStartDate, sEndDate);
+        a.showApptsByCustomer(sHairdresserID, sStartDate, sEndDate);
         break;
       case 'k':
       case 'K':
         //Gather a range for showing appts
-        printf("| Enter a Start date: ");
+        printf("| Enter a Start date (MM/DD/YYYY): ");
         cin >> sStartDate;
 
         while(validateDate(sStartDate))
@@ -216,7 +248,7 @@ int main()
           cin >> sStartDate;
         }
 
-        printf("| Enter an End dat: ");
+        printf("| Enter an End date (MM/DD/YYYY): ");
         cin >> sEndDate;
 
         while(validateDate(sEndDate))
@@ -228,12 +260,18 @@ int main()
         a.showAppts(sStartDate, sEndDate);
         break;
       case 'l':
-      case 'L': printf("| Goodbye :)\n");
+      case 'L':
+        printf("|-------------------------------------");
+        printf("-----------------------------------------|\n");
+        printf("|                                Goodbye :)    ");
+        printf("                                |\n");
+        printf("|-------------------------------------");
+        printf("-----------------------------------------|\n");
         break;
       default:
         printf("| Invalid selection, please try again.\n");
     }
-  } while (toupper(cMainChoice) != 'L'); //When 'E' is inputted the program ends
+  } while (toupper(cMainChoice) != 'L'); //When 'L' is inputted the program ends
   
   /*
   //Declare variables
@@ -462,7 +500,7 @@ int main()
   return 0;
 }
 
-bool validateDate(string &sDateIn)
+bool validateDate(string sDateIn)
 {
   //Initializing and declaring variables
   int iCount = 0, iDay, iMonth, iYear;
@@ -626,7 +664,7 @@ bool validateDate(string &sDateIn)
   return true;
 }
 
-bool validatePhone(string &sPhoneIn)
+bool validatePhone(string sPhoneIn)
 {
   //boolean value set true, will change to false if matching word found
   bool bOutcome = true;
@@ -643,33 +681,21 @@ bool validatePhone(string &sPhoneIn)
   bOutcome = false;
 
   //Loop while the number being tested is not null
-  while (sPhoneIn[iCount] != '\0')
+  for (int i = 0; i < sPhoneIn.length(); ++i)
   {
     //Make bOutcome true if any of the elements are nonnum
     if (!isdigit(sPhoneIn[iCount]))
+    {
       bOutcome = true;
-    
-    //Increment counter
-    iCount++;
+    } 
   }
-
 
   //If its all numbers and no formatting, we will format for the lazy user
   if (bOutcome == false && sPhoneIn.length() == 10)
   {
-    int iCount2 = 0;
-
       sPhoneIn.insert(0, "(");
       sPhoneIn.insert(4, ")");
       sPhoneIn.insert(8, "-");
-
-      while (sPhoneIn[iCount2] != '\0')
-      {
-        sPhoneIn[iCount2] = sPhoneIn[iCount2];
-        iCount2++;
-      }
-
-      sPhoneIn[iCount2] = '\0';
   }
   else if (bOutcome == false && sPhoneIn.length() != 10)
   {

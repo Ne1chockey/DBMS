@@ -24,7 +24,52 @@
 #include <iostream>
 #include <iomanip>
 #include "App.h"
+#include "Engine.h"
 using namespace std;
+
+App::App()
+{
+  //Declare variables for creating the necessary relations
+  vector< tuple<string,string,bool> > vColumnNames;
+  vector<string> vKeys;
+  //Create columns for the hairdresser relation
+  vColumnNames.push_back(make_tuple("Name","string",false));
+  vColumnNames.push_back(make_tuple("Phone Number","string",false));
+  vColumnNames.push_back(make_tuple("Address","string",false));
+  vKeys.push_back("Name");
+  vKeys.push_back("Phone Number");
+
+  //create the hairdresser relation
+  e.createTable("Hairdressers", vColumnNames, vKeys);
+
+  //clear the vector for the next relation info
+  vColumnNames.clear();
+  vKeys.clear();
+
+  //Create columns for the hairdresser relation
+  vColumnNames.push_back(make_tuple("Name","string",false));
+  vColumnNames.push_back(make_tuple("Phone Number","string",false));
+  vColumnNames.push_back(make_tuple("Address","string",false));
+  vKeys.push_back("Name");
+  vKeys.push_back("Phone Number");
+
+  //create the hairdresser relation
+  e.createTable("Customers", vColumnNames, vKeys);
+
+  //clear the vector for the next relation info
+  vColumnNames.clear();
+  vKeys.clear();
+
+  //Create columns for the hairdresser relation
+  vColumnNames.push_back(make_tuple("Customer ID","integer",false));
+  vColumnNames.push_back(make_tuple("Hairdresser ID","integer",false));
+  vColumnNames.push_back(make_tuple("Time","string",false));
+  vColumnNames.push_back(make_tuple("Date","string",false));
+  vKeys.push_back("Date");
+
+  //create the hairdresser relation
+  e.createTable("Customers", vColumnNames, vKeys);
+}
 
 /*******************************************************************************
 Function to display the menu 
@@ -55,36 +100,33 @@ void App::displayMenu()
 }
 
 /*******************************************************************************
-Function to show the hair dressers
-*******************************************************************************/
-void App::showHairDressers()
-{
-
-}
-
-/*******************************************************************************
 Function to add a hair dresser to the hair dresser relation
 *******************************************************************************/
 void App::addHairDresser(string sName, string sPhonenumber, string sAddress)
 {
+  vector< tuple<int, string> > vRow;
 
+  vRow.push_back(make_tuple(0,sName));
+  vRow.push_back(make_tuple(1,sPhonenumber));
+  vRow.push_back(make_tuple(2,sAddress));
+
+  //Add row to the relation
+  e.addRow("Hairdressers", vRow);
 }
 
 /*******************************************************************************
 Function to remove a hair dresser from the hair dresser relation
 *******************************************************************************/
-void App::removeHairDresser(int id, string sName, string sPhonenumber, 
+void App::removeHairDresser(string id, string sName, string sPhonenumber, 
   string sAddress)
 {
+  vector< tuple<int, string> > vRow;
 
-}
+  vRow.push_back(make_tuple(0,sName));
+  vRow.push_back(make_tuple(1,sPhonenumber));
+  vRow.push_back(make_tuple(2,sAddress));
 
-/*******************************************************************************
-Function to show customers
-*******************************************************************************/
-void App::showCustomers()
-{
-
+  e.deleteRow("Hairdressers", vRow);
 }
 
 /*******************************************************************************
@@ -92,31 +134,60 @@ Function to add a customer to the hair dresser relation
 *******************************************************************************/
 void App::addCustomer(string sName, string sPhonenumber, string sAddress)
 {
+  vector< tuple<int, string> > vRow;
 
+  vRow.push_back(make_tuple(0,sName));
+  vRow.push_back(make_tuple(1,sPhonenumber));
+  vRow.push_back(make_tuple(2,sAddress));
+
+  //Add row to the relation
+  e.addRow("Customers", vRow);
 }
 
 /*******************************************************************************
 Function to remove a customer to the hair dresser relation
 *******************************************************************************/
-void App::removeCustomer(int id, string sName, string sPhonenumber, string sAddress)
+void App::removeCustomer(string id, string sName, string sPhonenumber, string sAddress)
 {
+  vector< tuple<int, string> > vRow;
 
+  vRow.push_back(make_tuple(0,sName));
+  vRow.push_back(make_tuple(1,sPhonenumber));
+  vRow.push_back(make_tuple(2,sAddress));
+  
+  e.deleteRow("Customers", vRow);
 }
 
 /*******************************************************************************
 Function to add a appointment to the appointment relation
 *******************************************************************************/
-void App::addAppt(int iCustomer_id, int iHairdresser_id, string sTime)
+void App::addAppt(string sCustomer_id, string sHairdresser_id, string sTime, 
+  string sDate)
 {
+  vector< tuple<int, string> > vRow;
 
+  vRow.push_back(make_tuple(0,sCustomer_id));
+  vRow.push_back(make_tuple(1,sHairdresser_id));
+  vRow.push_back(make_tuple(2,sTime));
+  vRow.push_back(make_tuple(3,sDate));
+  
+  e.deleteRow("Appointments", vRow);
 }
 
 /*******************************************************************************
 Function to remove a appointment to the appointment relation
 *******************************************************************************/
-void App::removeAppt(int id, int iCustomer_id, int iHairdresser_id, string sTime)
+void App::removeAppt(string id, string sCustomer_id, string sHairdresser_id, 
+  string sTime, string sDate)
 {
+  vector< tuple<int, string> > vRow;
 
+  vRow.push_back(make_tuple(0,sCustomer_id));
+  vRow.push_back(make_tuple(1,sHairdresser_id));
+  vRow.push_back(make_tuple(2,sTime));
+  vRow.push_back(make_tuple(3,sDate));
+  
+  e.deleteRow("Appointments", vRow);
 }
 
 /*******************************************************************************
@@ -124,22 +195,22 @@ Function to show appointments
 *******************************************************************************/
 void App::showAppts(string sStartDate, string sEndDate)
 {
-
+  //do projection of the appointments table and show it
 }
 
 /*******************************************************************************
 Function to project appointments from appointment relation by range
 *******************************************************************************/
-void App::showApptsByCustomer(int iCustomer_id, string sStartDate, string sEndDate)
+void App::showApptsByCustomer(string sCustomer_id, string sStartDate, string sEndDate)
 {
-
+  //do selection of the customer table and show it
 }
 
 /*******************************************************************************
 Function to project appointments from appointment relation by range
 *******************************************************************************/
-void App::showApptsByHairdresser(int iHairdresser_id, string sStartDate, 
+void App::showApptsByHairdresser(string sHairdresser_id, string sStartDate, 
   string sEndDate)
 {
-
+  //do selection of the customer table and show it
 }

@@ -33,34 +33,42 @@ using namespace std;
 Database Schema:
 
 Hair Dresser: ID, name, Phone number, address
-Customers: ID, anme, phone number, address
-Appointments: ID, customer_id, hairdresser_id, time
+Customers: ID, name, phone number, address
+Appointments: ID, customer_id, hairdresser_id, time, date
 *******************************************************************************/
 
 class App 
 {
 private:
   //Declare private variables
+  Engine e;
 
 public:
   //Declare class methods
-  App(){};
+  App();
 
   void displayMenu();
-  void showHairDressers();
+  void showHairDressers()
+  {
+    e.displayTable("Hairdressers");
+  }
+
   void addHairDresser(string sName, string sPhonenumber, string sAddress);
-  void removeHairDresser(int id, string sName, string sPhonenumber, string sAddress);
+  void removeHairDresser(string id, string sName, string sPhonenumber, string sAddress);
 
-  void showCustomers();
+  void showCustomers()
+  {
+    e.displayTable("Customers");
+  }
   void addCustomer(string sName, string sPhonenumber, string sAddress);
-  void removeCustomer(int id, string sName, string sPhonenumber, string sAddress);
+  void removeCustomer(string id, string sName, string sPhonenumber, string sAddress);
 
 
-  void addAppt(int iCustomer_id, int iHairdresser_id, string sTime);
-  void removeAppt(int id, int iCustomer_id, int iHairdresser_id, string sTime);
+  void addAppt(string sCustomer_id, string sHairdresser_id, string sTime, string sDate);
+  void removeAppt(string id, string sCustomer_id, string sHairdresser_id, string sTime, string sDate);
   void showAppts(string sStartDate, string sEndDate);
-  void showApptsByCustomer(int iCustomer_id, string sStartDate, string sEndDate);
-  void showApptsByHairdresser(int iHairdresser_id, string sStartDate, string sEndDate);
+  void showApptsByCustomer(string sCustomer_id, string sStartDate, string sEndDate);
+  void showApptsByHairdresser(string sHairdresser_id, string sStartDate, string sEndDate);
 };
 
 #endif

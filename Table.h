@@ -89,6 +89,18 @@ public:
     vRows.push_back(v);
   }
 
+  void deleteRow(std::vector<std::tuple<int, std::string> > vRowIn)
+  {
+    for (int i = 0; i < vRows.size(); ++i)
+    {
+      if (vRows[i] == vRowIn)
+      {
+        vRows.erase(vRows.begin()+i);
+        return;
+      }
+    }
+  }
+
   //Getters
   std::string getTableName()
   {

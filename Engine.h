@@ -81,6 +81,21 @@ public:
   }
 
   /****************************************************************************
+  Removes a row to the specified table
+  ****************************************************************************/
+  void deleteRow(string sTableNameIn, vector<tuple<int, string> > vRowIn)
+  {
+    for (int i = 0; i < vTableList.size(); ++i)
+    {
+      if (vTableList[i].getTableName() == sTableNameIn)
+      {
+        vTableList[i].deleteRow(vRowIn);
+        return;
+      }
+    }
+  }
+
+  /****************************************************************************
   Adds a column to the specified table with name, type, and key
   ***************************************************************************/
   void addColumn(string sTableNameIn, string sColNameIn, string sTypeIn,
