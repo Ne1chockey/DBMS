@@ -260,18 +260,20 @@ int main()
         a.showAppts(sStartDate, sEndDate);
         break;
       case 'l':
-      case 'L':
+      case 'L': a.showAppointments();
+        break;
+      case 'm':
+      case 'M':
         printf("|-------------------------------------");
         printf("-----------------------------------------|\n");
         printf("|                                Goodbye :)    ");
         printf("                                |\n");
         printf("|-------------------------------------");
         printf("-----------------------------------------|\n");
-        break;
       default:
         printf("| Invalid selection, please try again.\n");
     }
-  } while (toupper(cMainChoice) != 'L'); //When 'L' is inputted the program ends
+  } while (toupper(cMainChoice) != 'M'); //When 'M' is inputted the program ends
   
   /*
   //Declare variables

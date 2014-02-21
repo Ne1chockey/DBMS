@@ -42,6 +42,7 @@ class App
 private:
   //Declare private variables
   Engine e;
+  int iCountTableVersions = 0;
 
 public:
   //Declare class methods
@@ -69,6 +70,11 @@ public:
   void showAppts(string sStartDate, string sEndDate);
   void showApptsByCustomer(string sCustomer_id, string sStartDate, string sEndDate);
   void showApptsByHairdresser(string sHairdresser_id, string sStartDate, string sEndDate);
+
+  void showAppointments()
+  {
+    e.displayTable("Appointments");
+  }
 };
 
 #endif

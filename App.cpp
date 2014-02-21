@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 #include "App.h"
 #include "Engine.h"
 using namespace std;
@@ -32,6 +33,7 @@ App::App()
   //Declare variables for creating the necessary relations
   vector< tuple<string,string,bool> > vColumnNames;
   vector<string> vKeys;
+
   //Create columns for the hairdresser relation
   vColumnNames.push_back(make_tuple("Name","string",false));
   vColumnNames.push_back(make_tuple("Phone Number","string",false));
@@ -68,7 +70,7 @@ App::App()
   vKeys.push_back("Date");
 
   //create the hairdresser relation
-  e.createTable("Customers", vColumnNames, vKeys);
+  e.createTable("Appointments", vColumnNames, vKeys);
 }
 
 /*******************************************************************************
@@ -90,10 +92,11 @@ void App::displayMenu()
   printf("| F) Remove Customer\n");
   printf("| G) Add Appointment\n");
   printf("| H) Remove Appointment\n");
-  printf("| I) Show Appointments By Customer\n");
-  printf("| J) Show Appointments By Hairdresser\n");
-  printf("| K) Show Appointments\n");
-  printf("| L) Exit\n");
+  printf("| I) Display Appointments By Customer\n");
+  printf("| J) Display Appointments By Hairdresser\n");
+  printf("| K) Display Appointments in range\n");
+  printf("| L) Display All Appointments\n");
+  printf("| M) Exit\n");
   printf("|-------------------------------------");
   printf("-----------------------------------------|\n");
   printf("| Enter a selection: ");
@@ -147,7 +150,8 @@ void App::addCustomer(string sName, string sPhonenumber, string sAddress)
 /*******************************************************************************
 Function to remove a customer to the hair dresser relation
 *******************************************************************************/
-void App::removeCustomer(string id, string sName, string sPhonenumber, string sAddress)
+void App::removeCustomer(string id, string sName, string sPhonenumber, 
+  string sAddress)
 {
   vector< tuple<int, string> > vRow;
 
@@ -171,7 +175,7 @@ void App::addAppt(string sCustomer_id, string sHairdresser_id, string sTime,
   vRow.push_back(make_tuple(2,sTime));
   vRow.push_back(make_tuple(3,sDate));
   
-  e.deleteRow("Appointments", vRow);
+  e.addRow("Appointments", vRow);
 }
 
 /*******************************************************************************
@@ -195,15 +199,27 @@ Function to show appointments
 *******************************************************************************/
 void App::showAppts(string sStartDate, string sEndDate)
 {
-  //do projection of the appointments table and show it
+  string sTempName = "temp ";
+  sTempName += 
+  static_cast<ostringstream*>( &(ostringstream() << iCountTableVersions) )->str();
+  string sNewName = "Appt Range (" + sStartDate + " - " + sEndDate + ")";
+
+  //do selection of the appointments table and show it
+  e.selection("Appointments",sTempName, "<", "Date", sStartDate);
+  e.selection(sTempName, sNewName, ">", "Date", sEndDate);
+  e.displayTable(sNewName);
+  iCountTableVersions++;
 }
 
 /*******************************************************************************
 Function to project appointments from appointment relation by range
 *******************************************************************************/
-void App::showApptsByCustomer(string sCustomer_id, string sStartDate, string sEndDate)
+void App::showApptsByCustomer(string sCustomer_id, string sStartDate, 
+  string sEndDate)
 {
   //do selection of the customer table and show it
+  //e.selection();
+  //e.displayTable();
 }
 
 /*******************************************************************************
@@ -213,4 +229,6 @@ void App::showApptsByHairdresser(string sHairdresser_id, string sStartDate,
   string sEndDate)
 {
   //do selection of the customer table and show it
+  //e.selection();
+  //e.displayTable();
 }

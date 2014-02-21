@@ -157,8 +157,12 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
 
       for (int a = 0; a < vNames.size(); ++a)
       {
-        //Add column to new table
-        tNewTable.addColumn(vNames[a]);
+        if (a == get <0> (vNames[a]))
+        {
+          printf("| ADDING COLUMN NAME = %s\n", (get <1>(vNames[a])).c_str());
+          //Add column to new table
+          tNewTable.addColumn(vNames[a]);
+        }
       }
 
       //See if the column exists in the table

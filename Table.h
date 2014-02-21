@@ -99,6 +99,7 @@ public:
         return;
       }
     }
+    printf("| The row was not removed\n");
   }
 
   //Getters
