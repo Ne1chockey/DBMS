@@ -24,13 +24,218 @@
 #include <iostream>
 #include <iomanip>
 #include <tuple>
-#include "Engine.h"
-#include "Parser.h"
-
+#include "App.h"
 using namespace std;
+
+bool validatePhone(string &sPhoneIn);
+bool validateDate(string &sDateIn);
 
 int main() 
 {
+  //Declaring and initializing variables
+  App a;
+  char cMainChoice;
+  int iAppointmentID, iCustomerID, iHairdresserID;
+  string sName, sPhoneNumber, sAddress, sStartDate, sEndDate, sTime;
+
+  do
+  {
+    //To display a menu of choices for the user to choose from
+    printf("\n");
+    a.displayMenu();
+    cin >> cMainChoice;
+    
+    //Process the user's selection
+    switch(cMainChoice) 
+    {
+      case 'a': 
+      case 'A': a.showHairDressers();
+        break;
+      case 'b': 
+      case 'B': 
+        //Gather hair dresser's information
+        printf("| Enter the Hair Dresser's name: ");
+        cin >> sName;
+        printf("| Enter the Hair Dresser's phone number: ");
+        cin >> sPhoneNumber;
+
+        while(!validatePhone(sPhoneNumber))
+        {
+          printf("| Phone number format incorrect, try again: ");
+          cin >> sPhoneNumber;
+        }
+
+        printf("| Enter the Hair Dresser's address: ");
+        cin >> sAddress;
+        a.addHairDresser(sName, sPhoneNumber, sAddress);
+        break;
+      case 'c':
+      case 'C':
+        //Gather info to delete hair dresser
+        printf("| Enter the Hair Dresser's id: ");
+        cin >> iHairdresserID;
+        printf("| Enter the Hair Dresser's name: ");
+        cin >> sName;
+        printf("| Enter the Hair Dresser's phone number: ");
+        cin >> sPhoneNumber;
+
+        while(validatePhone(sPhoneNumber))
+        {
+          printf("| Phone number format incorrect, try again: ");
+          cin >> sPhoneNumber;
+        }
+
+        printf("| Enter the Hair Dresser's address: ");
+        cin >> sAddress;
+        a.removeHairDresser(iHairdresserID, sName, sPhoneNumber, sAddress);
+        break;
+      case 'd':
+      case 'D': a.showCustomers();
+        break;
+      case 'e':
+      case 'E':
+        //Gather customer's information
+        printf("| Enter the Customer's name: ");
+        cin >> sName;
+        printf("| Enter the Customer's phone number: ");
+        cin >> sPhoneNumber;
+
+        while(validatePhone(sPhoneNumber))
+        {
+          printf("| Phone number format incorrect, try again: ");
+          cin >> sPhoneNumber;
+        }
+
+        printf("| Enter the Customer's address: ");
+        cin >> sAddress;
+        a.addCustomer(sName, sPhoneNumber, sAddress);
+        break;
+      case 'f':
+      case 'F':
+        //Gather info to delete customer
+        printf("| Enter the Customer's id: ");
+        cin >> iCustomerID;
+        printf("| Enter the Customer's name: ");
+        cin >> sName;
+        printf("| Enter the Customer's phone number: ");
+        cin >> sPhoneNumber;
+
+        while(validatePhone(sPhoneNumber))
+        {
+          printf("| Phone number format incorrect, try again: ");
+          cin >> sPhoneNumber;
+        }
+
+        printf("| Enter the Customer's address: ");
+        cin >> sAddress;
+        a.removeCustomer(iCustomerID, sName, sPhoneNumber, sAddress);
+        break;
+      case 'g':
+      case 'G':
+        //Gather info to add appointment
+        printf("| Enter the Customer's id: ");
+        cin >> iCustomerID;
+        printf("| Enter the Hairdresser's id: ");
+        cin >> iHairdresserID;
+        printf("| Enter the time: ");
+        cin >> sTime;
+        a.addAppt(iCustomerID, iHairdresserID, sTime);
+        break;
+      case 'h':
+      case 'H':
+        //Gather info to remove appointment
+        printf("| Enter the Appointment's id: ");
+        cin >> iAppointmentID;
+        printf("| Enter the Customer's id: ");
+        cin >> iCustomerID;
+        printf("| Enter the Hairdresser's id: ");
+        cin >> iHairdresserID;
+        printf("| Enter the time: ");
+        cin >> sTime;
+        a.removeAppt(iAppointmentID, iCustomerID, iHairdresserID, sTime);
+        break;
+      case 'i':
+      case 'I':
+        //Gather info to show customer's appointments
+        printf("| Enter the Customer's id: ");
+        cin >> iCustomerID;
+        printf("| Enter a Start date: ");
+        cin >> sStartDate;
+
+        while(validateDate(sStartDate))
+        {
+          printf("| Date format incorrect, try again: ");
+          cin >> sStartDate;
+        }
+
+        printf("| Enter an End dat: ");
+        cin >> sEndDate;
+
+        while(validateDate(sEndDate))
+        {
+          printf("| Date format incorrect, try again: ");
+          cin >> sEndDate;
+        }
+
+        a.showApptsByCustomer(iCustomerID, sStartDate, sEndDate);
+        break;
+      case 'j':
+      case 'J':
+        //Gather info to show hairdresser's appointments
+        printf("| Enter the Hairdresser's id: ");
+        cin >> iHairdresserID;
+        printf("| Enter a Start date: ");
+        cin >> sStartDate;
+
+        while(validateDate(sStartDate))
+        {
+          printf("| Date format incorrect, try again: ");
+          cin >> sStartDate;
+        }
+
+        printf("| Enter an End dat: ");
+        cin >> sEndDate;
+
+        while(validateDate(sEndDate))
+        {
+          printf("| Date format incorrect, try again: ");
+          cin >> sEndDate;
+        }
+
+        a.showApptsByCustomer(iHairdresserID, sStartDate, sEndDate);
+        break;
+      case 'k':
+      case 'K':
+        //Gather a range for showing appts
+        printf("| Enter a Start date: ");
+        cin >> sStartDate;
+
+        while(validateDate(sStartDate))
+        {
+          printf("| Date format incorrect, try again: ");
+          cin >> sStartDate;
+        }
+
+        printf("| Enter an End dat: ");
+        cin >> sEndDate;
+
+        while(validateDate(sEndDate))
+        {
+          printf("| Date format incorrect, try again: ");
+          cin >> sEndDate;
+        }
+
+        a.showAppts(sStartDate, sEndDate);
+        break;
+      case 'l':
+      case 'L': printf("| Goodbye :)\n");
+        break;
+      default:
+        printf("| Invalid selection, please try again.\n");
+    }
+  } while (toupper(cMainChoice) != 'L'); //When 'E' is inputted the program ends
+  
+  /*
   //Declare variables
   vector< tuple<string,string,bool> > vColumnNames;
   vector< tuple<int, string> > vRow;
@@ -64,8 +269,7 @@ int main()
     printf("Enter another line? 1 or 0: ");
     cin >> iParse;
   }
-
-
+  */
   /***********************************************************************
     ENGINE TESTING BELOW, UNCOMMENT TO SEE
   ************************************************************************/
@@ -256,4 +460,230 @@ int main()
   cin.get();
   */
   return 0;
+}
+
+bool validateDate(string &sDateIn)
+{
+  //Initializing and declaring variables
+  int iCount = 0, iDay, iMonth, iYear;
+  string sDay, sMonth, sYear;
+
+  //Month-Day-Year format for date
+
+  //Check to see if date is valid in multiple sizes and insert the missing parts
+  if (sDateIn.length() == 6)
+  {
+    //(9/9/99)
+    if ((ispunct(sDateIn[1]) && ispunct(sDateIn[3])) && (sDateIn[1] == sDateIn[3]))
+    {
+      sDateIn.insert(0, "0");
+      sDateIn.insert(3, "0");
+      string sDateInEnd = sDateIn.substr(6, 2);
+      int iTemp = atoi(sDateInEnd.c_str());
+      if (iTemp > 13)
+      {
+        sDateIn.insert(6, "1");
+        sDateIn.insert(7, "9");
+      }
+      else
+      {
+        sDateIn.insert(6, "2");
+        sDateIn.insert(7, "0");
+      }
+      
+    }
+    else
+      return true;
+  }
+  if (sDateIn.length() == 7)
+  {
+    //(9/99/99)
+    if ((ispunct(sDateIn[1]) && ispunct(sDateIn[4])) && (sDateIn[1] == sDateIn[4]))
+    {
+
+      sDateIn.insert(0, "0");
+      string sDateInEnd = sDateIn.substr(6, 2);
+      int iTemp = atoi(sDateInEnd.c_str());
+      if (iTemp > 13)
+      {
+        sDateIn.insert(6, "1");
+        sDateIn.insert(7, "9");
+      }
+      else
+      {
+        sDateIn.insert(6, "2");
+        sDateIn.insert(7, "0");
+      }
+    }
+    //(99/9/99)
+    else if ((ispunct(sDateIn[2]) && ispunct(sDateIn[4])) && (sDateIn[2] == sDateIn[4]))
+    {
+      sDateIn.insert(4, "0");
+      string sDateInEnd = sDateIn.substr(6, 2);
+      int iTemp = atoi(sDateInEnd.c_str());
+      if (iTemp > 13)
+      {
+        sDateIn.insert(6, "1");
+        sDateIn.insert(7, "9");
+      }
+      else
+      {
+        sDateIn.insert(6, "2");
+        sDateIn.insert(7, "0");
+      }
+    }
+    else
+      return true;
+  }
+  if (sDateIn.length() == 8)
+  {
+    //(99/99/99)
+    if ((ispunct(sDateIn[2]) && ispunct(sDateIn[5])) && (sDateIn[2] == sDateIn[5]))
+    {
+      string sDateInEnd = sDateIn.substr(6, 2);
+      int iTemp = atoi(sDateInEnd.c_str());
+      if (iTemp > 13)
+      {
+        sDateIn.insert(6, "1");
+        sDateIn.insert(7, "9");
+      }
+      else
+      {
+        sDateIn.insert(6, "2");
+        sDateIn.insert(7, "0");
+      }
+    }
+    //(9/9/9999)
+    else if ((ispunct(sDateIn[1]) && ispunct(sDateIn[3])) && (sDateIn[1] == sDateIn[3]))
+    {
+      sDateIn.insert(0, "0");
+      sDateIn.insert(3, "0");
+    }
+    else
+      return true;
+  }
+  //Add a zero to the front of day or month if user didnt input it
+  if (sDateIn.length() == 9)
+  {
+    //(9/99/9999)
+    if ((ispunct(sDateIn[1]) && ispunct(sDateIn[4])) && (sDateIn[1] == sDateIn[4]))
+    {
+      sDateIn.insert(0, "0");
+    }
+    //(99/9/9999)
+    else if ((ispunct(sDateIn[2]) && ispunct(sDateIn[4])) && (sDateIn[2] == sDateIn[4]))
+    {
+      sDateIn.insert(3, "0");
+    }
+    else
+      return true;
+  }
+  if (sDateIn.length() == 10)
+  {
+    //(99/99/9999) now that it is formatted we can validate numbers
+    if ((ispunct(sDateIn[2]) && ispunct(sDateIn[5])) && (sDateIn[2] == sDateIn[5]))
+    {
+      //Declare the variables
+      sMonth = sDateIn.substr(0, 2);
+      sDay = sDateIn.substr(3, 2);
+      sYear = sDateIn.substr(6, 4);
+    }
+    else
+      return true;
+
+    iDay = atoi(sDay.c_str());
+    iMonth = atoi(sMonth.c_str());
+    iYear = atoi(sYear.c_str());
+
+    if (iDay < 1 || iDay > 31 || iMonth < 1 || iMonth > 12 || iYear < 1900 
+      || iYear > 2013)
+      return true;
+    else
+    {
+      if ((iMonth == 4 || iMonth == 6 || iMonth == 9 || iMonth == 11) && iDay > 30)
+        return true;
+      else
+      {
+        if (iMonth == 2)
+        {
+          //Determine if its a leap year
+          if ((iYear % 4 == 0) && !(iYear % 100 == 0)|| (iYear % 400 == 0))
+          {
+            if (iDay > 29)
+              return true;
+          }
+          else
+            if (iDay > 28)
+              return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  //Send back the outcome
+  return true;
+}
+
+bool validatePhone(string &sPhoneIn)
+{
+  //boolean value set true, will change to false if matching word found
+  bool bOutcome = true;
+  int iCount = 0;
+
+  //If first element in the phone number is not a paran and not a num, return
+  if (sPhoneIn[0] != '(' && !isdigit(sPhoneIn[0]))
+    return bOutcome;
+
+  //If the phone number is too short or too long return
+  if (sPhoneIn.length() < 10 || sPhoneIn.length() > 13)
+    return bOutcome;
+
+  bOutcome = false;
+
+  //Loop while the number being tested is not null
+  while (sPhoneIn[iCount] != '\0')
+  {
+    //Make bOutcome true if any of the elements are nonnum
+    if (!isdigit(sPhoneIn[iCount]))
+      bOutcome = true;
+    
+    //Increment counter
+    iCount++;
+  }
+
+
+  //If its all numbers and no formatting, we will format for the lazy user
+  if (bOutcome == false && sPhoneIn.length() == 10)
+  {
+    int iCount2 = 0;
+
+      sPhoneIn.insert(0, "(");
+      sPhoneIn.insert(4, ")");
+      sPhoneIn.insert(8, "-");
+
+      while (sPhoneIn[iCount2] != '\0')
+      {
+        sPhoneIn[iCount2] = sPhoneIn[iCount2];
+        iCount2++;
+      }
+
+      sPhoneIn[iCount2] = '\0';
+  }
+  else if (bOutcome == false && sPhoneIn.length() != 10)
+  {
+    bOutcome = true;
+  }
+  else if (bOutcome == true)
+  {
+    //Test to see if the number is formatted or just garbage
+    if (sPhoneIn[0] == '(' && sPhoneIn[4] == ')' && sPhoneIn[8] == '-')
+      bOutcome = false;
+    else
+      bOutcome = true;
+  }
+      
+  //Send back the outcome
+    return bOutcome;
 }

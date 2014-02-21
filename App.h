@@ -2,7 +2,7 @@
     File: App.h
 
     Authors: Gustavo Pedroso UIN: 423002834
-             Levi Clark      UIN:
+             Levi Clark      UIN: 520007880
              Terry Chen      UIN: 121007055
              Daniel He       UIN: 620006827
 
@@ -18,27 +18,16 @@
     This file contains the header for the app
 *******************************************************************************/
 
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef APP_H
+#define APP_H
 
 #include <string>
 #include <vector>
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
+#include "Engine.h"
 using namespace std;
-
-/*class App 
-{
-private:
-  //Declare private variables
-
-public:
-  //Declare class methods
-  App(){};
-
-
-};*/
 
 /*******************************************************************************
 Database Schema:
@@ -48,6 +37,16 @@ Customers: ID, anme, phone number, address
 Appointments: ID, customer_id, hairdresser_id, time
 *******************************************************************************/
 
+class App 
+{
+private:
+  //Declare private variables
+
+public:
+  //Declare class methods
+  App(){};
+
+  void displayMenu();
   void showHairDressers();
   void addHairDresser(string sName, string sPhonenumber, string sAddress);
   void removeHairDresser(int id, string sName, string sPhonenumber, string sAddress);
@@ -62,6 +61,6 @@ Appointments: ID, customer_id, hairdresser_id, time
   void showAppts(string sStartDate, string sEndDate);
   void showApptsByCustomer(int iCustomer_id, string sStartDate, string sEndDate);
   void showApptsByHairdresser(int iHairdresser_id, string sStartDate, string sEndDate);
-  
+};
 
 #endif

@@ -50,9 +50,9 @@ public:
   Parser(){};
 
   bool readFromFile(string sFileName);
+  bool writeToFile(string sFileName);
   void parse(string sLineIn);
   void validate();
-  void op(string sNewTableName, string sRestOfLine);
 
   //Grammar functions
   bool findCreateTable(string sLineIn);
@@ -78,10 +78,12 @@ public:
 	treeNode * createTree(string sLineIn);
   void projection(string sRestOfLine, string sTableNameOut);	
   void rename(string sRestOfLine, string sTableNameOut);
+  void op(string sNewTableName, string sRestOfLine);
 
-   Engine getEngine() {
-     return e;
-   }
+  Engine getEngine() 
+  {
+    return e;
+  }
 };
 
 #endif

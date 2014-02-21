@@ -47,11 +47,8 @@ public:
     sTableName = sTableNameIn;
   }
 
-  //Display function and write function and open function
+  //Display function
   void displayTable();
-  void writeTable();
-  void openTable();
-  void closeTable();
 
   //Setters
   void setPrimaryKey(std::string sKeyIn)

@@ -66,54 +66,6 @@ public:
   }
 
   /****************************************************************************
-  Calls Table's writeTable to write the specified table to file
-  ****************************************************************************/
-  void writeTable(string sTableNameIn)
-  {
-    for (int i = 0; i < vTableList.size(); ++i)
-    {
-      if (vTableList[i].getTableName() == sTableNameIn)
-      {
-        vTableList[i].writeTable();
-        return;
-      }
-    }
-    printf("| The table was not found\n");
-  }
-
-  /****************************************************************************
-  Calls Table's openTable to open the specified table from file
-  ****************************************************************************/
-  void openTable(string sTableNameIn)
-  {
-    for (int i = 0; i < vTableList.size(); ++i)
-    {
-      if (vTableList[i].getTableName() == sTableNameIn)
-      {
-        vTableList[i].openTable();
-        return;
-      }
-    }
-    printf("| The table was not found\n");
-  }
-
-  /****************************************************************************
-  Calls Table's closeTable to close the specified table file
-  ***************************************************************************/
-  void closeTable(string sTableNameIn)
-  {
-    for (int i = 0; i < vTableList.size(); ++i)
-    {
-      if (vTableList[i].getTableName() == sTableNameIn)
-      {
-        vTableList[i].closeTable();
-        return;
-      }
-    }
-    printf("| The table was not found\n");
-  }
-
-  /****************************************************************************
   Adds a row to the specified table
   ****************************************************************************/
   void addRow(string sTableNameIn, vector<tuple<int, string> > vRowIn)

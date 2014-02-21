@@ -67,20 +67,12 @@ Read a file and call parse function on each line read
 bool Parser::readFromFile(string sFileName)
 {
     ifstream fhIn; //file handler
-   // string sFilenameIn; //Declaring string for holding filename from the user
     string sLineIn; //Hold the line that is read off file
     int iCount = 0;
-    /*
-    //Output for gathering filename from the user                       <------remember to uncomment this when submitting
-    printf("\n\n");
-    printf("|--------------------------------------");
-    printf("-----------------------------------------\n");
-    printf("| Enter the filename: ");
-    getline(cin, sFilenameIn);
-    
-    //Open the file and validate it opened properly*/
+
+    //Open the file and validate it opened properly
     fhIn.open(sFileName.c_str());
- //   fhIn.open("testInput.txt"); 
+
     if (!fhIn)
     { 
         //Output error message
@@ -98,12 +90,10 @@ bool Parser::readFromFile(string sFileName)
     printf("-----------------------------------------\n");
 
     //Loop to read in file information
-    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    CHANGE ICOUNT TO THE AMOUNT OF LINES YOU WANT TO SEE! FOR TESTING PURPOSES
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     while(!fhIn.eof() /*&& iCount < 20*/)
     {
-        int *ptrTemp;
+        //Keep a record of lines for writing to file
+        vValuesRead.push_back(sLineIn);
 
         //Parse the line of text and interpret it
         parse(sLineIn);
@@ -191,6 +181,21 @@ void Parser::parse(string sLineIn)
 }
 
 /*******************************************************************************
+Writes the relation information to a file
+*******************************************************************************/ 
+bool Parser::writeToFile(string sFilename)
+{
+    std::fstream outputFile;
+    //open the file and write the contents of the class vector in there
+    outputFile.open(sFilename + ".db");
+    for (int i = 0; i < vValuesRead.size(); ++i)
+    {
+        outputFile << vValuesRead[i] << '\n';
+    }
+    outputFile.close();
+}
+
+/*******************************************************************************
 Takes in a string, parses it, and creates a vector of columns to send back
 *******************************************************************************/ 
 vector<tuple<string,string,bool> > Parser::createColVector(string sLineIn)                  
@@ -219,7 +224,7 @@ vector<tuple<string,string,bool> > Parser::createColVector(string sLineIn)
             sType = "int";
             sName = vCol[i].substr(0,iInt);
         }
-        //printf("%s and %s\n", sType.c_str(), sName.c_str());
+
         //push the newly created column into the vector to send back
         vColVectorOut.push_back(make_tuple(sName,sType,false));
 
@@ -310,7 +315,7 @@ string Parser::removeSpaces (string sLineIn)
     string sOut = "";
     for (int i = 0; i < sLineIn.length(); ++i)
     {
-        //Append the value from the string into the return string, if its alpha
+        //Apend any values that are not spaces
         if (sLineIn[i] != ' ')
         {
             sOut += sLineIn[i];
@@ -328,28 +333,34 @@ bool Parser::findCreateTable(string sLineIn)
 {
     size_t iPosStart = sLineIn.find("CREATE TABLE");
     
+    //Execute if create table was found in the string
     if (iPosStart!=std::string::npos)
     {
         size_t iPosEnd = sLineIn.find("(",iPosStart+1);
         
+        //execute if '(' was found in the string
         if (iPosEnd!=std::string::npos)
         {
             //get the table name
             string sTableName = sLineIn.substr(iPosStart+CREATE_TABLE_SIZE,
                 iPosEnd-CREATE_TABLE_SIZE-1);
-        
+            
+            //reposition the position values
             iPosStart = iPosEnd;
             iPosEnd = sLineIn.find("PRIMARY KEY",iPosStart+1);
             
+            //Execute if primary key was found in string
             if (iPosEnd!=std::string::npos)
             {
                 //get the column names
                 string sColumns = sLineIn.substr(iPosStart,
                     iPosEnd-CREATE_TABLE_SIZE-PRIMARY_KEY_SIZE+1);
 
+                //reposition the position values
                 iPosStart = iPosEnd;
                 iPosEnd = sLineIn.find(")",iPosStart+1);
 
+                //execute if ')' was found in the string
                 if (iPosEnd!=std::string::npos)
                 {
                     //get the primary keys
@@ -412,7 +423,9 @@ bool Parser::findInsertInto(string sLineIn)
                     iPosEnd1);
 
                 sRestOfLine = removeSpaces(sRestOfLine);
-                printf("The rest: %s\n", sRestOfLine.c_str());
+                
+                //WE NEED THE TREE HERE!!!!!!!!!
+
                 //Clean up and add the row to the table
                 //e.addRow(sTableNameOut, createRowVector(sRow));
 
@@ -475,6 +488,7 @@ bool Parser::findDeleteFrom(string sLineIn)
 
             sRestOfLine = removeSpaces(sRestOfLine);
 
+            //WE NEED THE TREE HERE!!!!!!!
 
             return true;
         }
@@ -517,6 +531,8 @@ bool Parser::findUpdate(string sLineIn)
                 string sCondition = sLineIn.substr(iPosStart+UPDATE_SIZE,
                 iPosEnd-UPDATE_SIZE-SET_SIZE-WHERE_SIZE);
                 sCondition = removeSpaces(sCondition);
+
+                //WE NEED THE TREE HERE!!!!!
 
                 return true;
             }
@@ -564,7 +580,7 @@ bool Parser::findWrite(string sLineIn)
         sTableName = cleanSpaces(sTableName);
         
         //call the function to display table
-        e.writeTable(sTableName);
+        writeToFile(sTableName);
 
         return true;
     }
@@ -588,7 +604,7 @@ bool Parser::findOpen(string sLineIn)
         sTableName = cleanSpaces(sTableName);
         
         //call the function to display table
-        e.openTable(sTableName);        
+        readFromFile(sTableName + ".db");        
 
         return true;
     }
@@ -611,8 +627,7 @@ bool Parser::findClose(string sLineIn)
         string sTableName = sLineIn.substr(iPosStart+WRITE_CLOSE_SIZE);
         sTableName = cleanSpaces(sTableName);
         
-        //call the function to display table
-        e.closeTable(sTableName);             
+        //WHAT DO I DO HERE?!?!?!?!           
 
         return true;
     }
@@ -631,8 +646,8 @@ bool Parser::findExit(string sLineIn)
 
     if (iPosStart!=std::string::npos)                                       
     {
-        //WE HAVE TO EXIT SOMETHING HERE?
-        printf("Exiting..\n");
+        //WHAT DO I DO HERE!?!?!?!
+
         return true;
     }
     else
@@ -688,40 +703,18 @@ bool Parser::findArrow(string sLineIn)
 
         string sRestOfLine = sLineIn.substr(iPosStart+DOUBLE_OP_SIZE);
         sRestOfLine = removeSpaces(sRestOfLine);
+        
         op(sTableNameOut,sRestOfLine);
+        projection(sRestOfLine, sTableNameOut);
+        rename(sRestOfLine, sTableNameOut);
         
-        if (sRestOfLine.substr(0, 7) == "project") {
-          projection(sRestOfLine, sTableNameOut);
-        }
+        //WE NEED THE TREE HERE!!!!!!!
 
-        if (sRestOfLine.substr(0, 6) == "rename") {
-          rename(sRestOfLine, sTableNameOut);
-        }
-        
         return true;
     }
     else
     {
         return false;
-    }
-}
-
-/*******************************************************************************
-Function that finds the <- and returns the string of everything after it.
-*******************************************************************************/ 
-string Parser::getAfterArrow(string sLineIn)
-{
-    size_t iPosStart = sLineIn.find("<-"); 
-    if (iPosStart!=std::string::npos)                                       
-    {
-        string sAfterArrow = sLineIn.substr(iPosStart + 2);
-        sAfterArrow = removeSpaces(sAfterArrow);
-        printf("THE PARAMETERS ARE %s\n", sAfterArrow.c_str());
-        return sAfterArrow;
-    }
-    else
-    {
-        return sError;
     }
 }
 
@@ -761,11 +754,66 @@ void Parser::op(string sNewTableName, string sRestOfLine)
 
         string sLast = sRestOfLine.substr(iPosMul+1);
         sLast = removeSpaces(sLast);
-        e.displayTable("shapes");
-        e.displayTable("colors");
         e.crossProduct(sFirst,sLast,sNewTableName);
     }
 }
+
+/*******************************************************************************
+Function that does the projection
+*******************************************************************************/
+void Parser::projection(string sRestOfLine, string sTableNameOut)
+{
+    size_t iPos = sRestOfLine.find("project"); 
+
+    if (iPos!=std::string::npos)
+    {
+        size_t iParenth1 = sRestOfLine.find("(");
+        size_t iParenth2 = sRestOfLine.find(")",iParenth1+1);
+        string sColNames = sRestOfLine.substr(iParenth1, iParenth2-iParenth1);
+        string sTableNameIn = cleanSpaces(sRestOfLine.substr(iParenth2+1));
+        vector<string> vColVector = createVector(sColNames);
+        e.projection(sTableNameIn, sTableNameOut, vColVector);
+    }
+}
+
+/*******************************************************************************
+Function that does the rename
+*******************************************************************************/
+void Parser::rename(string sRestOfLine, string sTableNameOut)
+{
+    size_t iPos = sRestOfLine.find("rename"); 
+
+    if (iPos!=std::string::npos)
+    {
+        size_t iParenth1 = sRestOfLine.find("(");
+        size_t iParenth2 = sRestOfLine.find(")",iParenth1+1);
+        string sColNames = sRestOfLine.substr(iParenth1, iParenth2-iParenth1);
+        string sTableNameIn = cleanSpaces(sRestOfLine.substr(iParenth2+1));
+        vector<string> vColVector = createVector(sColNames);
+        e.reNaming(sTableNameIn, sTableNameOut, vColVector);
+    }
+}
+
+/*******************************************************************************
+Function that finds the <- and returns the string of everything after it.
+*******************************************************************************/ 
+/*
+string Parser::getAfterArrow(string sLineIn)
+{
+    size_t iPosStart = sLineIn.find("<-"); 
+    if (iPosStart!=std::string::npos)                                       
+    {
+        string sAfterArrow = sLineIn.substr(iPosStart + 2);
+        sAfterArrow = removeSpaces(sAfterArrow);
+        printf("THE PARAMETERS ARE %s\n", sAfterArrow.c_str());
+        return sAfterArrow;
+    }
+    else
+    {
+        return sError;
+    }
+}
+*/
 /*******************************************************************************
 Function that inserts everything after <- into a tree.
 *******************************************************************************/ 
@@ -815,7 +863,7 @@ Function that inserts everything after <- into a tree.
 	
 
 }*/
-
+/*
 vector<string> Parser::makeTokens(string sLineIn)
 {
 	vector<string> someTokens;
@@ -853,11 +901,11 @@ vector<string> Parser::makeTokens(string sLineIn)
 	}
 	return someTokens;
 }
-
+*/
 /*******************************************************************************
 Function that traverses the current tree and prints out values
 *******************************************************************************/
-
+/*
 void Parser::traversal(treeNode *start)
 {
 	if( start != NULL ){
@@ -867,29 +915,7 @@ void Parser::traversal(treeNode *start)
 	}
 
 }
-
-/*******************************************************************************
-Function that does the projection
-*******************************************************************************/
-void Parser::projection(string sRestOfLine, string sTableNameOut)
-{
-  size_t iParenth1 = sRestOfLine.find("(");
-  size_t iParenth2 = sRestOfLine.find(")",iParenth1+1);
-  string sColNames = sRestOfLine.substr(iParenth1, iParenth2-iParenth1);
-  string sTableNameIn = cleanSpaces(sRestOfLine.substr(iParenth2+1));
-  vector<string> vColVector = createVector(sColNames);
-  e.projection(sTableNameIn, sTableNameOut, vColVector);
-}
-
-void Parser::rename(string sRestOfLine, string sTableNameOut)
-{
-    size_t iParenth1 = sRestOfLine.find("(");
-    size_t iParenth2 = sRestOfLine.find(")",iParenth1+1);
-    string sColNames = sRestOfLine.substr(iParenth1, iParenth2-iParenth1);
-    string sTableNameIn = cleanSpaces(sRestOfLine.substr(iParenth2+1));
-    vector<string> vColVector = createVector(sColNames);
-    e.reNaming(sTableNameIn, sTableNameOut, vColVector);
-}
+*/
 
 
 
