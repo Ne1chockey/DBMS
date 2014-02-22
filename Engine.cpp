@@ -142,6 +142,8 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
   //Create a new table to send back 
   Table tNewTable(sTableNameOut);
   vector < string > vColumnValues;
+  int iColumnIndex = -1;
+  string sColumnType;
 
   for (int i = 0; i < vTableList.size(); ++i)
   {
@@ -157,19 +159,19 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
 
       for (int a = 0; a < vNames.size(); ++a)
       {
-        if (a == get <0> (vNames[a]))
+        if (a == get < 0 > (vNames[a]))
         {
-          printf("| ADDING COLUMN NAME = %s\n", (get <1>(vNames[a])).c_str());
           //Add column to new table
           tNewTable.addColumn(vNames[a]);
+          if (get < 1 > (vNames[a]) == sColumn)
+          {
+            iColumnIndex = a;
+            sColumnType = get < 3 > (vNames[a]);
+          }
         }
       }
 
       //See if the column exists in the table
-      tuple<int, string, bool, string> tCurrentColumn =
-          tCurrentTable.getColumnIndex(sColumn);
-      int iColumnIndex = get < 0 > (tCurrentColumn);
-
       if (iColumnIndex == -1)
       {
         printf("| The column does not exist.\n");
@@ -178,9 +180,6 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
       {
         //get the values for the column
         vColumnValues = tCurrentTable.getColumnValues(iColumnIndex);
-
-        //get the type of the column
-        string sColumnType = get < 3 > (tCurrentColumn);
 
         for (int x = 0; x < vColumnValues.size(); ++x)
         {
@@ -217,8 +216,23 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
           {
             if (sColumnType == "string")
             {
-              //Execute if the attribute satisfies the condition
-              if (sValueToBeTested >= sAttribute)
+              //Execute if the attribute satisfies the condition and is a date
+              if (sColumn == "Date")
+              {
+                string sMonth1 = sValueToBeTested.substr(0,2);
+                string sDay1 = sValueToBeTested.substr(3,2);
+                string sYear1 = sValueToBeTested.substr(5,4);
+                string sMonth2 = sAttribute.substr(0,2);
+                string sDay2 = sAttribute.substr(3,2);
+                string sYear2 = sAttribute.substr(5,4);
+
+                if (sMonth1 >= sMonth2 || sDay1 >= sDay2 || sYear1 >= sYear2)
+                {
+                  tNewTable.addRow(tCurrentTable.getRow(x));
+                }
+              }
+              //Execute if not a date
+              else if (sValueToBeTested >= sAttribute)
               {
                 //push back the row into the new table
                 tNewTable.addRow(tCurrentTable.getRow(x));
@@ -242,9 +256,33 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
           {
             if (sColumnType == "string")
             {
-              //Execute if the attribute satisfies the condition
-              if (sValueToBeTested <= sAttribute)
+              //Execute if the attribute satisfies the condition and is a date
+              if (sColumn == "Date")
               {
+                int iPosStart = sValueToBeTested.find("/");
+                int iPosEnd = sValueToBeTested.find("/",iPosStart+1);
+
+                string sMonth1 = sValueToBeTested.substr(0,iPosStart);
+                string sDay1 = sValueToBeTested.substr(iPosStart+1,iPosEnd-iPosStart-1);
+                string sYear1 = sValueToBeTested.substr(iPosEnd+1,4);
+
+                iPosStart = sAttribute.find("/");
+                iPosEnd = sAttribute.find("/",iPosStart+1);
+
+                string sMonth2 = sAttribute.substr(0,iPosStart);
+                string sDay2 = sAttribute.substr(iPosStart+1,iPosEnd-iPosStart-1);
+                string sYear2 = sAttribute.substr(iPosEnd+1,4);
+
+                printf("%s <= %s, %s <= %s, %s <= %s\n", sMonth1.c_str(), sMonth2.c_str(), sDay1.c_str(), sDay2.c_str(), sYear1.c_str(), sYear2.c_str());
+                if (sMonth1 <= sMonth2 || sDay1 <= sDay2 || sYear1 <= sYear2)
+                {
+                  tNewTable.addRow(tCurrentTable.getRow(x));
+                }
+              }
+              //Execute if the attribute satisfies the condition
+              else if (sValueToBeTested <= sAttribute)
+              {
+                printf("%s <= %s\n", sValueToBeTested.c_str(), sAttribute.c_str());
                 //push back the row into the new table
                 tNewTable.addRow(tCurrentTable.getRow(x));
               }

@@ -205,8 +205,9 @@ void App::showAppts(string sStartDate, string sEndDate)
   string sNewName = "Appt Range (" + sStartDate + " - " + sEndDate + ")";
 
   //do selection of the appointments table and show it
-  e.selection("Appointments",sTempName, "<", "Date", sStartDate);
-  e.selection(sTempName, sNewName, ">", "Date", sEndDate);
+  e.selection("Appointments",sTempName, ">=", "Date", sStartDate);
+  e.displayTable(sTempName);
+  e.selection(sTempName, sNewName, "<=", "Date", sEndDate);
   e.displayTable(sNewName);
   iCountTableVersions++;
 }
