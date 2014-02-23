@@ -95,7 +95,7 @@ public:
     {
       if (vRows[i] == vRowIn)
       {
-        vRows.erase(vRows.begin()+i);
+        vRows.erase(vRows.begin() + i);
         return;
       }
     }

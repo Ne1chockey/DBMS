@@ -1,22 +1,22 @@
 /*******************************************************************************
-    File: Engine.cpp
+ File: Engine.cpp
 
-    Authors: Gustavo Pedroso UIN: 423002834
-             Levi Clark      UIN: 520007880
-             Terry Chen      UIN: 121007055
-             Daniel He       UIN: 620006827
+ Authors: Gustavo Pedroso UIN: 423002834
+ Levi Clark      UIN: 520007880
+ Terry Chen      UIN: 121007055
+ Daniel He       UIN: 620006827
 
-            Department of Computer Science
-            Texas A&M University
-    Date  : 2014-02-18
+ Department of Computer Science
+ Texas A&M University
+ Date  : 2014-02-18
 
-    Formatting: * 80 pt width is used for code, for the most part
-                * Hungarian naming convention is used for variables
-                * Comments are applied for explanations
-                * Spacing and brackets are applied for readability
+ Formatting: * 80 pt width is used for code, for the most part
+ * Hungarian naming convention is used for variables
+ * Comments are applied for explanations
+ * Spacing and brackets are applied for readability
 
-	This file contains the implementation for the engine
-*******************************************************************************/
+ This file contains the implementation for the engine
+ *******************************************************************************/
 
 #include <string>
 #include <vector>
@@ -219,12 +219,12 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
               //Execute if the attribute satisfies the condition and is a date
               if (sColumn == "Date")
               {
-                string sMonth1 = sValueToBeTested.substr(0,2);
-                string sDay1 = sValueToBeTested.substr(3,2);
-                string sYear1 = sValueToBeTested.substr(5,4);
-                string sMonth2 = sAttribute.substr(0,2);
-                string sDay2 = sAttribute.substr(3,2);
-                string sYear2 = sAttribute.substr(5,4);
+                string sMonth1 = sValueToBeTested.substr(0, 2);
+                string sDay1 = sValueToBeTested.substr(3, 2);
+                string sYear1 = sValueToBeTested.substr(5, 4);
+                string sMonth2 = sAttribute.substr(0, 2);
+                string sDay2 = sAttribute.substr(3, 2);
+                string sYear2 = sAttribute.substr(5, 4);
 
                 if (sMonth1 >= sMonth2 || sDay1 >= sDay2 || sYear1 >= sYear2)
                 {
@@ -260,20 +260,24 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
               if (sColumn == "Date")
               {
                 int iPosStart = sValueToBeTested.find("/");
-                int iPosEnd = sValueToBeTested.find("/",iPosStart+1);
+                int iPosEnd = sValueToBeTested.find("/", iPosStart + 1);
 
-                string sMonth1 = sValueToBeTested.substr(0,iPosStart);
-                string sDay1 = sValueToBeTested.substr(iPosStart+1,iPosEnd-iPosStart-1);
-                string sYear1 = sValueToBeTested.substr(iPosEnd+1,4);
+                string sMonth1 = sValueToBeTested.substr(0, iPosStart);
+                string sDay1 = sValueToBeTested.substr(iPosStart + 1,
+                    iPosEnd - iPosStart - 1);
+                string sYear1 = sValueToBeTested.substr(iPosEnd + 1, 4);
 
                 iPosStart = sAttribute.find("/");
-                iPosEnd = sAttribute.find("/",iPosStart+1);
+                iPosEnd = sAttribute.find("/", iPosStart + 1);
 
-                string sMonth2 = sAttribute.substr(0,iPosStart);
-                string sDay2 = sAttribute.substr(iPosStart+1,iPosEnd-iPosStart-1);
-                string sYear2 = sAttribute.substr(iPosEnd+1,4);
+                string sMonth2 = sAttribute.substr(0, iPosStart);
+                string sDay2 = sAttribute.substr(iPosStart + 1,
+                    iPosEnd - iPosStart - 1);
+                string sYear2 = sAttribute.substr(iPosEnd + 1, 4);
 
-                printf("%s <= %s, %s <= %s, %s <= %s\n", sMonth1.c_str(), sMonth2.c_str(), sDay1.c_str(), sDay2.c_str(), sYear1.c_str(), sYear2.c_str());
+                printf("%s <= %s, %s <= %s, %s <= %s\n", sMonth1.c_str(),
+                    sMonth2.c_str(), sDay1.c_str(), sDay2.c_str(),
+                    sYear1.c_str(), sYear2.c_str());
                 if (sMonth1 <= sMonth2 || sDay1 <= sDay2 || sYear1 <= sYear2)
                 {
                   tNewTable.addRow(tCurrentTable.getRow(x));
@@ -282,7 +286,8 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
               //Execute if the attribute satisfies the condition
               else if (sValueToBeTested <= sAttribute)
               {
-                printf("%s <= %s\n", sValueToBeTested.c_str(), sAttribute.c_str());
+                printf("%s <= %s\n", sValueToBeTested.c_str(),
+                    sAttribute.c_str());
                 //push back the row into the new table
                 tNewTable.addRow(tCurrentTable.getRow(x));
               }
@@ -454,7 +459,8 @@ void Engine::update(vector<string> vColumnNames, vector<string> vNewVals,
 /*******************************************************************************
  Select of a subset of the attributes of a relation
  *******************************************************************************/
-void Engine::projection(string sTableNameIn, string sTableNameOut, vector<string> sColumnNamesIn)
+void Engine::projection(string sTableNameIn, string sTableNameOut,
+    vector<string> sColumnNamesIn)
 {
   //Create a new table to send back 
   Table tNewTable(sTableNameOut);
@@ -526,7 +532,8 @@ void Engine::projection(string sTableNameIn, string sTableNameOut, vector<string
 /*******************************************************************************
  rename the attributes in a relation
  *******************************************************************************/
-void Engine::reNaming(string sTableName, string sTableNameOut, vector<string> vNewNames)
+void Engine::reNaming(string sTableName, string sTableNameOut,
+    vector<string> vNewNames)
 {
   // Find the table in vTableList
   int iTableIndex = -1;
