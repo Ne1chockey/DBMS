@@ -193,6 +193,7 @@ bool Parser::writeToFile(string sFilename)
     outputFile << vValuesRead[i] << '\n';
   }
   outputFile.close();
+  return true;
 }
 
 /*******************************************************************************

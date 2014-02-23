@@ -42,7 +42,7 @@ class App
 private:
   //Declare private variables
   Engine e;
-  int iCountTableVersions = 0;
+  int iCountTableVersions;// = 0;
 
 public:
   //Declare class methods

@@ -151,9 +151,9 @@ namespace EngineUnitTest1
       vRow3.push_back(make_tuple(2,"3"));
       e.addRow(sTableName, vRow3);
 
-      /////////////////////////////////////////////
-      /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!!
-      /////////////////////////////////////////////
+      ////////////////////////////////////////////////////
+      /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
+      ////////////////////////////////////////////////////
 
       Assert::IsTrue(false);
 
@@ -162,9 +162,9 @@ namespace EngineUnitTest1
     // Let's see if we can delete rows
     TEST_METHOD(EngineTestDeleteRows)
     {
-      /////////////////////////////////////////////
-      /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!!
-      /////////////////////////////////////////////
+      ////////////////////////////////////////////////////
+      /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
+      ////////////////////////////////////////////////////
 
       Assert::IsTrue(false);
     }
@@ -172,9 +172,9 @@ namespace EngineUnitTest1
     // Test the relational algebra function Selection
     TEST_METHOD(EngineTestSelection)
     {
-      /////////////////////////////////////////////
-      /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!!
-      /////////////////////////////////////////////
+      ////////////////////////////////////////////////////
+      /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
+      ////////////////////////////////////////////////////
 
       Assert::IsTrue(false);
     }
@@ -182,9 +182,9 @@ namespace EngineUnitTest1
     // Test the relational algebra function Projection
     TEST_METHOD(EngineTestProjection)
     {
-      /////////////////////////////////////////////
-      /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!!
-      /////////////////////////////////////////////
+      ////////////////////////////////////////////////////
+      /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
+      ////////////////////////////////////////////////////
 
       Assert::IsTrue(false);
     }

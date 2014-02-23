@@ -33,6 +33,7 @@ App::App()
   //Declare variables for creating the necessary relations
   vector < tuple<string, string, bool> > vColumnNames;
   vector < string > vKeys;
+  iCountTableVersions = 0;
 
   //Create columns for the hairdresser relation
   vColumnNames.push_back(make_tuple("Name", "string", false));
