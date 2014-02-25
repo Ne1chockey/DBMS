@@ -25,53 +25,19 @@
 #include <iomanip>
 #include <sstream>
 #include "App.h"
-#include "Engine.h"
+#include "Parser.h"
 using namespace std;
 
 App::App()
 {
-  //Declare variables for creating the necessary relations
-  vector < tuple<string, string, bool> > vColumnNames;
-  vector < string > vKeys;
+  //set table versions to zero, needed for relation selections later
   iCountTableVersions = 0;
 
-  //Create columns for the hairdresser relation
-  vColumnNames.push_back(make_tuple("Name", "string", false));
-  vColumnNames.push_back(make_tuple("Phone Number", "string", false));
-  vColumnNames.push_back(make_tuple("Address", "string", false));
-  vKeys.push_back("Name");
-  vKeys.push_back("Phone Number");
+  p.parse("CREATE TABLE Hairdressers (Name VARCHAR(20), Phone Number VARCHAR(8), Address VARCHAR(20)) PRIMARY KEY (Name, Phone Number)");
 
-  //create the hairdresser relation
-  e.createTable("Hairdressers", vColumnNames, vKeys);
+  p.parse("CREATE TABLE Customers (Name VARCHAR(20), Phone Number VARCHAR(8), Address VARCHAR(20)) PRIMARY KEY (Name, Phone Number)");
 
-  //clear the vector for the next relation info
-  vColumnNames.clear();
-  vKeys.clear();
-
-  //Create columns for the hairdresser relation
-  vColumnNames.push_back(make_tuple("Name", "string", false));
-  vColumnNames.push_back(make_tuple("Phone Number", "string", false));
-  vColumnNames.push_back(make_tuple("Address", "string", false));
-  vKeys.push_back("Name");
-  vKeys.push_back("Phone Number");
-
-  //create the hairdresser relation
-  e.createTable("Customers", vColumnNames, vKeys);
-
-  //clear the vector for the next relation info
-  vColumnNames.clear();
-  vKeys.clear();
-
-  //Create columns for the hairdresser relation
-  vColumnNames.push_back(make_tuple("Customer ID", "integer", false));
-  vColumnNames.push_back(make_tuple("Hairdresser ID", "integer", false));
-  vColumnNames.push_back(make_tuple("Time", "string", false));
-  vColumnNames.push_back(make_tuple("Date", "string", false));
-  vKeys.push_back("Date");
-
-  //create the hairdresser relation
-  e.createTable("Appointments", vColumnNames, vKeys);
+  p.parse("CREATE TABLE Appointments (Customer ID INTEGER, Hairdresser ID INTEGER, Time VARCHAR(10), Date VARCHAR(10)) PRIMARY KEY (Time)");
 }
 
 /*******************************************************************************
@@ -108,29 +74,16 @@ void App::displayMenu()
  *******************************************************************************/
 void App::addHairDresser(string sName, string sPhonenumber, string sAddress)
 {
-  vector < tuple<int, string> > vRow;
-
-  vRow.push_back(make_tuple(0, sName));
-  vRow.push_back(make_tuple(1, sPhonenumber));
-  vRow.push_back(make_tuple(2, sAddress));
-
-  //Add row to the relation
-  e.addRow("Hairdressers", vRow);
+  p.parse("INSERT INTO Hairdressers VALUES FROM (" + sName + ", " + sPhonenumber
+    + ", " + sAddress + ")");
 }
 
 /*******************************************************************************
  Function to remove a hair dresser from the hair dresser relation
  *******************************************************************************/
-void App::removeHairDresser(string id, string sName, string sPhonenumber,
-    string sAddress)
+void App::removeHairDresser(string sName)
 {
-  vector < tuple<int, string> > vRow;
-
-  vRow.push_back(make_tuple(0, sName));
-  vRow.push_back(make_tuple(1, sPhonenumber));
-  vRow.push_back(make_tuple(2, sAddress));
-
-  e.deleteRow("Hairdressers", vRow);
+  p.parse("DELETE FROM Hairdressers WHERE (Name == " + sName + ")");
 }
 
 /*******************************************************************************
@@ -138,29 +91,16 @@ void App::removeHairDresser(string id, string sName, string sPhonenumber,
  *******************************************************************************/
 void App::addCustomer(string sName, string sPhonenumber, string sAddress)
 {
-  vector < tuple<int, string> > vRow;
-
-  vRow.push_back(make_tuple(0, sName));
-  vRow.push_back(make_tuple(1, sPhonenumber));
-  vRow.push_back(make_tuple(2, sAddress));
-
-  //Add row to the relation
-  e.addRow("Customers", vRow);
+  p.parse("INSERT INTO Customers VALUES FROM (" + sName + ", " + sPhonenumber
+    + ", " + sAddress + ")");
 }
 
 /*******************************************************************************
  Function to remove a customer to the hair dresser relation
  *******************************************************************************/
-void App::removeCustomer(string id, string sName, string sPhonenumber,
-    string sAddress)
+void App::removeCustomer(string sName)
 {
-  vector < tuple<int, string> > vRow;
-
-  vRow.push_back(make_tuple(0, sName));
-  vRow.push_back(make_tuple(1, sPhonenumber));
-  vRow.push_back(make_tuple(2, sAddress));
-
-  e.deleteRow("Customers", vRow);
+  p.parse("DELETE FROM Customers WHERE (Name == " + sName + ")");
 }
 
 /*******************************************************************************
@@ -169,30 +109,16 @@ void App::removeCustomer(string id, string sName, string sPhonenumber,
 void App::addAppt(string sCustomer_id, string sHairdresser_id, string sTime,
     string sDate)
 {
-  vector < tuple<int, string> > vRow;
-
-  vRow.push_back(make_tuple(0, sCustomer_id));
-  vRow.push_back(make_tuple(1, sHairdresser_id));
-  vRow.push_back(make_tuple(2, sTime));
-  vRow.push_back(make_tuple(3, sDate));
-
-  e.addRow("Appointments", vRow);
+  p.parse("INSERT INTO Appointments VALUES FROM (" + sCustomer_id + ", " + 
+    sHairdresser_id + ", " + sTime + ", " + sDate + ")");
 }
 
 /*******************************************************************************
  Function to remove a appointment to the appointment relation
  *******************************************************************************/
-void App::removeAppt(string id, string sCustomer_id, string sHairdresser_id,
-    string sTime, string sDate)
+void App::removeAppt(string sTime)
 {
-  vector < tuple<int, string> > vRow;
-
-  vRow.push_back(make_tuple(0, sCustomer_id));
-  vRow.push_back(make_tuple(1, sHairdresser_id));
-  vRow.push_back(make_tuple(2, sTime));
-  vRow.push_back(make_tuple(3, sDate));
-
-  e.deleteRow("Appointments", vRow);
+  p.parse("DELETE FROM Appointments WHERE (Time == " + sTime + ")");
 }
 
 /*******************************************************************************
@@ -200,16 +126,15 @@ void App::removeAppt(string id, string sCustomer_id, string sHairdresser_id,
  *******************************************************************************/
 void App::showAppts(string sStartDate, string sEndDate)
 {
-  string sTempName = "temp ";
+  string sTempName = "temp";
   sTempName += static_cast<ostringstream*>(&(ostringstream()
       << iCountTableVersions))->str();
-  string sNewName = "Appt Range (" + sStartDate + " - " + sEndDate + ")";
+  string sNewName = sTempName + "1";
 
   //do selection of the appointments table and show it
-  e.selection("Appointments", sTempName, ">=", "Date", sStartDate);
-  e.displayTable(sTempName);
-  e.selection(sTempName, sNewName, "<=", "Date", sEndDate);
-  e.displayTable(sNewName);
+  p.parse(sTempName + " <- select (Date >= " + sStartDate + ") Appointments");
+  p.parse(sNewName + " <- select (Date <= " + sEndDate + ") " + sTempName);
+  p.parse("SHOW " + sNewName);
   iCountTableVersions++;
 }
 
@@ -219,9 +144,18 @@ void App::showAppts(string sStartDate, string sEndDate)
 void App::showApptsByCustomer(string sCustomer_id, string sStartDate,
     string sEndDate)
 {
-  //do selection of the customer table and show it
-  //e.selection();
-  //e.displayTable();
+  //do selection of the appointment table for a customer and show it
+  string sTempName = "temp";
+  sTempName += static_cast<ostringstream*>(&(ostringstream()
+      << iCountTableVersions))->str();
+  string sNewName = sTempName + "1";
+  string sFinalName = sNewName + "2";
+
+  p.parse(sTempName + " <- select (Date >= " + sStartDate + ") Appointments");
+  p.parse(sNewName + " <- select (Date <= " + sEndDate + ") " + sTempName);
+  p.parse(sFinalName + " <- select (Date == " + sCustomer_id + ") " + sNewName);
+  p.parse("SHOW " + sFinalName);
+  iCountTableVersions++;
 }
 
 /*******************************************************************************
@@ -230,7 +164,16 @@ void App::showApptsByCustomer(string sCustomer_id, string sStartDate,
 void App::showApptsByHairdresser(string sHairdresser_id, string sStartDate,
     string sEndDate)
 {
-  //do selection of the customer table and show it
-  //e.selection();
-  //e.displayTable();
+  //do selection of the appointment table for a hair dresser and show it
+  string sTempName = "temp";
+  sTempName += static_cast<ostringstream*>(&(ostringstream()
+      << iCountTableVersions))->str();
+  string sNewName = sTempName + "1";
+  string sFinalName = sNewName + "2";
+
+  p.parse(sTempName + " <- select (Date >= " + sStartDate + ") Appointments");
+  p.parse(sNewName + " <- select (Date <= " + sEndDate + ") " + sTempName);
+  p.parse(sFinalName + " <- select (Date == " + sHairdresser_id + ") " + sNewName);
+  p.parse("SHOW " + sFinalName);
+  iCountTableVersions++;
 }

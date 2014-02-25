@@ -119,7 +119,7 @@ void Parser::parse(string sLineIn)
   string sTemp;
 
   //Output the line we are working with so we know we have the parsing correct
-  printf("%s\n", sLineIn.c_str());
+  printf("\n%s\n", sLineIn.c_str());
 
   if (sLineIn[0] == '\n')
   {
@@ -476,7 +476,7 @@ bool Parser::findDeleteFrom(string sLineIn)
     {
       //get the table name
       string sTableName = sLineIn.substr(iPosStart + DELETE_FROM_SIZE,
-          iPosEnd - DELETE_FROM_SIZE - 2);
+          iPosEnd - DELETE_FROM_SIZE - 1);
 
       sTableName = cleanSpaces(sTableName);
 
@@ -486,6 +486,30 @@ bool Parser::findDeleteFrom(string sLineIn)
           iPosEnd - WHERE_SIZE);
 
       sRestOfLine = removeSpaces(sRestOfLine);
+
+      vector<string> vCheck = makeTokens(sRestOfLine);
+      if (vCheck[2] == "==")
+      {
+        sRestOfLine = vCheck[0] + vCheck[1] + "!=" + vCheck[3] + vCheck[4];
+      }
+      else if (vCheck[2] == "<=")
+      {
+        sRestOfLine = vCheck[0] + vCheck[1] + ">" + vCheck[3] + vCheck[4];
+      }
+      else if (vCheck[2] == ">=")
+      {
+        sRestOfLine = vCheck[0] + vCheck[1] + "<" + vCheck[3] + vCheck[4];
+      }
+      else if (vCheck[2] == ">")
+      {
+        sRestOfLine = vCheck[0] + vCheck[1] + "<=" + vCheck[3] + vCheck[4];
+      }
+      else if (vCheck[2] == "<")
+      {
+        sRestOfLine = vCheck[0] + vCheck[1] + ">=" + vCheck[3] + vCheck[4];
+      }
+
+      select(sTableName,"select" + sRestOfLine + sTableName);
 
       //WE NEED THE TREE HERE!!!!!!!
 
@@ -626,7 +650,7 @@ bool Parser::findClose(string sLineIn)
     string sTableName = sLineIn.substr(iPosStart + WRITE_CLOSE_SIZE);
     sTableName = cleanSpaces(sTableName);
 
-    //WHAT DO I DO HERE?!?!?!?!
+    vValuesRead.clear();
 
     return true;
   }
@@ -645,7 +669,7 @@ bool Parser::findExit(string sLineIn)
 
   if (iPosStart != std::string::npos)
   {
-    //WHAT DO I DO HERE!?!?!?!
+    printf("Exiting.. \n");
 
     return true;
   }
@@ -704,6 +728,7 @@ bool Parser::findArrow(string sLineIn)
     sRestOfLine = removeSpaces(sRestOfLine);
 
     op(sTableNameOut, sRestOfLine);
+    select(sTableNameOut, sRestOfLine);
     projection(sRestOfLine, sTableNameOut);
     rename(sRestOfLine, sTableNameOut);
 
@@ -794,6 +819,39 @@ void Parser::rename(string sRestOfLine, string sTableNameOut)
 }
 
 /*******************************************************************************
+ Function that does the select
+ *******************************************************************************/
+void Parser::select(string sNewTableName, string sRestOfLine)
+{
+  printf("THE REST OF THE LINE IS %s\n", sRestOfLine.c_str());
+  size_t iPos = sRestOfLine.find("select");
+
+  if (iPos != std::string::npos)
+  {
+    size_t iParenth1 = sRestOfLine.find("(");
+    size_t iParenth2 = sRestOfLine.find(")", iParenth1 + 1);
+    string sValues = removeSpaces(sRestOfLine.substr(iParenth1+1, iParenth2 - iParenth1));
+    string sTableNameIn = cleanSpaces(sRestOfLine.substr(iParenth2 + 1));
+    vector<string> vValues = makeTokens(sValues);
+
+    if (sTableNameIn == sNewTableName)
+    {
+      e.selection(sNewTableName, sTableNameIn + " 2", vValues[1], vValues[0], vValues[2]);
+
+      //delete old table
+      e.dropTable(sTableNameIn);
+
+      //rename new table to old name
+      e.renameTable(sTableNameIn + " 2", sNewTableName);
+    }  
+    else
+    {
+      e.selection(sNewTableName, sTableNameIn, vValues[1], vValues[0], vValues[2]);
+    }
+  }
+}
+
+/*******************************************************************************
  Function that finds the <- and returns the string of everything after it.
  *******************************************************************************/
 /*
@@ -862,45 +920,49 @@ void Parser::rename(string sRestOfLine, string sTableNameOut)
 
 
  }*/
-/*
+
  vector<string> Parser::makeTokens(string sLineIn)
  {
- vector<string> someTokens;
- string sTemp = "";
- string sSymTemp = "";
- for(int i = 0; i < sLineIn.size(); i++)
- {
- if(isalnum(sLineIn[i]) || sLineIn[i] == '_')
- {
- if(sSymTemp != "")
- {
- someTokens.push_back(sSymTemp);
- sSymTemp = "";
+   vector<string> someTokens;
+   string sTemp = "";
+   string sSymTemp = "";
+   for(int i = 0; i < sLineIn.size(); i++)
+   {
+   if(isalnum(sLineIn[i]) || sLineIn[i] == '_')
+   {
+   if(sSymTemp != "")
+   {
+   someTokens.push_back(sSymTemp);
+   sSymTemp = "";
+   }
+   sTemp = sTemp + sLineIn[i];
+   }
+   if(!isalnum(sLineIn[i]) && sLineIn[i] != '_')
+   {
+   if(sTemp != "")
+   {
+   someTokens.push_back(sTemp);
+   sTemp = "";
+   }
+   if(sLineIn[i] == ')' || sLineIn[i] == '(')
+   {
+    if (sSymTemp != "")
+    {
+      someTokens.push_back(sSymTemp);
+    }
+   sSymTemp = sLineIn[i];
+   someTokens.push_back(sSymTemp);
+   sSymTemp = "";
+   }
+   else
+   {
+   sSymTemp = sSymTemp + sLineIn[i];
+   }
+   }
+   }
+   return someTokens;
  }
- sTemp = sTemp + sLineIn[i];
- }
- if(!isalnum(sLineIn[i]) && sLineIn[i] != '_')
- {
- if(sTemp != "")
- {
- someTokens.push_back(sTemp);
- sTemp = "";
- }
- if(sLineIn[i] == ')' || sLineIn[i] == '(')
- {
- sSymTemp = sLineIn[i];
- someTokens.push_back(sSymTemp);
- sSymTemp = "";
- }
- else
- {
- sSymTemp = sSymTemp + sLineIn[i];
- }
- }
- }
- return someTokens;
- }
- */
+ 
 /*******************************************************************************
  Function that traverses the current tree and prints out values
  *******************************************************************************/

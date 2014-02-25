@@ -69,6 +69,20 @@ void Engine::dropTable(string sTableNameIn)
 }
 
 /*******************************************************************************
+ Remove a table from the list
+ *******************************************************************************/
+void Engine::renameTable(string sOldTableName, string sNewTableName)
+{
+  for (int i = 0; i < vTableList.size(); ++i)
+  {
+    if (vTableList[i].getTableName() == sOldTableName)
+    {
+      vTableList[i].rename(sNewTableName);
+    }
+  }
+}
+
+/*******************************************************************************
  compare two tables
  *******************************************************************************/
 bool Engine::compareTables(string sT1Name, string sT2Name)
@@ -202,6 +216,31 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
             {
               //Execute if the attribute satisfies the condition
               if (iValueToBeTested == iAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else
+            {
+              printf("| Type of column invalid\n");
+            }
+          }
+          else if (sOperator == "!=")
+          {
+            if (sColumnType == "string")
+            {
+              //Execute if the attribute satisfies the condition
+              if (sValueToBeTested != sAttribute)
+              {
+                //push back the row into the new table
+                tNewTable.addRow(tCurrentTable.getRow(x));
+              }
+            }
+            else if (sColumnType == "int")
+            {
+              //Execute if the attribute satisfies the condition
+              if (iValueToBeTested != iAttribute)
               {
                 //push back the row into the new table
                 tNewTable.addRow(tCurrentTable.getRow(x));

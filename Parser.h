@@ -83,6 +83,7 @@ public:
   void projection(string sRestOfLine, string sTableNameOut);
   void rename(string sRestOfLine, string sTableNameOut);
   void op(string sNewTableName, string sRestOfLine);
+  void select(string sNewTableName, string sRestOfLine);
 
   Engine getEngine()
   {

@@ -1,3 +1,11 @@
+make all: main commandline
+
+commandline: commandline.o Engine.o Parser.o App.o Table.o
+	g++ -std=c++11 -o commandline commandline.o Engine.o Parser.o App.o Table.o
+
+commandline.o: commandline.cpp Engine.h Parser.h App.h Table.h
+	g++ -std=c++11 -c commandline.cpp
+
 main: main.o Engine.o Parser.o App.o Table.o
 	g++ -std=c++11 -o main main.o Engine.o Parser.o App.o Table.o
 

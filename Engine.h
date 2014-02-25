@@ -48,6 +48,7 @@ public:
       std::vector<std::string> vKeys);
   void dropTable(string sTableNameIn);
   bool compareTables(string sT1Name, string sT2Name);
+  void renameTable(string sOldTableName, string sNewTableName);
 
   /*****************************************************************************
    Print out the table with the given name

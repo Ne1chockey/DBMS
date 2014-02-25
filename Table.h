@@ -79,6 +79,10 @@ public:
     printf("| Primary Key was not removed\n");
   }
 
+  void rename(std::string sNewName)
+  {
+    sTableName = sNewName;
+  }
   void addColumn(std::tuple<int, std::string, bool, std::string> s)
   {
     vColumnName.push_back(s);

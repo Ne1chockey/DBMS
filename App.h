@@ -26,7 +26,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
-#include "Engine.h"
+#include "Parser.h"
 using namespace std;
 
 /*******************************************************************************
@@ -41,7 +41,7 @@ class App
 {
 private:
   //Declare private variables
-  Engine e;
+  Parser p;
   int iCountTableVersions;// = 0;
 
 public:
@@ -51,25 +51,22 @@ public:
   void displayMenu();
   void showHairDressers()
   {
-    e.displayTable("Hairdressers");
+    p.parse("SHOW Hairdressers");
   }
 
   void addHairDresser(string sName, string sPhonenumber, string sAddress);
-  void removeHairDresser(string id, string sName, string sPhonenumber,
-      string sAddress);
+  void removeHairDresser(string sName);
 
   void showCustomers()
   {
-    e.displayTable("Customers");
+    p.parse("SHOW Customers");
   }
   void addCustomer(string sName, string sPhonenumber, string sAddress);
-  void removeCustomer(string id, string sName, string sPhonenumber,
-      string sAddress);
+  void removeCustomer(string sName);
 
   void addAppt(string sCustomer_id, string sHairdresser_id, string sTime,
       string sDate);
-  void removeAppt(string id, string sCustomer_id, string sHairdresser_id,
-      string sTime, string sDate);
+  void removeAppt(string sTime);
   void showAppts(string sStartDate, string sEndDate);
   void showApptsByCustomer(string sCustomer_id, string sStartDate,
       string sEndDate);
@@ -78,7 +75,7 @@ public:
 
   void showAppointments()
   {
-    e.displayTable("Appointments");
+    p.parse("SHOW Appointments");
   }
 };
 
