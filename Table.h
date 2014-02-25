@@ -42,6 +42,7 @@ public:
   }
   ;
 
+  //Constructor that takes in a name for the table
   Table(std::string sTableNameIn)
   {
     sTableName = sTableNameIn;
@@ -55,8 +56,10 @@ public:
   {
     for (int i = 0; i < vColumnName.size(); ++i)
     {
+      //Execute if the column name is equal to the parameter name
       if (std::get < 1 > (vColumnName[i]) == sKeyIn)
       {
+        //set the boolean value in the column tuple to true, to show it is key
         std::get < 2 > (vColumnName[i]) = true;
         return;
       }
@@ -69,6 +72,7 @@ public:
   {
     for (int i = 0; i < vColumnName.size(); ++i)
     {
+      //find the column that is the key and set the bool to false, remove key
       if (std::get < 1 > (vColumnName[i]) == sKeyIn)
       {
         std::get < 2 > (vColumnName[i]) = false;
@@ -79,20 +83,25 @@ public:
     printf("| Primary Key was not removed\n");
   }
 
+  //rename the class table to parameter name
   void rename(std::string sNewName)
   {
     sTableName = sNewName;
   }
+
+  //add a column to the class vector
   void addColumn(std::tuple<int, std::string, bool, std::string> s)
   {
     vColumnName.push_back(s);
   }
 
+  //add a row to the row vector
   void addRow(std::vector<std::tuple<int, std::string> > v)
   {
     vRows.push_back(v);
   }
 
+  //find the row and delete it from the vector
   void deleteRow(std::vector<std::tuple<int, std::string> > vRowIn)
   {
     for (int i = 0; i < vRows.size(); ++i)

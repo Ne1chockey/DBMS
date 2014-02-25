@@ -6,5 +6,7 @@ The makeFile and rest of the files are included
 This program is meant to run in linux server
 
 Commands to run program:
-make
+make all
 ./main
+or
+./commandline

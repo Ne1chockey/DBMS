@@ -876,7 +876,8 @@ void Parser::select(string sNewTableName, string sRestOfLine)
   {
     size_t iParenth1 = sRestOfLine.find("(");
     size_t iParenth2 = sRestOfLine.find(")", iParenth1 + 1);
-    string sValues = removeSpaces(sRestOfLine.substr(iParenth1+1, iParenth2 - iParenth1));
+    string sValues = removeSpaces(sRestOfLine.substr(iParenth1+1, 
+      iParenth2 - iParenth1));
     string sTableNameIn = cleanSpaces(sRestOfLine.substr(iParenth2 + 1));
     vector<string> vValues = makeTokens(sValues);
 
@@ -889,7 +890,8 @@ void Parser::select(string sNewTableName, string sRestOfLine)
       }
       else
       {
-        e.selection(sNewTableName, sTableNameIn + " 2", vValues[1], vValues[0], vValues[2]);
+        e.selection(sNewTableName, sTableNameIn + " 2", vValues[1], vValues[0], 
+          vValues[2]);
       }
       
 
@@ -908,7 +910,8 @@ void Parser::select(string sNewTableName, string sRestOfLine)
       }
       else
       {
-        e.selection(sTableNameIn, sNewTableName, vValues[1], vValues[0], vValues[2]);
+        e.selection(sTableNameIn, sNewTableName, vValues[1], vValues[0], 
+          vValues[2]);
       }
       
     }
@@ -938,8 +941,10 @@ void Parser::select(string sNewTableName, string sRestOfLine)
 /*******************************************************************************
  Function that inserts everything after <- into a tree.
  *******************************************************************************/
-//Update function may need another function to parse because <- operator is not present
-//and there can be cases of multiple conditions. May modify this function later for that case
+//Update function may need another function to parse because <- operator is not 
+ //present
+//and there can be cases of multiple conditions. May modify this function later 
+ //for that case
 //if needs be.
 /*Parser::treeNode * Parser::createTree(string sLineIn)
  {
@@ -1080,7 +1085,8 @@ void comparison(vector<string> & vTokens, int & iTokenIndex, Table & relation)
 
   cout<<endl<<operand0 << " " << op << " " << operand1 << endl;
 
-  if(isColumnName(operand0, relation) && !isColumnName(operand1, relation))//attribute name and literal
+  //attribute name and literal
+  if(isColumnName(operand0, relation) && !isColumnName(operand1, relation))
   {
 
     /*e.selection(tableName, tableName + "2", op,  operand0, operand1)
