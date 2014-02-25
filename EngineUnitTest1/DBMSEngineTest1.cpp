@@ -138,25 +138,25 @@ public:
     Assert::IsTrue (good);
   }
 
-  // Let's see if we can update rows
-  TEST_METHOD(EngineTestUpdateRows)
-  {
-    // We created a table above.
-    // Let's add one row and update it
+  //// Let's see if we can update rows
+  //TEST_METHOD(EngineTestUpdateRows)
+  //{
+  //  // We created a table above.
+  //  // Let's add one row and update it
 
-    // Create one row to insert
-    vRow3.push_back(make_tuple(0,"Snoopy"));
-    vRow3.push_back(make_tuple(1,"dog"));
-    vRow3.push_back(make_tuple(2,"3"));
-    e.addRow(sTableName, vRow3);
+  //  // Create one row to insert
+  //  vRow3.push_back(make_tuple(0,"Snoopy"));
+  //  vRow3.push_back(make_tuple(1,"dog"));
+  //  vRow3.push_back(make_tuple(2,"3"));
+  //  e.addRow(sTableName, vRow3);
 
-    ////////////////////////////////////////////////////
-    /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
-    ////////////////////////////////////////////////////
+  //  ////////////////////////////////////////////////////
+  //  /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
+  //  ////////////////////////////////////////////////////
 
-    Assert::IsTrue(false);
+  //  Assert::IsTrue(false);
 
-  }
+  //}
 
   // Let's see if we can delete rows
   TEST_METHOD(EngineTestDeleteRows)
@@ -165,27 +165,88 @@ public:
     /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
     ////////////////////////////////////////////////////
 
-    Assert::IsTrue(false);
+    // Insert a row into our table.
+    vRow.push_back(make_tuple(0,"Joe"));
+    e.addRow(sTableName, vRow);
+
+    // Delete that row!
+    e.deleteRow(sTableName, vRow);
+
+    // Check to see that there are no rows
+    Assert::AreEqual((int)e.getTable(sTableName).getRows().size(), 0);
   }
 
-  // Test the relational algebra function Selection
-  TEST_METHOD(EngineTestSelection)
-  {
-    ////////////////////////////////////////////////////
-    /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
-    ////////////////////////////////////////////////////
+  //// Test the relational algebra function Selection
+  //TEST_METHOD(EngineTestSelection)
+  //{
+  //  ////////////////////////////////////////////////////
+  //  /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
+  //  ////1////////////////////////////////////////////////
 
-    Assert::IsTrue(false);
-  }
+  //  Assert::IsTrue(false);
+  //}
 
   // Test the relational algebra function Projection
   TEST_METHOD(EngineTestProjection)
   {
-    ////////////////////////////////////////////////////
-    /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
-    ////////////////////////////////////////////////////
+    // Let's insert several rows first.
+    // Create our rows for insertion
+    vRow.push_back(make_tuple(0,"Joe"));
+    vRow.push_back(make_tuple(1,"cat"));
+    vRow.push_back(make_tuple(2,"4"));
 
-    Assert::IsTrue(false);
+    vRow2.push_back(make_tuple(0,"Spot"));
+    vRow2.push_back(make_tuple(1,"dog"));
+    vRow2.push_back(make_tuple(2,"10"));
+
+    vRow3.push_back(make_tuple(0,"Snoopy"));
+    vRow3.push_back(make_tuple(1,"dog"));
+    vRow3.push_back(make_tuple(2,"3"));
+
+    // Add the rows to our table
+    e.addRow(sTableName, vRow);
+    e.addRow(sTableName, vRow2);
+    e.addRow(sTableName, vRow3);
+
+    // I want to project the column name only.
+    std::vector<std::string> vColName;
+    vColName.push_back("name");
+    // I want to call the new table "projected"
+    e.projection(sTableName, "projected", vColName);
+
+    // Gonna create a vector of just the names.
+    std::vector<std::string> animalNames;
+    animalNames.push_back("Joe");
+    animalNames.push_back("Spot");
+    animalNames.push_back("Snoopy");
+
+    // Now let's compare our tables.
+    bool good = false;
+
+    Table projectTest = e.getTable("projected");
+    std::vector<std::tuple<int, std::string, bool, std::string> > vColValues;
+    vColValues = projectTest.getColumnNames();
+    std::vector<std::vector<std::tuple<int, std::string> > > vRowValues;
+    vRowValues = projectTest.getRows();
+
+    if (get<1>(vColValues[0]) == "name")
+    {
+      if (vRowValues.size() == animalNames.size())
+      {
+        good = true;
+        for (int i = 0; i < animalNames.size(); i++)
+        {
+          string sRowNameEntry = get<1>((vRowValues[i])[0]);
+          if (sRowNameEntry != animalNames[i])
+          {
+            good = false;
+          }
+        }
+      }
+    }
+
+    Assert::IsTrue (good);
+
   }
 
   // Test the relational algebra function Renaming
@@ -242,7 +303,7 @@ public:
     e.addRow(sTableName, vRow);
     e.addRow(sTableName, vRow2);
 
-    // Now let's create another table to union with this one. 
+    // Now let's create another table to union with this one.
     string sTableName2 = "moreAnimals";
     vRow4.push_back(make_tuple(0, "Mikey"));
     vRow4.push_back(make_tuple(1, "lion"));
@@ -252,7 +313,7 @@ public:
     vRow5.push_back(make_tuple(1, "clownfish"));
     vRow5.push_back(make_tuple(2, "1"));
 
-    // Make the table and add the rows. 
+    // Make the table and add the rows.
     e.createTable(sTableName2, vColumnNames, vKeys);
     e.addRow(sTableName2, vRow4);
     e.addRow(sTableName2, vRow5);
@@ -276,7 +337,7 @@ public:
     Table tRef = e.getTable(sTableName3);
 
     bool good = false;
-    
+
     if (t1.getColumnNames() == tRef.getColumnNames())
     {
       if (t1.getRows() == tRef.getRows())
@@ -304,7 +365,7 @@ public:
     e.addRow(sTableName, vRow);
     e.addRow(sTableName, vRow2);
 
-    // Now let's create another table to difference with this one. 
+    // Now let's create another table to difference with this one.
     string sTableName2 = "moreAnimals";
     vRow4.push_back(make_tuple(0, "Mikey"));
     vRow4.push_back(make_tuple(1, "lion"));
@@ -314,7 +375,7 @@ public:
     vRow5.push_back(make_tuple(1, "clownfish"));
     vRow5.push_back(make_tuple(2, "1"));
 
-    // Make the table and add the rows. 
+    // Make the table and add the rows.
     e.createTable(sTableName2, vColumnNames, vKeys);
     e.addRow(sTableName2, vRow4);
     e.addRow(sTableName2, vRow5);
@@ -335,7 +396,7 @@ public:
     Table tRef = e.getTable(sTableName3);
 
     bool good = false;
-    
+
     if (t1.getColumnNames() == tRef.getColumnNames())
     {
       if (t1.getRows() == tRef.getRows())
@@ -349,14 +410,152 @@ public:
   // Test the relational algebra function Cross Product
   TEST_METHOD(EngineTestCrossProduct)
   {
-  
+    // Create two simple tables to cross product.
+
+    // Make two separate tables--students and class
+    vector< tuple<string,string,bool> > vColNameCP1;
+    vector< tuple<string,string,bool> > vColNameCP2;
+    vector< tuple<string,string,bool> > vColNameCP3;
+    vector<tuple<int, string> > vRow1CP1;
+    vector<tuple<int, string> > vRow2CP1;
+    vector<tuple<int, string> > vRow1CP2;
+    vector<tuple<int, string> > vRow2CP2;
+    vector<tuple<int, string> > vRow1CP3;
+    vector<tuple<int, string> > vRow2CP3;
+    vector<tuple<int, string> > vRow3CP3;
+    vector<tuple<int, string> > vRow4CP3;
+    vColNameCP1.push_back(make_tuple("Student", "string", true));
+    vColNameCP2.push_back(make_tuple("Class", "string", false));
+    vColNameCP3.push_back(make_tuple("Student", "string", true));
+    vColNameCP3.push_back(make_tuple("Class", "string", false));
+    
+    // Add the students to the student table
+    vRow1CP1.push_back(make_tuple(0, "Terry"));
+    vRow2CP1.push_back(make_tuple(0, "Gus"));
+    
+    // Add the classes to the class table
+    vRow1CP2.push_back(make_tuple(0, "CSCE313"));
+    vRow1CP2.push_back(make_tuple(0, "CSCE315"));
+
+    e.addRow("cp_names", vRow1CP1);
+    e.addRow("cp_names", vRow2CP1);
+
+    e.addRow("cp_class", vRow1CP2);
+    e.addRow("cp_class", vRow2CP2);
+
+    // Perform the cross product operation here:
+    e.crossProduct("cp_names", "cp_class", "cp_result");
+
+    // Make our reference table.
+    vRow1CP3.push_back(make_tuple(0, "Terry"));
+    vRow1CP3.push_back(make_tuple(1, "CSCE313"));
+
+    vRow2CP3.push_back(make_tuple(0, "Terry"));
+    vRow2CP3.push_back(make_tuple(1, "CSCE315"));
+
+    vRow3CP3.push_back(make_tuple(0, "Gus"));
+    vRow3CP3.push_back(make_tuple(1, "CSCE313"));
+
+    vRow4CP3.push_back(make_tuple(0, "Gus"));
+    vRow4CP3.push_back(make_tuple(1, "CSCE315"));
+    
+    e.addRow("cp_ref", vRow1CP3);
+    e.addRow("cp_ref", vRow2CP3);
+    e.addRow("cp_ref", vRow3CP3);
+    e.addRow("cp_ref", vRow4CP3);
+
+    // Compare the tables. 
+
+    Table t1 = e.getTable("cp_result");
+    Table tRef = e.getTable("cp_ref");
+
+    bool good = false; 
+
+    if (t1.getColumnNames() == tRef.getColumnNames()) 
+    {
+      if (t1.getRows() == tRef.getRows())
+      {
+        good = true;
+      }
+    }
+    Assert::IsTrue(good);
   }
 
-  // Test natural join.
-  TEST_METHOD(EngineTestNaturalJoin)
-  {
+  //// Test natural join.
+  //TEST_METHOD(EngineTestNaturalJoin)
+  //{
+  //  // Make super simple table to test this
 
-  }
+  //  // Make two separate tables--students and class
+  //  vector< tuple<string,string,bool> > vColNameNJ1;
+  //  vector< tuple<string,string,bool> > vColNameNJ2;
+
+  //  vector<tuple<int, string> > vRow1NJ1;
+  //  vector<tuple<int, string> > vRow2NJ1;
+  //  vector<tuple<int, string> > vRow1NJ2;
+  //  vector<tuple<int, string> > vRow2NJ2;
+
+  //  vector<string> vKeys;
+  //  vKeys.push_back("classID");
+
+  //  vColNameNJ1.push_back(make_tuple("Student", "string", false));
+  //  vColNameNJ1.push_back(make_tuple("classID", "int", true));
+
+  //  vColNameNJ2.push_back(make_tuple("Class", "string", false));
+  //  vColNameNJ2.push_back(make_tuple("classID", "int", true));
+  //  
+  //  e.createTable("nj_names", vColNameNJ1, vKeys);
+  //  e.createTable("nj_class", vColNameNJ2, vKeys);
+
+  //  // Add the students to the student table
+  //  vRow1NJ1.push_back(make_tuple(0, "Terry"));
+  //  vRow1NJ1.push_back(make_tuple(1, "1"));
+  //  vRow2NJ1.push_back(make_tuple(0, "Gus"));
+  //  vRow2NJ1.push_back(make_tuple(1, "2"));
+  //  
+  //  // Add the classes to the class table
+  //  vRow1NJ2.push_back(make_tuple(0, "CSCE313"));
+  //  vRow1NJ2.push_back(make_tuple(1, "1"));
+  //  vRow2NJ2.push_back(make_tuple(0, "CSCE315"));
+  //  vRow2NJ2.push_back(make_tuple(1, "2"));
+
+  //  e.addRow("nj_names", vRow1NJ1);
+  //  e.addRow("nj_names", vRow2NJ1);
+
+  //  e.addRow("nj_class", vRow1NJ2);
+  //  e.addRow("nj_class", vRow2NJ2);
+
+  //  // Perform the natural join
+  //  e.naturalJoin("nj_names", "nj_class");
+
+  //  Table t1 = e.getTable("nj_names and nj_class natural join");
+  //  std::vector<std::vector<std::tuple<int, std::string> > > vNJRows;
+  //  vNJRows = t1.getRows();
+  //  bool caseA = false;
+  //  bool caseB = false;
+  //  
+  //  Assert::AreEqual((int)t1.getRow(0).size(), 0);
+
+  //  for (int i = 0; i < vNJRows.size(); i++) 
+  //  {
+  //    if (get<1>(t1.getRow(i)[0]) == "Terry") 
+  //    {
+  //      if (get<1>(t1.getRow(i)[1]) == "CSCE313")
+  //      {
+  //        caseA = true;
+  //      }
+  //    }
+  //    if (get<1>(t1.getRow(i)[0]) == "Gus") 
+  //    {
+  //      if (get<1>(t1.getRow(i)[1]) == "CSCE315")
+  //      {
+  //        caseA = true;
+  //      }
+  //    }
+  //  }
+
+
+  //}
 
 };
 }
