@@ -870,7 +870,6 @@ void Parser::rename(string sRestOfLine, string sTableNameOut)
  *******************************************************************************/
 void Parser::select(string sNewTableName, string sRestOfLine)
 {
-  printf("THE REST OF THE LINE IS %s\n", sRestOfLine.c_str());
   size_t iPos = sRestOfLine.find("select");
 
   if (iPos != std::string::npos)
@@ -883,7 +882,16 @@ void Parser::select(string sNewTableName, string sRestOfLine)
 
     if (sTableNameIn == sNewTableName)
     {
-      e.selection(sNewTableName, sTableNameIn + " 2", vValues[1], vValues[0], vValues[2]);
+      if (vValues[0] == "Date")
+      {
+        e.selection(sNewTableName, sTableNameIn + " 2", vValues[1], vValues[0], 
+          vValues[2] + vValues[3] + vValues[4] + vValues[5] + vValues[6]);
+      }
+      else
+      {
+        e.selection(sNewTableName, sTableNameIn + " 2", vValues[1], vValues[0], vValues[2]);
+      }
+      
 
       //delete old table
       e.dropTable(sTableNameIn);
@@ -893,7 +901,16 @@ void Parser::select(string sNewTableName, string sRestOfLine)
     }  
     else
     {
-      e.selection(sNewTableName, sTableNameIn, vValues[1], vValues[0], vValues[2]);
+      if (vValues[0] == "Date")
+      {
+        e.selection(sTableNameIn, sNewTableName, vValues[1], vValues[0], 
+          vValues[2] + vValues[3] + vValues[4] + vValues[5] + vValues[6]);
+      }
+      else
+      {
+        e.selection(sTableNameIn, sNewTableName, vValues[1], vValues[0], vValues[2]);
+      }
+      
     }
   }
 }

@@ -258,17 +258,32 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
               //Execute if the attribute satisfies the condition and is a date
               if (sColumn == "Date")
               {
-                string sMonth1 = sValueToBeTested.substr(0, 2);
-                string sDay1 = sValueToBeTested.substr(3, 2);
-                string sYear1 = sValueToBeTested.substr(5, 4);
-                string sMonth2 = sAttribute.substr(0, 2);
-                string sDay2 = sAttribute.substr(3, 2);
-                string sYear2 = sAttribute.substr(5, 4);
+                int iPosStart = sValueToBeTested.find("/");
+                int iPosEnd = sValueToBeTested.find("/", iPosStart + 1);
 
-                if (sMonth1 >= sMonth2 || sDay1 >= sDay2 || sYear1 >= sYear2)
+                string sMonth1 = sValueToBeTested.substr(0, iPosStart);
+                string sDay1 = sValueToBeTested.substr(iPosStart + 1,
+                    iPosEnd - iPosStart - 1);
+                string sYear1 = sValueToBeTested.substr(iPosEnd + 1, 4);
+
+                iPosStart = sAttribute.find("/");
+                iPosEnd = sAttribute.find("/", iPosStart + 1);
+
+                string sMonth2 = sAttribute.substr(0, iPosStart);
+                string sDay2 = sAttribute.substr(iPosStart + 1,
+                    iPosEnd - iPosStart - 1);
+                string sYear2 = sAttribute.substr(iPosEnd + 1, 4);
+
+                if (atoi(sYear1.c_str()) >= atoi(sYear2.c_str()))
                 {
-                  tNewTable.addRow(tCurrentTable.getRow(x));
-                }
+                  if (atoi(sMonth1.c_str()) >= atoi(sMonth2.c_str()))
+                  {
+                    if (atoi(sDay1.c_str()) >= atoi(sDay2.c_str()))
+                    {
+                      tNewTable.addRow(tCurrentTable.getRow(x));
+                    }
+                  }
+                } 
               }
               //Execute if not a date
               else if (sValueToBeTested >= sAttribute)
@@ -314,19 +329,20 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
                     iPosEnd - iPosStart - 1);
                 string sYear2 = sAttribute.substr(iPosEnd + 1, 4);
 
-                printf("%s <= %s, %s <= %s, %s <= %s\n", sMonth1.c_str(),
-                    sMonth2.c_str(), sDay1.c_str(), sDay2.c_str(),
-                    sYear1.c_str(), sYear2.c_str());
-                if (sMonth1 <= sMonth2 || sDay1 <= sDay2 || sYear1 <= sYear2)
+                if (atoi(sYear1.c_str()) <= atoi(sYear2.c_str()))
                 {
-                  tNewTable.addRow(tCurrentTable.getRow(x));
+                  if (atoi(sMonth1.c_str()) <= atoi(sMonth2.c_str()))
+                  {
+                    if (atoi(sDay1.c_str()) <= atoi(sDay2.c_str()))
+                    {
+                      tNewTable.addRow(tCurrentTable.getRow(x));
+                    }
+                  }
                 }
               }
               //Execute if the attribute satisfies the condition
               else if (sValueToBeTested <= sAttribute)
               {
-                printf("%s <= %s\n", sValueToBeTested.c_str(),
-                    sAttribute.c_str());
                 //push back the row into the new table
                 tNewTable.addRow(tCurrentTable.getRow(x));
               }
