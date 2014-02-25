@@ -486,10 +486,10 @@ bool Parser::findDeleteFrom(string sLineIn)
   }
   removeBlankTokens(vCondition);
   //printing conditional tokens for bug testing;
- for(int i =0; i<vCondition.size(); i++)
+ /*for(int i =0; i<vCondition.size(); i++)
  {
   cout << vCondition[i] << " ";
- }
+ }*/
 
   if (iPosStart != std::string::npos)
   {
@@ -568,10 +568,10 @@ bool Parser::findUpdate(string sLineIn)
   }
   removeBlankTokens(vCondition);
   //printing conditional tokens for bug testing;
- for(int i =0; i<vCondition.size(); i++)
+ /*for(int i =0; i<vCondition.size(); i++)
  {
   cout << vCondition[i] << " ";
- }
+ }*/
 
 
   if (iPosStart != std::string::npos)
@@ -1044,6 +1044,8 @@ void comparison(vector<string> & vTokens, int & iTokenIndex, Table & relation)
   string operand1;
   string op;
 
+  string tableName = relation.getTableName();
+
   if(vTokens[iTokenIndex] == "(")
   {
     iTokenIndex++;
@@ -1061,8 +1063,17 @@ void comparison(vector<string> & vTokens, int & iTokenIndex, Table & relation)
 
   cout<<endl<<operand0 << " " << op << " " << operand1 << endl;
 
-  if(operand0.isColumnName() && !operand1.isColumnName())//attribute name and literal
-    
+  if(isColumnName(operand0, relation) && !isColumnName(operand1, relation))//attribute name and literal
+  {
+
+    /*e.selection(tableName, tableName + "2", op,  operand0, operand1)
+    e.dropTable(tableName);
+
+    //rename new table to old name
+    e.renameTable(sTableNameIn + " 2", sNewTableName);*/
+  }
+  //void Engine::selection(string sTableNameIn, string sTableNameOut,
+   // string sOperator, string sColumn, string sAttribute)
 
 }
 
