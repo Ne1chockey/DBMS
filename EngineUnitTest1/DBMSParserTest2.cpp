@@ -209,7 +209,6 @@ public:
     // Make the assertion that my test succeeded and the tables are the same
     Assert::IsTrue (same);
   }
-   
 
   //TEST_METHOD(ParserTestUpdateRows) 
   //{
@@ -381,14 +380,14 @@ public:
     if (t1.getColumnNames() == tRef.getColumnNames())
     {
       bool found = false;
-      for (int i = 0; i < tRefRows.size(); i++) 
+      for (int i = 0; i < tRefRows.size(); i++)
       {
-        for (int j = 0; j < t1Rows.size(); j++) 
+        for (int j = 0; j < t1Rows.size(); j++)
         {
           if (tRefRows[i][0] == t1Rows[j][0])
           {
-             found = true;
-             break;
+            found = true;
+            break;
           }
         }
         if (found == false)
@@ -464,16 +463,16 @@ public:
     Table t1 = p.getEngine().getTable("cp_result");
     Table tRef = p.getEngine().getTable("cp_ref");
 
-    bool good = false; 
+    bool good = false;
 
-    if (t1.getColumnNames() == tRef.getColumnNames()) 
+    if (t1.getColumnNames() == tRef.getColumnNames())
     {
       if (t1.getRows() == tRef.getRows())
       {
         good = true;
       }
     }
-    Assert::IsTrue(good);
+    Assert::IsTrue (good);
   }
 
 };

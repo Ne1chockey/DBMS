@@ -161,10 +161,6 @@ public:
   // Let's see if we can delete rows
   TEST_METHOD(EngineTestDeleteRows)
   {
-    ////////////////////////////////////////////////////
-    /// NEED OUR CONDITIONS TO WORK FOR THIS TEST!!! ///
-    ////////////////////////////////////////////////////
-
     // Insert a row into our table.
     vRow.push_back(make_tuple(0,"Joe"));
     e.addRow(sTableName, vRow);
@@ -414,8 +410,8 @@ public:
 
     // Make two separate tables--students and class
     vector< tuple<string,string,bool> > vColNameCP1;
-    vector< tuple<string,string,bool> > vColNameCP2;
-    vector< tuple<string,string,bool> > vColNameCP3;
+    vector<tuple<string, string, bool> > vColNameCP2;
+    vector<tuple<string, string, bool> > vColNameCP3;
     vector<tuple<int, string> > vRow1CP1;
     vector<tuple<int, string> > vRow2CP1;
     vector<tuple<int, string> > vRow1CP2;
@@ -428,11 +424,11 @@ public:
     vColNameCP2.push_back(make_tuple("Class", "string", false));
     vColNameCP3.push_back(make_tuple("Student", "string", true));
     vColNameCP3.push_back(make_tuple("Class", "string", false));
-    
+
     // Add the students to the student table
     vRow1CP1.push_back(make_tuple(0, "Terry"));
     vRow2CP1.push_back(make_tuple(0, "Gus"));
-    
+
     // Add the classes to the class table
     vRow1CP2.push_back(make_tuple(0, "CSCE313"));
     vRow1CP2.push_back(make_tuple(0, "CSCE315"));
@@ -458,7 +454,7 @@ public:
 
     vRow4CP3.push_back(make_tuple(0, "Gus"));
     vRow4CP3.push_back(make_tuple(1, "CSCE315"));
-    
+
     e.addRow("cp_ref", vRow1CP3);
     e.addRow("cp_ref", vRow2CP3);
     e.addRow("cp_ref", vRow3CP3);
@@ -469,16 +465,16 @@ public:
     Table t1 = e.getTable("cp_result");
     Table tRef = e.getTable("cp_ref");
 
-    bool good = false; 
+    bool good = false;
 
-    if (t1.getColumnNames() == tRef.getColumnNames()) 
+    if (t1.getColumnNames() == tRef.getColumnNames())
     {
       if (t1.getRows() == tRef.getRows())
       {
         good = true;
       }
     }
-    Assert::IsTrue(good);
+    Assert::IsTrue (good);
   }
 
   //// Test natural join.
@@ -553,7 +549,6 @@ public:
   //      }
   //    }
   //  }
-
 
   //}
 
