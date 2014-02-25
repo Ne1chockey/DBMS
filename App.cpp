@@ -33,11 +33,14 @@ App::App()
   //set table versions to zero, needed for relation selections later
   iCountTableVersions = 0;
 
-  p.parse("CREATE TABLE Hairdressers (Name VARCHAR(20), Phone Number VARCHAR(8), Address VARCHAR(20)) PRIMARY KEY (Name, Phone Number)");
+  p.parse(
+      "CREATE TABLE Hairdressers (Name VARCHAR(20), Phone Number VARCHAR(8), Address VARCHAR(20)) PRIMARY KEY (Name, Phone Number)");
 
-  p.parse("CREATE TABLE Customers (Name VARCHAR(20), Phone Number VARCHAR(8), Address VARCHAR(20)) PRIMARY KEY (Name, Phone Number)");
+  p.parse(
+      "CREATE TABLE Customers (Name VARCHAR(20), Phone Number VARCHAR(8), Address VARCHAR(20)) PRIMARY KEY (Name, Phone Number)");
 
-  p.parse("CREATE TABLE Appointments (Customer ID INTEGER, Hairdresser ID INTEGER, Time VARCHAR(10), Date VARCHAR(10)) PRIMARY KEY (Time)");
+  p.parse(
+      "CREATE TABLE Appointments (Customer ID INTEGER, Hairdresser ID INTEGER, Time VARCHAR(10), Date VARCHAR(10)) PRIMARY KEY (Time)");
 }
 
 /*******************************************************************************
@@ -74,8 +77,9 @@ void App::displayMenu()
  *******************************************************************************/
 void App::addHairDresser(string sName, string sPhonenumber, string sAddress)
 {
-  p.parse("INSERT INTO Hairdressers VALUES FROM (" + sName + ", " + sPhonenumber
-    + ", " + sAddress + ")");
+  p.parse(
+      "INSERT INTO Hairdressers VALUES FROM (" + sName + ", " + sPhonenumber
+          + ", " + sAddress + ")");
 }
 
 /*******************************************************************************
@@ -91,8 +95,9 @@ void App::removeHairDresser(string sName)
  *******************************************************************************/
 void App::addCustomer(string sName, string sPhonenumber, string sAddress)
 {
-  p.parse("INSERT INTO Customers VALUES FROM (" + sName + ", " + sPhonenumber
-    + ", " + sAddress + ")");
+  p.parse(
+      "INSERT INTO Customers VALUES FROM (" + sName + ", " + sPhonenumber + ", "
+          + sAddress + ")");
 }
 
 /*******************************************************************************
@@ -109,8 +114,9 @@ void App::removeCustomer(string sName)
 void App::addAppt(string sCustomer_id, string sHairdresser_id, string sTime,
     string sDate)
 {
-  p.parse("INSERT INTO Appointments VALUES FROM (" + sCustomer_id + ", " + 
-    sHairdresser_id + ", " + sTime + ", " + sDate + ")");
+  p.parse(
+      "INSERT INTO Appointments VALUES FROM (" + sCustomer_id + ", "
+          + sHairdresser_id + ", " + sTime + ", " + sDate + ")");
 }
 
 /*******************************************************************************
@@ -173,7 +179,8 @@ void App::showApptsByHairdresser(string sHairdresser_id, string sStartDate,
 
   p.parse(sTempName + " <- select (Date >= " + sStartDate + ") Appointments");
   p.parse(sNewName + " <- select (Date <= " + sEndDate + ") " + sTempName);
-  p.parse(sFinalName + " <- select (Date == " + sHairdresser_id + ") " + sNewName);
+  p.parse(
+      sFinalName + " <- select (Date == " + sHairdresser_id + ") " + sNewName);
   p.parse("SHOW " + sFinalName);
   iCountTableVersions++;
 }

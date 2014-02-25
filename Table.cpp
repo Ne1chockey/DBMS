@@ -16,7 +16,7 @@
  * Spacing and brackets are applied for readability
 
  This file contains the table implementation file
-*******************************************************************************/
+ *******************************************************************************/
 
 #include <string>
 #include <vector>
@@ -32,7 +32,7 @@ std::fstream outputFile;
 
 /*******************************************************************************
  Display the table
-*******************************************************************************/
+ *******************************************************************************/
 void Table::displayTable()
 {
   // Print the lines of the table for a pretty output
@@ -115,7 +115,7 @@ void Table::displayTable()
 /*******************************************************************************
  This function returns the index of the column or -1 if the column is not found
  and the type of the column
-*******************************************************************************/
+ *******************************************************************************/
 std::tuple<int, std::string, bool, std::string> Table::getColumnIndex(
     std::string sColumnNameIn)
 {
@@ -139,7 +139,7 @@ std::tuple<int, std::string, bool, std::string> Table::getColumnIndex(
 
 /*******************************************************************************
  This function takes the index of a column and returns the values of the column
-*******************************************************************************/
+ *******************************************************************************/
 std::vector<std::string> Table::getColumnValues(int iIndex)
 {
   //create a vector of strings to return column values
@@ -164,7 +164,7 @@ std::vector<std::string> Table::getColumnValues(int iIndex)
 
 /*******************************************************************************
  This function takes the index of a column and returns the values of the column
-*******************************************************************************/
+ *******************************************************************************/
 std::vector<std::tuple<int, std::string> > Table::getRow(int iIndex)
 {
   std::vector < std::tuple<int, std::string> > vReturn;

@@ -283,7 +283,7 @@ void Engine::selection(string sTableNameIn, string sTableNameOut,
                       tNewTable.addRow(tCurrentTable.getRow(x));
                     }
                   }
-                } 
+                }
               }
               //Execute if not a date
               else if (sValueToBeTested >= sAttribute)

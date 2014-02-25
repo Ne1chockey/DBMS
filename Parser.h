@@ -86,7 +86,7 @@ public:
   void select(string sNewTableName, string sRestOfLine);
   void evalCondition(vector<string> vTokens, string relationName);
   void removeBlankTokens(vector<string> & vTokens);
-  
+
   Engine getEngine()
   {
     return e;

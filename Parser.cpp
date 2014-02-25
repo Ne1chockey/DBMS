@@ -468,28 +468,28 @@ bool Parser::findDeleteFrom(string sLineIn)
 {
   size_t iPosStart = sLineIn.find("DELETE FROM");
 
-  vector<string> vTokens = makeTokens(sLineIn);
-  vector<string> vCondition;
+  vector < string > vTokens = makeTokens(sLineIn);
+  vector < string > vCondition;
 
   //getting conditional expression from tokens;
-  for(int i=0; i < vTokens.size(); i++ )
+  for (int i = 0; i < vTokens.size(); i++)
   {
-    if(vTokens[i] == "WHERE")
+    if (vTokens[i] == "WHERE")
     {
       i++;
-      while(i < vTokens.size())
+      while (i < vTokens.size())
       {
         vCondition.push_back(vTokens[i]);
         i++;
       }
     }
   }
-  removeBlankTokens(vCondition);
+  removeBlankTokens (vCondition);
   //printing conditional tokens for bug testing;
- /*for(int i =0; i<vCondition.size(); i++)
- {
-  cout << vCondition[i] << " ";
- }*/
+  /*for(int i =0; i<vCondition.size(); i++)
+   {
+   cout << vCondition[i] << " ";
+   }*/
 
   if (iPosStart != std::string::npos)
   {
@@ -510,7 +510,7 @@ bool Parser::findDeleteFrom(string sLineIn)
 
       sRestOfLine = removeSpaces(sRestOfLine);
 
-      vector<string> vCheck = makeTokens(sRestOfLine);
+      vector < string > vCheck = makeTokens(sRestOfLine);
       if (vCheck[2] == "==")
       {
         sRestOfLine = vCheck[0] + vCheck[1] + "!=" + vCheck[3] + vCheck[4];
@@ -532,7 +532,7 @@ bool Parser::findDeleteFrom(string sLineIn)
         sRestOfLine = vCheck[0] + vCheck[1] + ">=" + vCheck[3] + vCheck[4];
       }
 
-      select(sTableName,"select" + sRestOfLine + sTableName);
+      select(sTableName, "select" + sRestOfLine + sTableName);
 
       //WE NEED THE TREE HERE!!!!!!!
 
@@ -550,29 +550,28 @@ bool Parser::findUpdate(string sLineIn)
 {
   size_t iPosStart = sLineIn.find("UPDATE");
 
-  vector<string> vTokens = makeTokens(sLineIn);
-  vector<string> vCondition;
+  vector < string > vTokens = makeTokens(sLineIn);
+  vector < string > vCondition;
 
   //getting conditional expression from tokens;
-  for(int i=0; i < vTokens.size(); i++ )
+  for (int i = 0; i < vTokens.size(); i++)
   {
-    if(vTokens[i] == "WHERE")
+    if (vTokens[i] == "WHERE")
     {
       i++;
-      while(i < vTokens.size())
+      while (i < vTokens.size())
       {
         vCondition.push_back(vTokens[i]);
         i++;
       }
     }
   }
-  removeBlankTokens(vCondition);
+  removeBlankTokens (vCondition);
   //printing conditional tokens for bug testing;
- /*for(int i =0; i<vCondition.size(); i++)
- {
-  cout << vCondition[i] << " ";
- }*/
-
+  /*for(int i =0; i<vCondition.size(); i++)
+   {
+   cout << vCondition[i] << " ";
+   }*/
 
   if (iPosStart != std::string::npos)
   {
@@ -876,44 +875,43 @@ void Parser::select(string sNewTableName, string sRestOfLine)
   {
     size_t iParenth1 = sRestOfLine.find("(");
     size_t iParenth2 = sRestOfLine.find(")", iParenth1 + 1);
-    string sValues = removeSpaces(sRestOfLine.substr(iParenth1+1, 
-      iParenth2 - iParenth1));
+    string sValues = removeSpaces(
+        sRestOfLine.substr(iParenth1 + 1, iParenth2 - iParenth1));
     string sTableNameIn = cleanSpaces(sRestOfLine.substr(iParenth2 + 1));
-    vector<string> vValues = makeTokens(sValues);
+    vector < string > vValues = makeTokens(sValues);
 
     if (sTableNameIn == sNewTableName)
     {
       if (vValues[0] == "Date")
       {
-        e.selection(sNewTableName, sTableNameIn + " 2", vValues[1], vValues[0], 
-          vValues[2] + vValues[3] + vValues[4] + vValues[5] + vValues[6]);
+        e.selection(sNewTableName, sTableNameIn + " 2", vValues[1], vValues[0],
+            vValues[2] + vValues[3] + vValues[4] + vValues[5] + vValues[6]);
       }
       else
       {
-        e.selection(sNewTableName, sTableNameIn + " 2", vValues[1], vValues[0], 
-          vValues[2]);
+        e.selection(sNewTableName, sTableNameIn + " 2", vValues[1], vValues[0],
+            vValues[2]);
       }
-      
 
       //delete old table
       e.dropTable(sTableNameIn);
 
       //rename new table to old name
       e.renameTable(sTableNameIn + " 2", sNewTableName);
-    }  
+    }
     else
     {
       if (vValues[0] == "Date")
       {
-        e.selection(sTableNameIn, sNewTableName, vValues[1], vValues[0], 
-          vValues[2] + vValues[3] + vValues[4] + vValues[5] + vValues[6]);
+        e.selection(sTableNameIn, sNewTableName, vValues[1], vValues[0],
+            vValues[2] + vValues[3] + vValues[4] + vValues[5] + vValues[6]);
       }
       else
       {
-        e.selection(sTableNameIn, sNewTableName, vValues[1], vValues[0], 
-          vValues[2]);
+        e.selection(sTableNameIn, sNewTableName, vValues[1], vValues[0],
+            vValues[2]);
       }
-      
+
     }
   }
 }
@@ -942,9 +940,9 @@ void Parser::select(string sNewTableName, string sRestOfLine)
  Function that inserts everything after <- into a tree.
  *******************************************************************************/
 //Update function may need another function to parse because <- operator is not 
- //present
+//present
 //and there can be cases of multiple conditions. May modify this function later 
- //for that case
+//for that case
 //if needs be.
 /*Parser::treeNode * Parser::createTree(string sLineIn)
  {
@@ -990,46 +988,46 @@ void Parser::select(string sNewTableName, string sRestOfLine)
 
  }*/
 
- vector<string> Parser::makeTokens(string sLineIn)
- {
- vector<string> someTokens;
- string sTemp = "";
- string sSymTemp = "";
- for(int i = 0; i < sLineIn.size(); i++)
- {
-  if(isalnum(sLineIn[i]) || sLineIn[i] == '_')
+vector<string> Parser::makeTokens(string sLineIn)
+{
+  vector < string > someTokens;
+  string sTemp = "";
+  string sSymTemp = "";
+  for (int i = 0; i < sLineIn.size(); i++)
   {
-    if(sSymTemp != "")
+    if (isalnum(sLineIn[i]) || sLineIn[i] == '_')
     {
-      someTokens.push_back(sSymTemp);
-      sSymTemp = "";
-    }
-  sTemp = sTemp + sLineIn[i];
-  }
-  if(!isalnum(sLineIn[i]) && sLineIn[i] != '_')
-  {
-    if(sTemp != "")
-    {
-      someTokens.push_back(sTemp);
-      sTemp = "";
-    }
-    if(sLineIn[i] == ')' || sLineIn[i] == '(')
-    {
-      if(sSymTemp != "")
+      if (sSymTemp != "")
+      {
         someTokens.push_back(sSymTemp);
-      sSymTemp = sLineIn[i];
-      someTokens.push_back(sSymTemp);
-      sSymTemp = "";
+        sSymTemp = "";
+      }
+      sTemp = sTemp + sLineIn[i];
     }
-    else
+    if (!isalnum(sLineIn[i]) && sLineIn[i] != '_')
     {
-      sSymTemp = sSymTemp + sLineIn[i];
+      if (sTemp != "")
+      {
+        someTokens.push_back(sTemp);
+        sTemp = "";
+      }
+      if (sLineIn[i] == ')' || sLineIn[i] == '(')
+      {
+        if (sSymTemp != "")
+          someTokens.push_back(sSymTemp);
+        sSymTemp = sLineIn[i];
+        someTokens.push_back(sSymTemp);
+        sSymTemp = "";
+      }
+      else
+      {
+        sSymTemp = sSymTemp + sLineIn[i];
+      }
     }
   }
- }
- return someTokens;
+  return someTokens;
 }
- 
+
 /*******************************************************************************
  Function that traverses the current tree and prints out values
  *******************************************************************************/
@@ -1047,11 +1045,11 @@ void Parser::select(string sNewTableName, string sRestOfLine)
 
 void Parser::removeBlankTokens(vector<string> & vTokens)
 {
-  vector<string> vTemp;
-  for(int i  = 0; i<vTokens.size(); i++)
+  vector < string > vTemp;
+  for (int i = 0; i < vTokens.size(); i++)
   {
     string sTemp = removeSpaces(vTokens[i]);
-    if(sTemp != "")
+    if (sTemp != "")
       vTemp.push_back(sTemp);
   }
 
@@ -1068,7 +1066,7 @@ void comparison(vector<string> & vTokens, int & iTokenIndex, Table & relation)
 
   string tableName = relation.getTableName();
 
-  if(vTokens[iTokenIndex] == "(")
+  if (vTokens[iTokenIndex] == "(")
   {
     iTokenIndex++;
   }
@@ -1081,28 +1079,27 @@ void comparison(vector<string> & vTokens, int & iTokenIndex, Table & relation)
 
   operand1 = vTokens[iTokenIndex];
   iTokenIndex++;
-  
 
-  cout<<endl<<operand0 << " " << op << " " << operand1 << endl;
+  cout << endl << operand0 << " " << op << " " << operand1 << endl;
 
   //attribute name and literal
-  if(isColumnName(operand0, relation) && !isColumnName(operand1, relation))
+  if (isColumnName(operand0, relation) && !isColumnName(operand1, relation))
   {
 
     /*e.selection(tableName, tableName + "2", op,  operand0, operand1)
-    e.dropTable(tableName);
+     e.dropTable(tableName);
 
-    //rename new table to old name
-    e.renameTable(sTableNameIn + " 2", sNewTableName);*/
+     //rename new table to old name
+     e.renameTable(sTableNameIn + " 2", sNewTableName);*/
   }
   //void Engine::selection(string sTableNameIn, string sTableNameOut,
-   // string sOperator, string sColumn, string sAttribute)
+  // string sOperator, string sColumn, string sAttribute)
 
 }
 
 void Parser::evalCondition(vector<string> vTokens, string relationName)
 {
-  int iTokenIndex =0;
+  int iTokenIndex = 0;
 
   removeBlankTokens(vTokens);
   Table relation = e.getTable(relationName);
@@ -1113,13 +1110,13 @@ void Parser::evalCondition(vector<string> vTokens, string relationName)
 
 bool isColumnName(string sIn, Table & t)
 {
-  std::vector<std::tuple<int, std::string, bool, std::string> > vColumnName;
+  std::vector < std::tuple<int, std::string, bool, std::string> > vColumnName;
 
   vColumnName = t.getColumnNames();
 
-  for(int i = 0; i<vColumnName.size(); i++)
+  for (int i = 0; i < vColumnName.size(); i++)
   {
-    if(get <1> (vColumnName[i]) == sIn)
+    if (get < 1 > (vColumnName[i]) == sIn)
       return true;
   }
 
