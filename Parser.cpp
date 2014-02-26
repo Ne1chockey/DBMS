@@ -299,7 +299,7 @@ string Parser::cleanSpaces(string sLineIn)
   for (int i = 0; i < sLineIn.length(); ++i)
   {
     //Append the value from the string into the return string, if its alpha
-    if (isalnum(sLineIn[i]) || sLineIn[i] == '_')
+    if (isalnum(sLineIn[i]) || sLineIn[i] == '_' || sLineIn[i] == '/')
     {
       sOut += sLineIn[i];
     }
